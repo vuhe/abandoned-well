@@ -1,0 +1,36 @@
+package ${packageName}.domain
+
+#foreach ($import in $importList)
+import ${import}
+#end
+#if($table.crud || $table.sub)
+import top.vuhe.admin.spring.database.entity.BaseEntity
+#elseif($table.tree)
+import top.vuhe.admin.spring.database.entity.TreeEntity
+#end
+
+/**
+ * ${functionName}对象 ${tableName}
+ *
+ * @author ${author}
+ */
+#if($table.crud || $table.sub)
+    #set($Entity="BaseDomain")
+#elseif($table.tree)
+    #set($Entity="TreeDomain")
+#end
+class ${ClassName} : ${Entity}() {
+    override val id: String get() = TODO("需要自行确定主键信息")
+
+#foreach ($column in $columns)
+    #if(!$column.isSuperColumn)
+    /** $column.columnComment */
+    var $column.javaField: $column.columnType.ktType = $column.columnType.default
+    #end
+#end
+
+#if($table.sub)
+     /** $table.subTable.functionName信息 */
+     var ${subclassName}List: List<${subClassName}> = emptyList()
+#end
+}

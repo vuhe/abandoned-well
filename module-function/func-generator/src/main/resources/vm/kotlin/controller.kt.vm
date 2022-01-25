@@ -1,0 +1,94 @@
+package ${packageName}.controller
+
+import top.vuhe.admin.spring.web.controller.BaseController
+import top.vuhe.admin.spring.web.request.PageDomain
+import org.springframework.security.access.prepost.PreAuthorize
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.servlet.ModelAndView
+import ${packageName}.domain.${ClassName}
+import ${packageName}.service.I${ClassName}Service
+
+/**
+ * ${functionName}Controller
+ *
+ * @author ${author}
+ */
+@RestController
+@RequestMapping("/${moduleName}/${businessName}")
+class ${ClassName}Controller(
+    private val service: I${ClassName}Service
+) : BaseController() {
+
+    @GetMapping("/main")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/main','${permissionPrefix}:main')")
+    fun main() = ModelAndView("${moduleName}/${businessName}/main")
+
+    /**
+     * 新增${functionName}
+     */
+    @GetMapping("/add")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/add','${permissionPrefix}:add')")
+    fun add() = ModelAndView("${moduleName}/${businessName}/add")
+
+    /**
+     * 修改${functionName}
+     */
+    @GetMapping("/edit")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/edit','${permissionPrefix}:edit')")
+    fun edit(id: String) = ModelAndView("${moduleName}/${businessName}/edit").apply {
+        val entity = service.getOneById(id)
+        addObject("${className}", entity)
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    /**
+     * 查询${functionName}列表
+     */
+    @ResponseBody
+    @GetMapping("/data")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/data','${permissionPrefix}:data')")
+    fun list(@ModelAttribute entity: ${ClassName}, pageDomain: PageDomain) = pageTable {
+        service.page(entity, pageDomain)
+    }
+
+    /**
+     * 新增保存${functionName}
+     */
+    @ResponseBody
+    @PostMapping("/save")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/add','${permissionPrefix}:add')")
+    fun save(@RequestBody entity: ${ClassName}) = boolResult {
+        service.add(entity)
+    }
+
+    /**
+     * 修改保存${functionName}
+     */
+    @ResponseBody
+    @PutMapping("/update")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/edit','${permissionPrefix}:edit')")
+    fun update(@RequestBody entity: ${ClassName}) = boolResult {
+        service.modify(entity)
+    }
+
+    /**
+     * 删除
+     */
+    @ResponseBody
+    @DeleteMapping("/remove/{id}")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/remove','${permissionPrefix}:remove')")
+    fun remove(@PathVariable("id") id: String) = boolResult {
+        service.remove(id)
+    }
+
+    /**
+     * 删除${functionName}
+     */
+    @ResponseBody
+    @DeleteMapping("/batchRemove")
+    @PreAuthorize("hasPermission('/${moduleName}/${businessName}/remove','${permissionPrefix}:remove')")
+    fun batchRemove(ids: String) = boolResult {
+        service.batchRemove(ids.split(","))
+    }
+}
