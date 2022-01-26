@@ -1,12 +1,12 @@
 package top.vuhe.admin.well.service
 
 import top.vuhe.admin.spring.database.service.ICurdService
-import top.vuhe.admin.well.domina.WellInfo
+import top.vuhe.admin.well.domina.WellLog
 
 /**
- * 井信息服务类
+ * 井修改日志服务类
  *
  * @author vuhe
  */
-interface IWellService: ICurdService<WellInfo> {
+interface ILogService: ICurdService<WellLog> {
 }

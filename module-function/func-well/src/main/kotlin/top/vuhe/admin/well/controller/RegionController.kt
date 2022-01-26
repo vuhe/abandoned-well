@@ -3,16 +3,16 @@ package top.vuhe.admin.well.controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.well.service.IWellService
+import top.vuhe.admin.well.service.IRegionService
 
 /**
- * 井信息管理
+ * 井区域管理
  *
  * @author vuhe
  */
 @RestController
-@RequestMapping("/well/info")
-class WellController(
-    private val infoService: IWellService
+@RequestMapping("/well/region")
+class RegionController(
+    private val regionService: IRegionService
 ) : BaseController() {
 }
