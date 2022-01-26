@@ -2,7 +2,7 @@ package top.vuhe.admin.spring.security.login
 
 import org.springframework.security.authentication.AuthenticationDetailsSource
 import org.springframework.security.web.authentication.WebAuthenticationDetails
-import top.vuhe.admin.api.security.util.Captcha
+import top.vuhe.admin.api.security.Captcha
 import javax.servlet.http.HttpServletRequest
 
 /**

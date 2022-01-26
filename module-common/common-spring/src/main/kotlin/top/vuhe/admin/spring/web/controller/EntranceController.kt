@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.logging.Logging
-import top.vuhe.admin.api.security.util.Captcha
+import top.vuhe.admin.api.security.Captcha
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.isAuthentication
 import top.vuhe.admin.spring.security.session.SecuritySessionRegistry
 import top.vuhe.admin.spring.web.response.ResultObj

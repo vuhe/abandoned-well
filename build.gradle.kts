@@ -11,7 +11,7 @@ dependencies {
 }
 
 springBoot {
-    mainClass.set("top.vuhe.admin.AdminTemplateAppKt")
+    mainClass.set("top.vuhe.admin.WellManagementAppKt")
 }
 
 allprojects {
