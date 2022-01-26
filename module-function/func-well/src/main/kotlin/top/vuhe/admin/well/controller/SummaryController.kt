@@ -6,33 +6,27 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.well.service.ILogService
+import top.vuhe.admin.well.service.IWellService
 
 /**
- * 井信息日志管理
+ * 井信息汇总管理
  *
  * @author vuhe
  */
 @RestController
-@RequestMapping("/well/log")
-class LogController(
-    private val logService: ILogService
+@RequestMapping("/well/summary")
+class SummaryController(
+    private val infoService: IWellService
 ) : BaseController() {
 
     /**
-     * 用于管理查看日志的页面
+     * 用于汇总导出的页面
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/well/log/main','well:log:main')")
-    fun main() = ModelAndView("well/log/main")
-
-    /**
-     * 用于查看日志详情的页面
-     */
-    @GetMapping("detail")
-    @PreAuthorize("hasPermission('/well/log/detail','well:log:detail')")
-    fun detail() = ModelAndView("well/log/detail")
+    @PreAuthorize("hasPermission('/well/summary/main','well:summary:main')")
+    fun main() = ModelAndView("well/summary/main")
 
     /* -------------------------------------------------------------------------- */
+
 
 }
