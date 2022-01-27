@@ -20,8 +20,8 @@ class WellRegion : BaseEntity() {
     /** 行政区划代码 */
     var districtCode: String = ""
 
-    /** 二级水文地址代码 */
-    var regionCode: String = ""
+    /** 二级水文地址代码 id */
+    var regionCodeId: String = ""
 
     /** 排序码 */
     var sort: Int? = null

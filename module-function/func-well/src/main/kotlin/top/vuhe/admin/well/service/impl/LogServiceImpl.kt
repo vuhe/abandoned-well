@@ -12,7 +12,5 @@ import top.vuhe.admin.well.service.ILogService
  * @author vuhe
  */
 @Service
-class LogServiceImpl(
-    private val logMapper: LogMapper
-) : CurdService<WellLog>(logMapper), ILogService {
-}
+class LogServiceImpl(logMapper: LogMapper) :
+    CurdService<WellLog>(logMapper), ILogService

@@ -24,9 +24,6 @@ class WellInfo : BaseEntity() {
     /** 废弃井区域 id */
     var regionId: String = ""
 
-    /** 废弃井区域 */
-    var wellRegion: WellRegion? = null
-
     /** 乡镇(街道办) */
     var street: String = ""
 

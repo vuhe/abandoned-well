@@ -8,5 +8,4 @@ import top.vuhe.admin.well.domina.WellLog
  *
  * @author vuhe
  */
-interface ILogService: ICurdService<WellLog> {
-}
+interface ILogService : ICurdService<WellLog>

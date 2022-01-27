@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
+import top.vuhe.admin.spring.web.request.PageDomain
+import top.vuhe.admin.well.domina.WellLog
 import top.vuhe.admin.well.service.ILogService
 
 /**
@@ -18,6 +20,7 @@ import top.vuhe.admin.well.service.ILogService
 class LogController(
     private val logService: ILogService
 ) : BaseController() {
+    private val emptyQuery = WellLog()
 
     /**
      * 用于管理查看日志的页面
@@ -34,5 +37,14 @@ class LogController(
     fun detail() = ModelAndView("well/log/detail")
 
     /* -------------------------------------------------------------------------- */
+
+    /**
+     * 操作日志数据
+     */
+    @GetMapping("data")
+    @PreAuthorize("hasPermission('/system/log/data','sys:log:data')")
+    fun data(pageDomain: PageDomain) = pageTable {
+        logService.page(emptyQuery, pageDomain)
+    }
 
 }
