@@ -18,4 +18,5 @@ class RegionMapper : CurdMapper<WellRegion>("well_region") {
     private val districtCode = varchar("district_code").bind(WellRegion::districtCode)
     private val regionCodeId = varchar("region_code").bind(WellRegion::regionCodeId)
     private val sort = int("sort").bind(WellRegion::sort)
+    private val count = int("next").bind(WellRegion::count)
 }

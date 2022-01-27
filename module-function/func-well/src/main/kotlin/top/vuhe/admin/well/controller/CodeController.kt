@@ -1,11 +1,11 @@
 package top.vuhe.admin.well.controller
 
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
+import top.vuhe.admin.spring.web.request.PageDomain
+import top.vuhe.admin.well.domina.RegionCode
 import top.vuhe.admin.well.service.ICodeService
 
 /**
@@ -38,8 +38,55 @@ class CodeController(
      */
     @GetMapping("edit")
     @PreAuthorize("hasPermission('/well/code/edit','well:code:edit')")
-    fun edit() = ModelAndView("well/code/edit")
+    fun edit(id: String) = ModelAndView("well/code/edit").apply {
+        addObject("code", codeService.getOneById(id))
+    }
 
     /* -------------------------------------------------------------------------- */
 
+    /**
+     * 分页查询 地质代码
+     */
+    @GetMapping("page")
+    @PreAuthorize("hasPermission('/well/code/page','well:code:page')")
+    fun page(code: RegionCode, pageDomain: PageDomain) = pageTable {
+        codeService.page(code, pageDomain)
+    }
+
+    /**
+     * 添加 地质代码
+     */
+    @PostMapping("save")
+    @PreAuthorize("hasPermission('/well/code/add','well:code:add')")
+    fun save(@RequestBody code: RegionCode) = boolResult {
+        codeService.add(code)
+    }
+
+    /**
+     * 修改 地质代码
+     */
+    @PutMapping("update")
+    @PreAuthorize("hasPermission('/well/code/edit','well:code:edit')")
+    fun update(@RequestBody code: RegionCode) = boolResult {
+        codeService.modify(code)
+    }
+
+    /**
+     * 删除 地质代码
+     */
+    @DeleteMapping("remove/{id}")
+    @PreAuthorize("hasPermission('/well/code/remove','well:code:remove')")
+    fun remove(@PathVariable("id") id: String) = boolResult {
+        codeService.remove(id)
+    }
+
+    /**
+     * 批量删除 地质代码
+     */
+    @ResponseBody
+    @DeleteMapping("/batchRemove")
+    @PreAuthorize("hasPermission('/well/code/remove','well:code:remove')")
+    fun batchRemove(ids: String) = boolResult {
+        codeService.batchRemove(ids.split(","))
+    }
 }

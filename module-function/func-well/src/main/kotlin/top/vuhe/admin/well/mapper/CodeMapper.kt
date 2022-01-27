@@ -14,4 +14,5 @@ import top.vuhe.admin.well.domina.RegionCode
 class CodeMapper: CurdMapper<RegionCode>("region_code") {
     override val id = varchar("id").primaryKey().bind(RegionCode::id)
     private val code = varchar("code").bind(RegionCode::code)
+    private val remark = text("remark").bind(RegionCode::remark)
 }

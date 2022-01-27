@@ -25,4 +25,7 @@ class WellRegion : BaseEntity() {
 
     /** 排序码 */
     var sort: Int? = null
+
+    /** 当前区域统计井数 */
+    var count: Int? = 0
 }
