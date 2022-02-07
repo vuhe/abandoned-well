@@ -34,13 +34,6 @@ class WellController(
     fun approve() = ModelAndView("well/info/approve")
 
     /**
-     * 用于上报的页面
-     */
-    @GetMapping("report")
-    @PreAuthorize("hasPermission('/well/info/report','well:info:report')")
-    fun report() = ModelAndView("well/info/report")
-
-    /**
      * 用于添加井信息的页面
      */
     @GetMapping("add")
@@ -52,7 +45,12 @@ class WellController(
      */
     @GetMapping("edit")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
-    fun edit() = ModelAndView("well/info/edit")
+    fun edit() :ModelAndView {
+        // TODO("未通过审核的是全部更改")
+        ModelAndView("well/info/edit")
+        // TODO("通过审核的是动态更新")
+        return ModelAndView("well/info/report")
+    }
 
     /* -------------------------------------------------------------------------- */
 

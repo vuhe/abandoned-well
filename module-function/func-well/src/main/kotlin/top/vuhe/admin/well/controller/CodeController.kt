@@ -1,5 +1,6 @@
 package top.vuhe.admin.well.controller
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
@@ -14,6 +15,7 @@ import top.vuhe.admin.well.service.ICodeService
  * @author vuhe
  */
 @RestController
+@Tag(name = "地质分区代码")
 @RequestMapping("/well/code")
 class CodeController(
     private val codeService: ICodeService

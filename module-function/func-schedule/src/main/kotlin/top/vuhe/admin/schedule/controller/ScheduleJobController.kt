@@ -61,7 +61,7 @@ class ScheduleJobController(
     /**
      * 保存定时任务数据
      */
-    @RequestMapping("/save")
+    @PostMapping("/save")
     @PreAuthorize("hasPermission('/schdule/job/add','sch:job:add')")
     fun save(@RequestBody scheduleJob: ScheduleJob) = boolResult {
         scheduleJobService.add(scheduleJob)
@@ -70,7 +70,7 @@ class ScheduleJobController(
     /**
      * 执行一次定时任务
      */
-    @RequestMapping("/run")
+    @PutMapping("/run")
     @PreAuthorize("hasPermission('/schdule/job/run','sch:job:run')")
     fun run(jobId: String): ResultObj<*> {
         scheduleJobService.run(jobId)
@@ -80,7 +80,7 @@ class ScheduleJobController(
     /**
      * 更新定时任务数据
      */
-    @RequestMapping("/update")
+    @PutMapping("/update")
     @PreAuthorize("hasPermission('/schdule/job/edit','sch:job:edit')")
     fun update(@RequestBody scheduleJob: ScheduleJob) = boolResult {
         scheduleJobService.modify(scheduleJob)
@@ -98,7 +98,7 @@ class ScheduleJobController(
     /**
      * 恢复定时任务
      */
-    @RequestMapping("/resume")
+    @PutMapping("/resume")
     @PreAuthorize("hasPermission('/schdule/job/resume','sch:job:resume')")
     fun resumeJob(jobId: String) = boolResult("恢复成功", "恢复失败") {
         scheduleJobService.resume(jobId)
@@ -107,7 +107,7 @@ class ScheduleJobController(
     /**
      * 删除定时任务
      */
-    @RequestMapping("/remove/{id}")
+    @DeleteMapping("/remove/{id}")
     @PreAuthorize("hasPermission('/schdule/job/remove','sch:job:remove')")
     fun deleteJob(@PathVariable("id") jobId: String) = boolResult("删除成功", "删除失败") {
         scheduleJobService.resume(jobId)
