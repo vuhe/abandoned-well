@@ -41,7 +41,7 @@ class SysMenuServiceImpl(
             SysMenu(
                 id = it.powerId, parentId = it.parentId, title = it.powerName,
                 username = userId, type = it.powerType, icon = it.icon,
-                openType = it.openType, href = it.powerUrl
+                openType = it.openType, href = it.powerUrl, sort = it.sort ?: 0
             )
         }
     }
@@ -52,6 +52,6 @@ class SysMenuServiceImpl(
                 menu.children = toUserMenu(sysMenus, menu.id)
                 menu
             } else null
-        }
+        }.sortedBy { it.sort }
     }
 }

@@ -12,6 +12,7 @@ package top.vuhe.admin.system.domain
  * @param href     跳转路径
  * @param children 子菜单
  * @param username 用于参数传递
+ * @param sort     用于排序
  * @author vuhe
  */
 data class SysMenu(
@@ -23,5 +24,6 @@ data class SysMenu(
     val icon: String,
     val href: String,
     val username: String,
+    val sort: Int,
     var children: List<SysMenu> = emptyList()
 )
