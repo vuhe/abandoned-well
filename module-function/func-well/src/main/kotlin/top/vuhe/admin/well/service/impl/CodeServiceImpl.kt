@@ -15,4 +15,13 @@ import top.vuhe.admin.well.service.ICodeService
 class CodeServiceImpl(
     private val codeMapper: CodeMapper
 ) : CurdService<RegionCode>(codeMapper), ICodeService {
+    private val emptyParam = RegionCode()
+
+    override fun listWithChecked(codeId: String): List<RegionCode> {
+        val list = list(emptyParam)
+        val code = list.find { it.id == codeId }
+            ?: return list
+        code.checked = true
+        return list
+    }
 }

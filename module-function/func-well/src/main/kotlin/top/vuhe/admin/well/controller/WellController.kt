@@ -59,7 +59,7 @@ class WellController(
      */
     @GetMapping("edit")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
-    fun edit(id: String) :ModelAndView {
+    fun edit(id: String): ModelAndView {
         val well = infoService.getOneById(id)
         // 通过审核的是动态更新
         return if (well?.status == WellStatus.Approved) {
@@ -76,7 +76,7 @@ class WellController(
 
 
     /**
-     * 分页查询 地质代码
+     * 分页查询 井信息
      */
     @GetMapping("page")
     @PreAuthorize("hasPermission('/well/info/page','well:info:page')")
@@ -85,7 +85,7 @@ class WellController(
     }
 
 //    /**
-//     * 添加 地质代码
+//     * 添加 井信息
 //     */
 //    @PostMapping("save")
 //    @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
@@ -94,7 +94,7 @@ class WellController(
 //    }
 //
 //    /**
-//     * 修改 地质代码
+//     * 修改 井信息
 //     */
 //    @PutMapping("update")
 //    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
@@ -103,7 +103,7 @@ class WellController(
 //    }
 
     /**
-     * 删除 地质代码
+     * 删除 井信息
      */
     @DeleteMapping("remove/{id}")
     @PreAuthorize("hasPermission('/well/info/remove','well:info:remove')")
@@ -112,7 +112,7 @@ class WellController(
     }
 
     /**
-     * 批量删除 地质代码
+     * 批量删除 井信息
      */
     @ResponseBody
     @DeleteMapping("/batchRemove")

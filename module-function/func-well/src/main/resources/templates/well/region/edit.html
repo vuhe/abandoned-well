@@ -1,10 +1,94 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('修改辖区')"/>
 </head>
 <body>
-
+<form class="layui-form" th:object="${region}">
+  <div class="mainBox">
+    <div class="main-container">
+      <input name="id" th:field="*{id}" type="hidden">
+      <div class="layui-form-item">
+        <label class="layui-form-label">省辖市：</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="city" placeholder="请输入城市" th:field="*{city}"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">区/县：</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="county" placeholder="请输入区县" th:field="*{county}"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">行政代码：</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="districtCode" placeholder="请输入行政区划代码" th:field="*{districtCode}"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">水文代码：</label>
+        <div class="layui-input-block">
+          <input lay-skin="primary" name="regionCodeId"
+                 th:checked="${code.checked}" th:each="code:${codes}" th:title="${code.code}"
+                 th:value="${code.id}" type="radio">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">排序码：</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="sort" placeholder="请输入排序码" th:field="*{sort}"
+                 type="text"/>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="button-container">
+      <button class="pear-btn pear-btn-primary pear-btn-sm" lay-filter="well-region-update" lay-submit=""
+              type="submit">
+        <i class="layui-icon layui-icon-ok"></i>
+        提交
+      </button>
+      <button class="pear-btn pear-btn-sm" type="reset">
+        <i class="layui-icon layui-icon-refresh"></i>
+        重置
+      </button>
+    </div>
+  </div>
+</form>
 </body>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+  layui.use(['form', 'jquery'], function () {
+    let form = layui.form;
+    let $ = layui.jquery;
+
+    let prefix = "/well/region/";
+
+    form.on('submit(well-region-update)', function (data) {
+      $.ajax({
+        url: prefix + 'update',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name));
+              parent.layui.table.reload("well-region-table");
+            });
+          } else {
+            layer.msg(result.msg, {icon: 2, time: 1000});
+          }
+        }
+      })
+      return false;
+    });
+  });
+</script>
 </html>

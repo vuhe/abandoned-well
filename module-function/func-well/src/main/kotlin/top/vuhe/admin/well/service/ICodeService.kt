@@ -9,4 +9,8 @@ import top.vuhe.admin.well.domina.RegionCode
  * @author vuhe
  */
 interface ICodeService: ICurdService<RegionCode> {
+    /**
+     * 查询全部代码，并对选中代码标记
+     */
+    fun listWithChecked(codeId: String): List<RegionCode>
 }

@@ -1,10 +1,201 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('辖区列表')"/>
 </head>
-<body>
+<body class="pear-container">
 
+<div class="layui-card">
+  <div class="layui-card-body">
+    <form action="" class="layui-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">省辖市</label>
+        <div class="layui-input-inline">
+          <input class="layui-input" name="city" placeholder="" type="text">
+        </div>
+        <label class="layui-form-label">区/县</label>
+        <div class="layui-input-inline">
+          <input class="layui-input" name="county" placeholder="" type="text">
+        </div>
+        <button class="pear-btn pear-btn-md pear-btn-primary" lay-filter="region-query" lay-submit>
+          <i class="layui-icon layui-icon-search"></i>
+          查询
+        </button>
+        <button class="pear-btn pear-btn-md" type="reset">
+          <i class="layui-icon layui-icon-refresh"></i>
+          重置
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="layui-card">
+  <div class="layui-card-body">
+    <table id="well-region-table" lay-filter="well-region-table"></table>
+
+    <script id="well-code-toolbar" type="text/html">
+      <button sec:authorize="hasPermission('/well/region/add','well:region:add')"
+              class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        新增
+      </button>
+      <button sec:authorize="hasPermission('/well/region/remove','well:region:remove')"
+              class="pear-btn pear-btn-md" lay-event="batchRemove">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除
+      </button>
+    </script>
+
+    <script id="well-code-bar" type="text/html">
+      <button sec:authorize="hasPermission('/well/region/edit','well:region:edit')"
+              class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
+        class="layui-icon layui-icon-edit"></i>
+      </button>
+      <button sec:authorize="hasPermission('/well/region/remove','well:region:remove')"
+              class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
+        class="layui-icon layui-icon-delete"></i>
+      </button>
+    </script>
+  </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script>
+  layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
+    let table = layui.table;
+    let form = layui.form;
+    let $ = layui.jquery;
+
+    let prefix = "/well/region/";
+
+    let cols = [
+      [
+        {type: 'checkbox'},
+        {field: 'city', title: '省辖市（含济源）'},
+        {field: 'county', title: '区/县'},
+        {field: 'districtCode', title: '行政区划代码'},
+        {field: 'sort', title: '排序码'},
+        {title: '操作', toolbar: '#well-code-bar', align: 'center', width: 130}
+      ]
+    ]
+
+    table.render({
+      elem: '#well-region-table',
+      url: prefix + 'page',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: '#well-code-toolbar',
+      defaultToolbar: [{
+        title: '刷新',
+        layEvent: 'refresh',
+        icon: 'layui-icon-refresh',
+      }, 'filter', 'print', 'exports']
+    });
+
+    form.on('submit(region-query)', function (data) {
+      window.refresh(data.field);
+      return false;
+    });
+
+    table.on('tool(well-region-table)', function (obj) {
+      if (obj.event === 'remove') {
+        window.remove(obj);
+      } else if (obj.event === 'edit') {
+        window.edit(obj);
+      }
+    });
+
+    table.on('toolbar(well-region-table)', function (obj) {
+      if (obj.event === 'add') {
+        window.add();
+      } else if (obj.event === 'refresh') {
+        window.refresh();
+      } else if (obj.event === 'batchRemove') {
+        window.batchRemove(obj);
+      }
+    });
+
+    window.add = function () {
+      layer.open({
+        type: 2,
+        title: '新增辖区',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'add'
+      });
+    }
+
+    window.edit = function (obj) {
+      layer.open({
+        type: 2,
+        title: '修改辖区',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'edit?id=' + obj.data['id']
+      });
+    }
+
+    window.remove = function (obj) {
+      layer.confirm('确定要删除该辖区', {icon: 3, title: '提示'}, function (index) {
+        layer.close(index);
+        let loading = layer.load();
+        $.ajax({
+          url: prefix + "remove/" + obj.data['id'],
+          dataType: 'json',
+          type: 'delete',
+          success: function (result) {
+            layer.close(loading);
+            if (result.success) {
+              layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                obj.del();
+              });
+            } else {
+              layer.msg(result.msg, {icon: 2, time: 1000});
+            }
+          }
+        })
+      });
+    }
+
+    window.batchRemove = function (obj) {
+      let data = table.checkStatus(obj.config.id).data;
+      if (data.length === 0) {
+        layer.msg("未选中数据", {icon: 3, time: 1000});
+        return false;
+      }
+      let ids = "";
+      for (let i = 0; i < data.length; i++) {
+        ids += data[i].id + ",";
+      }
+      ids = ids.substr(0, ids.length - 1);
+      layer.confirm('确定要删除这些辖区', {icon: 3, title: '提示'}, function (index) {
+        layer.close(index);
+        let loading = layer.load();
+        $.ajax({
+          url: prefix + "batchRemove",
+          dataType: 'json',
+          data: {"ids": ids},
+          type: 'delete',
+          success: function (result) {
+            layer.close(loading);
+            if (result.success) {
+              layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                table.reload('well-region-table');
+              });
+            } else {
+              layer.msg(result.msg, {icon: 2, time: 1000});
+            }
+          }
+        })
+      });
+    }
+
+    window.refresh = function (param) {
+      table.reload('well-region-table', {where: param});
+    }
+  })
+</script>
 </body>
 </html>
