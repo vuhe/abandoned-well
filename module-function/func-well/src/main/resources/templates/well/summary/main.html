@@ -1,10 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('井列表汇总导出')"/>
 </head>
-<body>
+<body class="pear-container">
+<div class="layui-card">
+  <div class="layui-card-body">
+    <table id="well-info-table" lay-filter="well-info-table"></table>
 
+    <script id="well-code-toolbar" type="text/html">
+      <button class="pear-btn pear-btn-primary pear-btn-md" lay-event="word">
+        <i class="layui-icon layui-icon-download-circle"></i>
+        详情导出
+      </button>
+      <button class="pear-btn pear-btn-md" lay-event="excel">
+        <i class="layui-icon layui-icon-export"></i>
+        汇总导出
+      </button>
+    </script>
+
+    <script id="well-info-bar" type="text/html">
+      <button sec:authorize="hasPermission('/well/info/detail','well:info:detail')"
+              class="pear-btn pear-btn-primary pear-btn-sm" lay-event="detail"><i
+        class="pear-icon pear-icon-image-text"></i>
+      </button>
+    </script>
+  </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script>
+  layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
+    let table = layui.table;
+    let form = layui.form;
+    let $ = layui.jquery;
+
+    let prefix = "/well/info/";
+
+    let cols = [
+      [
+        {type: 'checkbox'},
+        {field: 'id', title: '废弃井编号'},
+        {field: 'name', title: '废弃井名称'},
+        {field: 'originCode', title: '原始编号'},
+        {field: 'type', title: '废弃井类型'},
+        {field: 'company', title: '井所属单位'},
+        {field: 'statusStr', title: '上报状态'},
+        {title: '操作', toolbar: '#well-info-bar', align: 'center', width: 160}
+      ]
+    ]
+
+    table.render({
+      elem: '#well-info-table',
+      url: prefix + 'page',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: '#well-code-toolbar',
+      defaultToolbar: [{
+        title: '刷新',
+        layEvent: 'refresh',
+        icon: 'layui-icon-refresh',
+      }, 'filter']
+    });
+
+    table.on('tool(well-info-table)', function (obj) {
+      if (obj.event === 'detail') {
+        window.detail(obj);
+      }
+    });
+
+    table.on('toolbar(well-info-table)', function (obj) {
+      if (obj.event === 'excel') {
+        // TODO("export excel")
+      } else if (obj.event === 'word') {
+        // TODO("export word")
+      } else if (obj.event === 'refresh') {
+        window.refresh();
+      }
+    });
+
+    window.detail = function (obj) {
+      layer.open({
+        type: 2,
+        title: '井信息详情',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'detail?id=' + obj.data['id']
+      });
+    }
+
+    window.refresh = function () {
+      table.reload('well-info-table');
+    }
+  })
+</script>
 </body>
 </html>
