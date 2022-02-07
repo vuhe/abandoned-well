@@ -4,6 +4,7 @@ import java.io.Serializable
 import top.vuhe.admin.spring.property.SecurityProperty
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.core.Authentication
+import top.vuhe.admin.spring.security.principal.LoginUserAuthority
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 
 /**
@@ -32,7 +33,8 @@ class SecurePermissionSupport(
             return true
         }
 
-        return user.authorities.contains(permission)
+        val authority = LoginUserAuthority(permission.toString())
+        return user.authorities.contains(authority)
     }
 
     /**
