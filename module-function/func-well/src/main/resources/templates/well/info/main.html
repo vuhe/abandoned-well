@@ -1,10 +1,231 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('井列表')"/>
 </head>
-<body>
+<body class="pear-container">
 
+<div class="layui-card">
+  <div class="layui-card-body">
+    <form action="" class="layui-form">
+      <div class="layui-form-item">
+        <label class="layui-form-label">井名称</label>
+        <div class="layui-input-inline">
+          <input class="layui-input" name="name" placeholder="" type="text">
+        </div>
+        <button class="pear-btn pear-btn-md pear-btn-primary" lay-filter="well-query" lay-submit>
+          <i class="layui-icon layui-icon-search"></i>
+          查询
+        </button>
+        <button class="pear-btn pear-btn-md" type="reset">
+          <i class="layui-icon layui-icon-refresh"></i>
+          重置
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="layui-card">
+  <div class="layui-card-body">
+    <table id="well-info-table" lay-filter="well-info-table"></table>
+
+    <script id="well-code-toolbar" type="text/html">
+      <button sec:authorize="hasPermission('/well/info/add','well:info:add')"
+              class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
+        <i class="layui-icon layui-icon-add-1"></i>
+        上报
+      </button>
+      <button sec:authorize="hasPermission('/well/info/remove','well:info:remove')"
+              class="pear-btn pear-btn-md" lay-event="batchRemove">
+        <i class="layui-icon layui-icon-delete"></i>
+        删除
+      </button>
+    </script>
+
+    <script id="well-info-bar" type="text/html">
+      <button sec:authorize="hasPermission('/well/info/edit','well:info:edit')"
+              class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
+        class="layui-icon layui-icon-edit"></i>
+      </button>
+      <button sec:authorize="hasPermission('/well/info/approve','well:info:approve')"
+              class="pear-btn pear-btn-primary pear-btn-sm" lay-event="approve"><i
+        class="pear-icon pear-icon-history"></i>
+      </button>
+      <button sec:authorize="hasPermission('/well/info/detail','well:info:detail')"
+              class="pear-btn pear-btn-primary pear-btn-sm" lay-event="detail"><i
+        class="pear-icon pear-icon-image-text"></i>
+      </button>
+      <button sec:authorize="hasPermission('/well/info/remove','well:info:remove')"
+              class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
+        class="layui-icon layui-icon-delete"></i>
+      </button>
+    </script>
+  </div>
+</div>
+
+<th:block th:include="include :: footer"/>
+<script>
+  layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
+    let table = layui.table;
+    let form = layui.form;
+    let $ = layui.jquery;
+
+    let prefix = "/well/info/";
+
+    let cols = [
+      [
+        {type: 'checkbox'},
+        {field: 'id', title: '废弃井编号'},
+        {field: 'name', title: '废弃井名称'},
+        {field: 'originCode', title: '原始编号'},
+        {field: 'type', title: '废弃井类型'},
+        {field: 'company', title: '井所属单位'},
+        {field: 'statusStr', title: '上报状态'},
+        {title: '操作', toolbar: '#well-info-bar', align: 'center', width: 160}
+      ]
+    ]
+
+    table.render({
+      elem: '#well-info-table',
+      url: prefix + 'page',
+      page: true,
+      cols: cols,
+      skin: 'line',
+      toolbar: '#well-code-toolbar',
+      defaultToolbar: [{
+        title: '刷新',
+        layEvent: 'refresh',
+        icon: 'layui-icon-refresh',
+      }, 'filter', 'print']
+    });
+
+    form.on('submit(well-query)', function (data) {
+      window.refresh(data.field);
+      return false;
+    });
+
+    table.on('tool(well-info-table)', function (obj) {
+      if (obj.event === 'remove') {
+        window.remove(obj);
+      } else if (obj.event === 'edit') {
+        window.edit(obj);
+      } else if (obj.event === 'approve') {
+        window.approve(obj);
+      } else if (obj.event === 'detail') {
+        window.detail(obj);
+      }
+    });
+
+    table.on('toolbar(well-info-table)', function (obj) {
+      if (obj.event === 'add') {
+        window.add();
+      } else if (obj.event === 'refresh') {
+        window.refresh();
+      } else if (obj.event === 'batchRemove') {
+        window.batchRemove(obj);
+      }
+    });
+
+    window.add = function () {
+      layer.open({
+        type: 2,
+        title: '新增井信息',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'add'
+      });
+    }
+
+    window.edit = function (obj) {
+      layer.open({
+        type: 2,
+        title: '修改井信息',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'edit?id=' + obj.data['id']
+      });
+    }
+
+    window.approve = function (obj) {
+      layer.open({
+        type: 2,
+        title: '审批井信息',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'approve?id=' + obj.data['id']
+      });
+    }
+
+    window.detail = function (obj) {
+      layer.open({
+        type: 2,
+        title: '井信息详情',
+        shade: 0.1,
+        area: ['550px', '500px'],
+        content: prefix + 'detail?id=' + obj.data['id']
+      });
+    }
+
+    window.remove = function (obj) {
+      layer.confirm('确定要删除该废弃井信息', {icon: 3, title: '提示'}, function (index) {
+        layer.close(index);
+        let loading = layer.load();
+        $.ajax({
+          url: prefix + "remove/" + obj.data['id'],
+          dataType: 'json',
+          type: 'delete',
+          success: function (result) {
+            layer.close(loading);
+            if (result.success) {
+              layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                obj.del();
+              });
+            } else {
+              layer.msg(result.msg, {icon: 2, time: 1000});
+            }
+          }
+        })
+      });
+    }
+
+    window.batchRemove = function (obj) {
+      let data = table.checkStatus(obj.config.id).data;
+      if (data.length === 0) {
+        layer.msg("未选中数据", {icon: 3, time: 1000});
+        return false;
+      }
+      let ids = "";
+      for (let i = 0; i < data.length; i++) {
+        ids += data[i].id + ",";
+      }
+      ids = ids.substr(0, ids.length - 1);
+      layer.confirm('确定要删除这些信息', {icon: 3, title: '提示'}, function (index) {
+        layer.close(index);
+        let loading = layer.load();
+        $.ajax({
+          url: prefix + "batchRemove",
+          dataType: 'json',
+          data: {"ids": ids},
+          type: 'delete',
+          success: function (result) {
+            layer.close(loading);
+            if (result.success) {
+              layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+                table.reload('well-info-table');
+              });
+            } else {
+              layer.msg(result.msg, {icon: 2, time: 1000});
+            }
+          }
+        })
+      });
+    }
+
+    window.refresh = function (param) {
+      table.reload('well-info-table', {where: param});
+    }
+  })
+</script>
 </body>
 </html>

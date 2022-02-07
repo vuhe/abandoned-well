@@ -12,7 +12,7 @@ class WellInfo : BaseEntity() {
     /** 主键 id */
     override var id: String = ""
 
-    /** 废弃并名称 */
+    /** 废弃井名称 */
     var name: String = ""
 
     /** 原始编号 */
@@ -108,4 +108,15 @@ class WellInfo : BaseEntity() {
 //    @NotNull(message = "废弃井纬度(秒)未填报")
 //    @Range(message = "废弃井纬度（秒）填报有误，范围在[0-60)之内", min = 0, max = 59L)
     var lat3: Int? = null
+
+    /** 井类型字符串 */
+    val type: String get() = "${wellType?.category}-${wellType?.type}"
+
+    /** 井状态字符串 */
+    val statusStr: String
+        get() = when (status) {
+            WellStatus.NotAccepted -> "审核不通过（打回修改）"
+            WellStatus.Approved -> "审核通过"
+            else -> "已上报（审核中）"
+        }
 }

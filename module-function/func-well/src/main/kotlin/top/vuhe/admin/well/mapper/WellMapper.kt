@@ -1,5 +1,6 @@
 package top.vuhe.admin.well.mapper
 
+import org.ktorm.dsl.*
 import org.ktorm.schema.*
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.mapper.CurdMapper
@@ -35,4 +36,10 @@ class WellMapper : CurdMapper<WellInfo>("well_info") {
     private val status = enum<WellStatus>("status").bind(WellInfo::status, WellStatus.Reported)
     private val fillStartTime = datetime("fill_start_time").bind(WellInfo::fillStartTime)
     private val fillEndTime = datetime("fill_end_time").bind(WellInfo::fillEndTime)
+
+    override fun Query.listFilter(param: WellInfo): Query {
+        return whereWithConditions {
+            if (param.name.isNotEmpty()) it.add(name like "%${param.name}%")
+        }
+    }
 }

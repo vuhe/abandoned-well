@@ -1,5 +1,6 @@
 package top.vuhe.admin.well.controller
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -14,6 +15,7 @@ import top.vuhe.admin.well.service.IRegionService
  * @author vuhe
  */
 @RestController
+@Tag(name = "井区域")
 @RequestMapping("/well/region")
 class RegionController(
     private val regionService: IRegionService
