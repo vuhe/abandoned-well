@@ -69,7 +69,7 @@ class WellInfo : BaseEntity() {
     var informTime: LocalDateTime? = null
 
     /** 信息状态 */
-    var status: WellStatus? = WellStatus.Reported
+    var status: WellStatus? = null
 
     /** 回填开始时间 */
     var fillStartTime: LocalDateTime? = null

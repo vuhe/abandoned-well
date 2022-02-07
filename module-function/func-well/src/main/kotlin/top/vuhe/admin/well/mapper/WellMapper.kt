@@ -32,7 +32,7 @@ class WellMapper : CurdMapper<WellInfo>("well_info") {
     private val informer = varchar("informer").bind(WellInfo::informer)
     private val investigator = varchar("investigator").bind(WellInfo::investigator)
     private val informTime = datetime("inform_time").bind(WellInfo::informTime)
-    private val status = enum<WellStatus>("status").bind(WellInfo::status)
+    private val status = enum<WellStatus>("status").bind(WellInfo::status, WellStatus.Reported)
     private val fillStartTime = datetime("fill_start_time").bind(WellInfo::fillStartTime)
     private val fillEndTime = datetime("fill_end_time").bind(WellInfo::fillEndTime)
 }
