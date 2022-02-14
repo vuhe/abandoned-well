@@ -1,10 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('井信息动态更新')"/>
 </head>
 <body>
-<h1>report</h1>
+<form class="layui-form" th:object="${well}">
+  <div class="mainBox">
+    <div class="main-container">
+      <input name="id" th:field="*{id}" type="hidden">
+      <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">回填开始时间</label>
+        <div class="layui-input-block" style="margin-left: 120px">
+          <input id="fillStartTime" class="layui-input" lay-verify="required" name="fillStartTime"
+                 placeholder="请输入时间" type="text" th:if="${well.fillStartTime} eq null"/>
+          <input id="fillStartTime" class="layui-input" lay-verify="required" name="fillStartTime"
+                 placeholder="请输入时间" type="text" th:unless="${well.fillStartTime} eq null"
+                 th:value="${#temporals.format(well.fillStartTime, 'yyyy-MM-dd')}"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">回填结束时间</label>
+        <div class="layui-input-block" style="margin-left: 120px">
+          <input id="fillEndTime" class="layui-input" lay-verify="required" name="fillEndTime"
+                 placeholder="请输入时间" type="text" th:if="${well.fillEndTime} eq null"/>
+          <input id="fillEndTime" class="layui-input" lay-verify="required" name="fillEndTime"
+                 placeholder="请输入时间" type="text" th:unless="${well.fillEndTime} eq null"
+                 th:value="${#temporals.format(well.fillEndTime, 'yyyy-MM-dd')}"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label" style="width: 90px">注释</label>
+        <div class="layui-input-block" style="margin-left: 120px">
+          <textarea class="layui-textarea" name="remark" placeholder="请输入注释"
+                    th:field="*{remark}" type="text"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="button-container">
+      <button class="pear-btn pear-btn-primary pear-btn-sm" lay-filter="well-info-detail" lay-submit>
+        <i class="layui-icon layui-icon-search"></i>
+        详情
+      </button>
+      <button class="pear-btn pear-btn-primary pear-btn-sm" lay-filter="well-info-update" lay-submit=""
+              type="submit">
+        <i class="layui-icon layui-icon-ok"></i>
+        提交
+      </button>
+      <button class="pear-btn pear-btn-sm" type="reset">
+        <i class="layui-icon layui-icon-refresh"></i>
+        重置
+      </button>
+    </div>
+  </div>
+</form>
 </body>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+  layui.use(['form', 'jquery', 'laydate'], function () {
+    let form = layui.form;
+    let laydate = layui.laydate;
+    let $ = layui.jquery;
+
+    let prefix = "/well/info/";
+
+    laydate.render({
+      elem: '#fillStartTime',
+      format: 'yyyy-MM-dd'
+    });
+
+    laydate.render({
+      elem: '#fillEndTime',
+      format: 'yyyy-MM-dd'
+    });
+
+    form.on('submit(well-info-detail)', function () {
+      window.detail();
+      return false;
+    });
+
+    form.on('submit(well-info-update)', function (data) {
+      $.ajax({
+        url: prefix + 'report',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name));
+              parent.layui.table.reload("well-info-table");
+            });
+          } else {
+            layer.msg(result.msg, {icon: 2, time: 1000});
+          }
+        }
+      })
+      return false;
+    });
+
+    window.detail = function () {
+      layer.open({
+        type: 2,
+        title: '井信息详情',
+        shade: 0.1,
+        area: ['500px', '450px'],
+        content: prefix + 'detail?id=' + [[${well.id}]]
+      });
+    }
+  });
+</script>
 </html>

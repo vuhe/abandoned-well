@@ -107,6 +107,15 @@ class WellController(
 //    }
 
     /**
+     * 动态更新 井信息
+     */
+    @PutMapping("report")
+    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    fun update(@RequestBody info: WellInfo) = boolResult {
+        infoService.modify(info)
+    }
+
+    /**
      * 通过审核 井信息
      */
     @PutMapping("approved/{id}")

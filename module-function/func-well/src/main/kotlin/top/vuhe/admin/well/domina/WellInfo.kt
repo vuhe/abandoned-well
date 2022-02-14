@@ -1,7 +1,7 @@
 package top.vuhe.admin.well.domina
 
 import top.vuhe.admin.spring.database.entity.BaseEntity
-import java.time.LocalDateTime
+import java.time.LocalDate
 
 /**
  * 废弃井信息
@@ -34,7 +34,7 @@ class WellInfo : BaseEntity() {
     var company: String = ""
 
     /** 建井时间 */
-    var digTime: LocalDateTime? = null
+    var digTime: LocalDate? = null
 
     /** 联系人 */
     var contacts: String = ""
@@ -46,7 +46,7 @@ class WellInfo : BaseEntity() {
     var abandonRemark: String = ""
 
     /** 废弃时间 */
-    var abandonTime: LocalDateTime? = null
+    var abandonTime: LocalDate? = null
 
     /** 经度 */
     var lng: String = ""
@@ -66,16 +66,16 @@ class WellInfo : BaseEntity() {
 
     /** 填表时间 */
 //    @NotNull(message = "报出时间未填报")
-    var informTime: LocalDateTime? = null
+    var informTime: LocalDate? = null
 
     /** 信息状态 */
     var status: WellStatus? = null
 
     /** 回填开始时间 */
-    var fillStartTime: LocalDateTime? = null
+    var fillStartTime: LocalDate? = null
 
     /** 回填结束时间 */
-    var fillEndTime: LocalDateTime? = null
+    var fillEndTime: LocalDate? = null
 
     /* ------------------------------------- json 解析字段-------------------------------------- */
 
