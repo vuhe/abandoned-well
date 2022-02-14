@@ -1,10 +1,115 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('井详细信息')"/>
 </head>
 <body>
-<h1>detail</h1>
+<table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col>
+  </colgroup>
+  <thead>
+  <tr>
+    <th>数据名称</th>
+    <th>数据值</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>废弃井编号</td>
+    <td th:text="${well.id}"></td>
+  </tr>
+  <tr>
+    <td>名 称</td>
+    <td th:text="${well.name}"></td>
+  </tr>
+  <tr>
+    <td>原始编号</td>
+    <td th:text="${well.originCode}"></td>
+  </tr>
+  <tr>
+    <td>废弃井类型</td>
+    <td th:text="${well.type}"></td>
+  </tr>
+  <tr>
+    <td>省辖市(含济源)</td>
+    <td th:text="${region.city}"></td>
+  </tr>
+  <tr>
+    <td>区/县</td>
+    <td th:text="${region.county}"></td>
+  </tr>
+  <tr>
+    <td>乡镇(街道办)</td>
+    <td th:text="${well.street}"></td>
+  </tr>
+  <tr>
+    <td>村(街)、门牌号</td>
+    <td th:text="${well.address}"></td>
+  </tr>
+  <tr>
+    <td>井所属单位</td>
+    <td th:text="${well.company}"></td>
+  </tr>
+  <tr>
+    <td>建井时间</td>
+    <td th:if="${well.digTime} eq null">未填报</td>
+    <td th:unless="${well.digTime} eq null"
+        th:text="${#temporals.format(well.digTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  <tr>
+    <td>联系人</td>
+    <td th:if="${well.phone} eq ''" th:text="${well.contacts}"></td>
+    <td th:unless="${well.phone} eq ''"
+        th:text="${well.contacts} + '(' + ${well.phone} + ')'"></td>
+  </tr>
+  <tr>
+    <td>废弃原因</td>
+    <td th:text="${well.abandonRemark}"></td>
+  </tr>
+  <tr>
+    <td>废弃时间</td>
+    <td th:if="${well.abandonTime} eq null">未填报</td>
+    <td th:unless="${well.abandonTime} eq null"
+        th:text="${#temporals.format(well.abandonTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  <tr>
+    <td>坐标</td>
+    <td th:text="'经度: ' + ${well.lng} + '; 纬度: ' + ${well.lat}"></td>
+  </tr>
+  <tr>
+    <td>填表人</td>
+    <td th:text="${well.informer}"></td>
+  </tr>
+  <tr>
+    <td>排查人</td>
+    <td th:text="${well.investigator}"></td>
+  </tr>
+  <tr>
+    <td>填表时间</td>
+    <td th:if="${well.informTime} eq null">未填报</td>
+    <td th:unless="${well.informTime} eq null"
+        th:text="${#temporals.format(well.informTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  <tr>
+    <td>状态</td>
+    <td th:text="${well.statusStr}"></td>
+  </tr>
+  <tr>
+    <td>回填开始时间</td>
+    <td th:if="${well.fillStartTime} eq null">未填报</td>
+    <td th:unless="${well.fillStartTime} eq null"
+        th:text="${#temporals.format(well.fillStartTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  <tr>
+    <td>回填结束时间</td>
+    <td th:if="${well.fillEndTime} eq null">未填报</td>
+    <td th:unless="${well.fillEndTime} eq null"
+        th:text="${#temporals.format(well.fillEndTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  </tbody>
+</table>
 </body>
+<th:block th:include="include :: footer"/>
 </html>

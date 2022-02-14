@@ -8,6 +8,7 @@ import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
+import top.vuhe.admin.well.service.IRegionService
 import top.vuhe.admin.well.service.IWellService
 
 /**
@@ -19,7 +20,8 @@ import top.vuhe.admin.well.service.IWellService
 @Tag(name = "井信息")
 @RequestMapping("/well/info")
 class WellController(
-    private val infoService: IWellService
+    private val infoService: IWellService,
+    private val regionService: IRegionService
 ) : BaseController() {
 
     /**
@@ -35,7 +37,9 @@ class WellController(
     @GetMapping("detail")
     @PreAuthorize("hasPermission('/well/info/detail','well:info:detail')")
     fun detail(id: String) = ModelAndView("well/info/detail").apply {
-        addObject("well", infoService.getOneById(id))
+        val well = infoService.getOneById(id)
+        addObject("well", well)
+        addObject("region", regionService.getOneById(well?.regionId ?: ""))
     }
 
     /**

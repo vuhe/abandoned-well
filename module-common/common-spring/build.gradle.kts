@@ -12,6 +12,7 @@ dependencies {
     // 系统模版组件
     api("org.springframework.boot:spring-boot-starter-thymeleaf")
     api("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+    api("org.thymeleaf.extras:thymeleaf-extras-java8time")
 
     // 系统数据库组件
     api("org.springframework.boot:spring-boot-starter-jdbc")

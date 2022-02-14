@@ -4,10 +4,6 @@ import org.springframework.boot.autoconfigure.AutoConfigureBefore
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.web.session.HttpSessionEventPublisher
-import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect
-import org.thymeleaf.spring5.ISpringTemplateEngine
-import org.thymeleaf.spring5.SpringTemplateEngine
-import org.thymeleaf.templateresolver.ITemplateResolver
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.config.SecureConfiguration
@@ -65,16 +61,4 @@ class SecurityAutoConfiguration(
      */
     @Bean
     fun httpSessionEventPublisher() = HttpSessionEventPublisher()
-
-    /**
-     * thymeleaf security 别名注册，方便前端使用
-     */
-    @Bean
-    fun templateEngine(templateResolver: ITemplateResolver): ISpringTemplateEngine {
-        val templateEngine = SpringTemplateEngine()
-        templateEngine.setTemplateResolver(templateResolver)
-        templateEngine.enableSpringELCompiler = true
-        templateEngine.addDialect(SpringSecurityDialect())
-        return templateEngine
-    }
 }

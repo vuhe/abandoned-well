@@ -1,10 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('井信息审批')"/>
 </head>
 <body>
-<h1>approve</h1>
+<table class="layui-table">
+  <colgroup>
+    <col width="150">
+    <col>
+  </colgroup>
+  <thead>
+  <tr>
+    <th>数据名称</th>
+    <th>数据值</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr>
+    <td>废弃井编号</td>
+    <td th:text="${well.id}"></td>
+  </tr>
+  <tr>
+    <td>名 称</td>
+    <td th:text="${well.name}"></td>
+  </tr>
+  <tr>
+    <td>填表人</td>
+    <td th:text="${well.informer}"></td>
+  </tr>
+  <tr>
+    <td>排查人</td>
+    <td th:text="${well.investigator}"></td>
+  </tr>
+  <tr>
+    <td>填表时间</td>
+    <td th:if="${well.informTime} eq null">未填报</td>
+    <td th:unless="${well.informTime} eq null"
+        th:text="${#temporals.format(well.informTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  <tr>
+    <td>状态</td>
+    <td th:text="${well.statusStr}"></td>
+  </tr>
+  <tr>
+    <td>详情</td>
+    <td></td>
+  </tr>
+  </tbody>
+</table>
 </body>
 </html>
