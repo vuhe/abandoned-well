@@ -107,6 +107,32 @@ class WellController(
 //    }
 
     /**
+     * 通过审核 井信息
+     */
+    @PutMapping("approved/{id}")
+    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    fun pass(@PathVariable("id") id: String) = boolResult {
+        val info = WellInfo().apply {
+            this.id = id
+            status = WellStatus.Approved
+        }
+        infoService.modify(info)
+    }
+
+    /**
+     * 打回修改 井信息
+     */
+    @PutMapping("not_approved/{id}")
+    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    fun notPass(@PathVariable("id") id: String) = boolResult {
+        val info = WellInfo().apply {
+            this.id = id
+            status = WellStatus.NotAccepted
+        }
+        infoService.modify(info)
+    }
+
+    /**
      * 删除 井信息
      */
     @DeleteMapping("remove/{id}")

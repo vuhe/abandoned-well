@@ -4,6 +4,28 @@
   <th:block th:include="include :: header('井信息审批')"/>
 </head>
 <body>
+
+<div class="layui-card">
+  <div class="layui-card-body">
+    <form action="" class="layui-form">
+      <div class="layui-form-item">
+        <button class="pear-btn pear-btn-md pear-btn-primary" lay-filter="well-info-detail" lay-submit>
+          <i class="layui-icon layui-icon-search"></i>
+          信息详情
+        </button>
+        <button class="pear-btn pear-btn-md pear-btn-primary" lay-filter="well-pass" lay-submit>
+          <i class="layui-icon layui-icon-search"></i>
+          审核通过
+        </button>
+        <button class="pear-btn pear-btn-md" lay-filter="well-not-pass" lay-submit>
+          <i class="layui-icon layui-icon-refresh"></i>
+          打回修改
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <table class="layui-table">
   <colgroup>
     <col width="150">
@@ -42,11 +64,69 @@
     <td>状态</td>
     <td th:text="${well.statusStr}"></td>
   </tr>
-  <tr>
-    <td>详情</td>
-    <td></td>
-  </tr>
   </tbody>
 </table>
 </body>
+<th:block th:include="include :: footer"/>
+<script>
+  layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
+    let form = layui.form;
+    let $ = layui.jquery;
+
+    let prefix = "/well/info/";
+
+    form.on('submit(well-info-detail)', function () {
+      window.detail();
+      return false;
+    });
+
+    form.on('submit(well-pass)', function () {
+      $.ajax({
+        url: prefix + 'approved/' + [[${well.id}]],
+        dataType: 'json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name));
+              parent.layui.table.reload("well-info-table");
+            });
+          } else {
+            layer.msg(result.msg, {icon: 2, time: 1000});
+          }
+        }
+      })
+      return false;
+    });
+
+    form.on('submit(well-not-pass)', function () {
+      $.ajax({
+        url: prefix + 'not_approved/' + [[${well.id}]],
+        dataType: 'json',
+        type: 'put',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name));
+              parent.layui.table.reload("well-info-table");
+            });
+          } else {
+            layer.msg(result.msg, {icon: 2, time: 1000});
+          }
+        }
+      })
+      return false;
+    });
+
+    window.detail = function () {
+      layer.open({
+        type: 2,
+        title: '井信息详情',
+        shade: 0.1,
+        area: ['500px', '450px'],
+        content: prefix + 'detail?id=' + [[${well.id}]]
+      });
+    }
+  })
+</script>
 </html>
