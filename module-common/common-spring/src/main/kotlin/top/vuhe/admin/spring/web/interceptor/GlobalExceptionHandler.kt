@@ -1,6 +1,7 @@
 package top.vuhe.admin.spring.web.interceptor
 
 import org.slf4j.LoggerFactory
+import org.springframework.validation.BindException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
@@ -33,6 +34,15 @@ class GlobalExceptionHandler {
     fun notFount(e: RuntimeException): ResultObj<*> {
         log.error("运行时异常:", e)
         return ResultObj.Fail<Nothing>(message = "运行时异常:" + e.message)
+    }
+
+    /**
+     * 拦 截 参 数 验 证 失 败 异 常
+     */
+    @ExceptionHandler(BindException::class)
+    fun validationFailed(request: HttpServletRequest, e: BindException): ResultObj<*> {
+        val message = e.bindingResult.allErrors.lastOrNull()?.defaultMessage ?: "参数不符合要求"
+        return ResultObj.Fail<Nothing>(message = message)
     }
 
     /**

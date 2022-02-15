@@ -1,5 +1,6 @@
 package top.vuhe.admin.well.domina
 
+import org.hibernate.validator.constraints.Length
 import top.vuhe.admin.spring.database.entity.BaseEntity
 
 /**
@@ -18,6 +19,7 @@ class WellRegion : BaseEntity() {
     var county: String = ""
 
     /** 行政区划代码 */
+    @Length(min = 6, max = 6, message = "行政区划代码应为6位")
     var districtCode: String = ""
 
     /** 二级水文地址代码 id */

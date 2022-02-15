@@ -8,4 +8,9 @@ import top.vuhe.admin.well.domina.WellLog
  *
  * @author vuhe
  */
-interface ILogService : ICurdService<WellLog>
+interface ILogService : ICurdService<WellLog> {
+    /**
+     * 记录日志信息
+     */
+    fun record(wellId: String, logType: String)
+}

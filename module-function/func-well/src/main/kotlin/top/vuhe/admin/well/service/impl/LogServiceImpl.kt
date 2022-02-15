@@ -13,4 +13,13 @@ import top.vuhe.admin.well.service.ILogService
  */
 @Service
 class LogServiceImpl(logMapper: LogMapper) :
-    CurdService<WellLog>(logMapper), ILogService
+    CurdService<WellLog>(logMapper), ILogService {
+    override fun record(wellId: String, logType: String) {
+        val log = WellLog().apply {
+            this.wellId = wellId
+            this.logType = logType
+            username = "" // TODO modify username
+        }
+//        add(log)
+    }
+}

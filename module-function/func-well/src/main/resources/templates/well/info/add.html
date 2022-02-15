@@ -1,10 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <th:block th:include="include :: header('上报井信息')"/>
 </head>
 <body>
-<h1>add</h1>
+<form action="javascript:void(0);" class="layui-form">
+  <div class="mainBox">
+    <div class="main-container">
+
+      <div class="layui-form-item">
+        <label class="layui-form-label">井名称</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="name" placeholder="请输入名称"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">原始编号</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="originCode" placeholder="请输入原编号"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">井类型</label>
+        <div class="layui-input-block">
+          <select name="wellType" lay-verify="required">
+            <option value=""></option>
+            <option value="KU">矿井-竖井</option>
+            <option value="KX">矿井-斜井</option>
+            <option value="KP">矿井-平硐</option>
+            <option value="KO">矿井-其他</option>
+
+            <option value="ZU">钻井-石油井</option>
+            <option value="ZT">钻井-天然气井</option>
+            <option value="ZW">钻井-瓦斯抽采与排放井</option>
+            <option value="ZD">钻井-地热井</option>
+            <option value="ZL">钻井-卤水井</option>
+            <option value="ZP">钻井-普通地质钻孔</option>
+            <option value="ZK">钻井-水文孔</option>
+            <option value="ZO">钻井-其他</option>
+
+            <option value="QG">取水井-供水井</option>
+            <option value="QD">取水井-地下水监测井</option>
+            <option value="QK">取水井-水文地质勘探井</option>
+            <option value="QU">取水井-疏降水井</option>
+            <option value="QN">取水井-农田灌溉井</option>
+            <option value="QO">取水井-其他</option>
+          </select>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">井区域</label>
+        <div class="layui-input-block">
+          <select name="regionId" lay-verify="required">
+            <option value=""></option>
+            <option th:each="region:${regions}" th:value="${region.id}"
+                    th:text="${region.city} + '-' + ${region.county}">城市-区域
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">乡镇(街道办)</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="street" placeholder="请输入乡镇"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">村(街)</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="address" placeholder="请输入村(街)"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">所属单位</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="company" placeholder="请输入所属单位"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">建井时间</label>
+        <div class="layui-input-block">
+          <input id="digTime" class="layui-input" lay-verify="required" name="digTime"
+                 placeholder="请输入时间" type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">联系人</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="contacts" placeholder="请输入联系人"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">联系电话</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="phone" placeholder="请输入联系电话"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">废弃原因</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="abandonRemark" placeholder="请输入废弃原因"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">废弃时间</label>
+        <div class="layui-input-block">
+          <input id="abandonTime" class="layui-input" lay-verify="required" name="abandonTime"
+                 placeholder="请输入时间" type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">经度</label>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="text" name="lng1" placeholder="度" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid">°</div>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="text" name="lng2" placeholder="分" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid">'</div>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="text" name="lng3" placeholder="秒" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid">"</div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <div class="layui-inline">
+          <label class="layui-form-label">纬度</label>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="text" name="lat1" placeholder="度" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid">°</div>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="text" name="lat2" placeholder="分" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid">'</div>
+          <div class="layui-input-inline" style="width: 100px;">
+            <input type="text" name="lat3" placeholder="秒" autocomplete="off" class="layui-input">
+          </div>
+          <div class="layui-form-mid">"</div>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">填表人</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="informer" placeholder="请输入填表人"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">排查人</label>
+        <div class="layui-input-block">
+          <input class="layui-input" lay-verify="required" name="investigator" placeholder="请输入排查人"
+                 type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">填表时间</label>
+        <div class="layui-input-block">
+          <input id="informTime" class="layui-input" lay-verify="required" name="informTime"
+                 placeholder="请输入时间" type="text"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="button-container">
+      <button class="pear-btn pear-btn-primary pear-btn-sm" lay-filter="well-info-save" lay-submit="" type="submit">
+        <i class="layui-icon layui-icon-ok"></i>
+        提交
+      </button>
+      <button class="pear-btn pear-btn-sm" type="reset">
+        <i class="layui-icon layui-icon-refresh"></i>
+        重置
+      </button>
+    </div>
+  </div>
+</form>
 </body>
+<th:block th:include="include :: footer"/>
+<script th:inline="javascript">
+
+  layui.use(['form', 'jquery', 'dictionary', 'laydate'], function () {
+    let form = layui.form;
+    let laydate = layui.laydate;
+    let $ = layui.jquery;
+
+    let prefix = "/well/info/";
+
+    laydate.render({
+      elem: '#digTime',
+      format: 'yyyy-MM-dd'
+    });
+
+    laydate.render({
+      elem: '#abandonTime',
+      format: 'yyyy-MM-dd'
+    });
+
+    laydate.render({
+      elem: '#informTime',
+      format: 'yyyy-MM-dd'
+    });
+
+    form.on('submit(well-info-save)', function (data) {
+      $.ajax({
+        url: prefix + 'save',
+        data: JSON.stringify(data.field),
+        dataType: 'json',
+        contentType: 'application/json',
+        type: 'post',
+        success: function (result) {
+          if (result.success) {
+            layer.msg(result.msg, {icon: 1, time: 1000}, function () {
+              parent.layer.close(parent.layer.getFrameIndex(window.name));
+              parent.layui.table.reload("well-info-table");
+            });
+          } else {
+            layer.msg(result.msg, {icon: 2, time: 1000});
+          }
+        }
+      })
+      return false;
+    });
+  });
+</script>
 </html>

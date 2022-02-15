@@ -9,6 +9,9 @@ dependencies {
     // 系统安全组件
     api("org.springframework.boot:spring-boot-starter-security")
 
+    // 系统校验组件
+    api("org.springframework.boot:spring-boot-starter-validation")
+
     // 系统模版组件
     api("org.springframework.boot:spring-boot-starter-thymeleaf")
     api("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")

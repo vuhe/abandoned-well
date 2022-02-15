@@ -9,6 +9,7 @@ import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.well.domina.WellRegion
 import top.vuhe.admin.well.service.ICodeService
 import top.vuhe.admin.well.service.IRegionService
+import javax.validation.Valid
 
 /**
  * 井区域管理
@@ -66,7 +67,7 @@ class RegionController(
      */
     @PostMapping("save")
     @PreAuthorize("hasPermission('/well/region/add','well:region:add')")
-    fun save(@RequestBody region: WellRegion) = boolResult {
+    fun save(@RequestBody @Valid region: WellRegion) = boolResult {
         regionService.add(region)
     }
 
@@ -75,7 +76,7 @@ class RegionController(
      */
     @PutMapping("update")
     @PreAuthorize("hasPermission('/well/region/edit','well:region:edit')")
-    fun update(@RequestBody region: WellRegion) = boolResult {
+    fun update(@RequestBody @Valid region: WellRegion) = boolResult {
         regionService.modify(region)
     }
 

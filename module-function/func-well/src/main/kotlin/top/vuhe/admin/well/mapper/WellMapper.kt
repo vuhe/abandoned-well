@@ -28,8 +28,12 @@ class WellMapper : CurdMapper<WellInfo>("well_info") {
     private val phone = varchar("phone").bind(WellInfo::phone)
     private val abandonRemark = text("abandon_remark").bind(WellInfo::abandonRemark)
     private val abandonTime = date("abandon_time").bind(WellInfo::abandonTime)
-    private val lng = varchar("lng").bind(WellInfo::lng)
-    private val lat = varchar("lat").bind(WellInfo::lat)
+    private val lng1 = int("lng1").bind(WellInfo::lng1)
+    private val lng2 = int("lng2").bind(WellInfo::lng2)
+    private val lng3 = int("lng3").bind(WellInfo::lng3)
+    private val lat1 = int("lat1").bind(WellInfo::lat1)
+    private val lat2 = int("lat2").bind(WellInfo::lat2)
+    private val lat3 = int("lat3").bind(WellInfo::lat3)
     private val informer = varchar("informer").bind(WellInfo::informer)
     private val investigator = varchar("investigator").bind(WellInfo::investigator)
     private val informTime = date("inform_time").bind(WellInfo::informTime)
@@ -42,4 +46,25 @@ class WellMapper : CurdMapper<WellInfo>("well_info") {
             if (param.name.isNotEmpty()) it.add(name like "%${param.name}%")
         }
     }
+
+    /**
+     * 使用根据文档规则生成的 id 插入
+     */
+    override fun insert(entity: WellInfo): Int = database.insert(this) {
+        insertSetting(entity)
+        set(id, entity.id)
+    }
+
+    /**
+     * 使用根据文档规则生成的 id 插入
+     */
+    override fun batchInsert(entities: Collection<WellInfo>): Int = database.batchInsert(this) {
+        entities.forEach { e ->
+            item {
+                insertSetting(e)
+                set(id, e.id)
+            }
+        }
+    }.reduce { a, b -> a + b }
+
 }

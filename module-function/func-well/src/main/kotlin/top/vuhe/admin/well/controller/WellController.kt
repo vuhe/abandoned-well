@@ -8,8 +8,10 @@ import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
+import top.vuhe.admin.well.service.ILogService
 import top.vuhe.admin.well.service.IRegionService
 import top.vuhe.admin.well.service.IWellService
+import javax.validation.Valid
 
 /**
  * 井信息管理
@@ -21,7 +23,8 @@ import top.vuhe.admin.well.service.IWellService
 @RequestMapping("/well/info")
 class WellController(
     private val infoService: IWellService,
-    private val regionService: IRegionService
+    private val regionService: IRegionService,
+    private val logService: ILogService
 ) : BaseController() {
 
     /**
@@ -47,7 +50,9 @@ class WellController(
      */
     @GetMapping("add")
     @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
-    fun add() = ModelAndView("well/info/add")
+    fun add() = ModelAndView("well/info/add").apply {
+        addObject("regions", regionService.getAllRegion())
+    }
 
     /**
      * 用于审批的页面
@@ -72,6 +77,7 @@ class WellController(
             }
             // 未通过审核的是全部更改
         } else ModelAndView("well/info/edit").apply {
+            addObject("regions", regionService.getAllRegion())
             addObject("well", infoService.getOneById(id))
         }
     }
@@ -88,31 +94,31 @@ class WellController(
         infoService.page(info, pageDomain)
     }
 
-//    /**
-//     * 添加 井信息
-//     */
-//    @PostMapping("save")
-//    @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
-//    fun save(@RequestBody info: WellInfo) = boolResult {
-//        infoService.add(info)
-//    }
-//
-//    /**
-//     * 修改 井信息
-//     */
-//    @PutMapping("update")
-//    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
-//    fun update(@RequestBody info: WellInfo) = boolResult {
-//        infoService.modify(info)
-//    }
+    /**
+     * 添加 井信息
+     */
+    @PostMapping("save")
+    @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
+    fun save(@RequestBody @Valid info: WellInfo) = boolResult {
+        infoService.add(info)
+    }
+
+    /**
+     * 修改 井信息
+     */
+    @PutMapping("update")
+    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    fun update(@RequestBody @Valid info: WellInfo) = boolResult {
+        infoService.modify(info)
+    }
 
     /**
      * 动态更新 井信息
      */
     @PutMapping("report")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
-    fun update(@RequestBody info: WellInfo) = boolResult {
-        infoService.modify(info)
+    fun report(@RequestBody info: WellInfo) = boolResult {
+        infoService.modify(info).also { if (it) logService.record(info.id, "动态更新") }
     }
 
     /**

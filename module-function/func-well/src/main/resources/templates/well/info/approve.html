@@ -82,7 +82,7 @@
 
     form.on('submit(well-pass)', function () {
       $.ajax({
-        url: prefix + 'approved/' + [[${well.id}]],
+        url: prefix + 'approved/[[${well.id}]]',
         dataType: 'json',
         type: 'put',
         success: function (result) {
@@ -101,7 +101,7 @@
 
     form.on('submit(well-not-pass)', function () {
       $.ajax({
-        url: prefix + 'not_approved/' + [[${well.id}]],
+        url: prefix + 'not_approved/[[${well.id}]]',
         dataType: 'json',
         type: 'put',
         success: function (result) {
@@ -124,7 +124,7 @@
         title: '井信息详情',
         shade: 0.1,
         area: ['500px', '450px'],
-        content: prefix + 'detail?id=' + [[${well.id}]]
+        content: prefix + 'detail?id=[[${well.id}]]'
       });
     }
   })
