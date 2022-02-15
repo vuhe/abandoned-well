@@ -72,9 +72,9 @@
 
     table.on('toolbar(well-info-table)', function (obj) {
       if (obj.event === 'excel') {
-        // TODO("export excel")
+        window.open("excel")
       } else if (obj.event === 'word') {
-        // TODO("export word")
+        window.open("word")
       } else if (obj.event === 'refresh') {
         window.refresh();
       }

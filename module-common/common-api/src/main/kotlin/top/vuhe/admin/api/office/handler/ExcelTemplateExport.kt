@@ -2,6 +2,7 @@ package top.vuhe.admin.api.office.handler
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams
+import cn.hutool.core.bean.BeanUtil
 import org.apache.poi.ss.usermodel.Workbook
 import org.slf4j.LoggerFactory
 import java.io.OutputStream
@@ -19,7 +20,9 @@ internal object ExcelTemplateExport {
      */
     fun <T : Any> templateExport(list: List<T>, templateUrl: String): Workbook {
         val params = TemplateExportParams(templateUrl)
-        return ExcelExportUtil.exportExcel(params, mapOf("list" to list))
+        val objects = list.map { objToMap(it) }
+        val map = mutableMapOf("list" to objects) as MutableMap<String, *>
+        return ExcelExportUtil.exportExcel(params, map)
     }
 
     /**
@@ -31,5 +34,9 @@ internal object ExcelTemplateExport {
         } catch (e: Exception) {
             log.error("导出 excel 失败！", e)
         }
+    }
+
+    private fun objToMap(obj: Any): Map<String, Any> {
+        return BeanUtil.beanToMap(obj)
     }
 }

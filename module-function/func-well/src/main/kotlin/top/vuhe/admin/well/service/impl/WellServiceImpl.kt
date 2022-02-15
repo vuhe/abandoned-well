@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.exception.BusinessException
 import top.vuhe.admin.spring.database.service.impl.CurdService
+import top.vuhe.admin.well.domina.ExportWell
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.mapper.CodeMapper
 import top.vuhe.admin.well.mapper.RegionMapper
@@ -21,6 +22,16 @@ class WellServiceImpl(
     private val regionMapper: RegionMapper,
     private val regionCodeMapper: CodeMapper
 ) : CurdService<WellInfo>(infoMapper), IWellService {
+    private val emptyParam = WellInfo()
+
+    override fun exportList(): List<ExportWell> {
+        return list(emptyParam).mapNotNull {
+            val region = regionMapper.selectById(it.regionId)
+            if (region != null) ExportWell(it, region)
+            else null
+        }
+    }
+
     /**
      * 添加实体，使用自定义的 id 生成策略
      */
