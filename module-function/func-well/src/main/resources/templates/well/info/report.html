@@ -4,35 +4,31 @@
   <th:block th:include="include :: header('井信息动态更新')"/>
 </head>
 <body>
-<form class="layui-form" th:object="${well}">
+<form class="layui-form">
   <div class="mainBox">
     <div class="main-container">
-      <input name="id" th:field="*{id}" type="hidden">
+      <input name="id" th:value="${well.id}" type="hidden">
       <div class="layui-form-item">
         <label class="layui-form-label" style="width: 90px">回填开始时间</label>
         <div class="layui-input-block" style="margin-left: 120px">
           <input id="fillStartTime" class="layui-input" lay-verify="required" name="fillStartTime"
-                 placeholder="请输入时间" type="text" th:if="${well.fillStartTime} eq null"/>
-          <input id="fillStartTime" class="layui-input" lay-verify="required" name="fillStartTime"
-                 placeholder="请输入时间" type="text" th:unless="${well.fillStartTime} eq null"
-                 th:value="${#temporals.format(well.fillStartTime, 'yyyy-MM-dd')}"/>
+                 placeholder="请输入时间" type="text"
+                 th:value="${well.fillStartTime} eq null ? '' : ${#temporals.format(well.fillStartTime, 'yyyy-MM-dd')}"/>
         </div>
       </div>
       <div class="layui-form-item">
         <label class="layui-form-label" style="width: 90px">回填结束时间</label>
         <div class="layui-input-block" style="margin-left: 120px">
-          <input id="fillEndTime" class="layui-input" lay-verify="required" name="fillEndTime"
-                 placeholder="请输入时间" type="text" th:if="${well.fillEndTime} eq null"/>
-          <input id="fillEndTime" class="layui-input" lay-verify="required" name="fillEndTime"
-                 placeholder="请输入时间" type="text" th:unless="${well.fillEndTime} eq null"
-                 th:value="${#temporals.format(well.fillEndTime, 'yyyy-MM-dd')}"/>
+          <input id="fillEndTime" class="layui-input" lay-verify="required"
+                 name="fillEndTime" placeholder="请输入时间" type="text"
+                 th:value="${well.fillEndTime} eq null ? '' : ${#temporals.format(well.fillEndTime, 'yyyy-MM-dd')}"/>
         </div>
       </div>
       <div class="layui-form-item">
         <label class="layui-form-label" style="width: 90px">注释</label>
         <div class="layui-input-block" style="margin-left: 120px">
           <textarea class="layui-textarea" name="remark" placeholder="请输入注释"
-                    th:field="*{remark}" type="text"></textarea>
+                    th:value="${well.remark}" type="text"></textarea>
         </div>
       </div>
     </div>

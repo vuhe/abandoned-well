@@ -12,9 +12,8 @@ import top.vuhe.admin.well.service.ICodeService
  * @author vuhe
  */
 @Service
-class CodeServiceImpl(
-    private val codeMapper: CodeMapper
-) : CurdService<RegionCode>(codeMapper), ICodeService {
+class CodeServiceImpl(codeMapper: CodeMapper) :
+    CurdService<RegionCode>(codeMapper), ICodeService {
     private val emptyParam = RegionCode()
 
     override fun listWithChecked(codeId: String): List<RegionCode> {
