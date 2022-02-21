@@ -108,10 +108,10 @@ class WellInfo : BaseEntity() {
     /* ------------------------------------- 辅助字段 -------------------------------------- */
 
     /** 经度 */
-    val lng: String get() = "${lng1}°${lng2}'${lng3}\""
+    val lng: String get() = "${lng1}°${lng2}′${lng3}″"
 
     /** 纬度 */
-    val lat: String get() = "${lat1}°${lat2}'${lat3}\""
+    val lat: String get() = "${lat1}°${lat2}′${lat3}″"
 
     /** 井类型字符串 */
     val type: String get() = "${wellType?.category}-${wellType?.type}"
