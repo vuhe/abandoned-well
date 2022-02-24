@@ -9,6 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import top.vuhe.admin.spring.property.SwaggerProperty
+import javax.annotation.PostConstruct
 
 /**
  * ### 接口文档配置文件
@@ -19,6 +20,12 @@ import top.vuhe.admin.spring.property.SwaggerProperty
 @ConditionalOnClass(GroupedOpenApi::class)
 @EnableConfigurationProperties(SwaggerProperty::class)
 class SwaggerConfiguration {
+    @PostConstruct
+    @Suppress("SpellCheckingInspection")
+    fun setProperties() {
+        System.setProperty("springdoc.packages-to-scan", "top.vuhe")
+    }
+
     @Bean
     fun apiInfo(documentInfo: SwaggerProperty) = OpenAPI().apply {
         info = Info().apply {

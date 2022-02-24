@@ -1,4 +1,4 @@
-package top.vuhe.admin.api.file.util
+package top.vuhe.admin.api.file
 
 import cn.hutool.core.io.FileUtil
 import org.slf4j.LoggerFactory

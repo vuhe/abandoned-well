@@ -1,14 +1,9 @@
-package top.vuhe.admin.api.file.operator
+package top.vuhe.admin.api.file
 
 import org.springframework.util.FileCopyUtils
 import org.springframework.web.multipart.MultipartFile
 import oshi.PlatformEnum
 import oshi.SystemInfo
-import top.vuhe.admin.api.file.FileInfo
-import top.vuhe.admin.api.file.FileOperatorApi
-import top.vuhe.admin.api.file.info.LocalFileInfo
-import top.vuhe.admin.api.file.property.LocalFileProperties
-import top.vuhe.admin.api.file.util.file
 import java.io.File
 import java.io.FileInputStream
 import javax.servlet.http.HttpServletResponse

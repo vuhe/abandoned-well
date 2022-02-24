@@ -1,7 +1,6 @@
 package top.vuhe.admin.spring.config
 
 import org.springframework.beans.factory.annotation.Autowired
-import top.vuhe.admin.spring.property.SecurityProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
@@ -10,12 +9,13 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.config.web.servlet.*
+import org.springframework.security.config.web.servlet.invoke
+import top.vuhe.admin.spring.property.SecurityProperty
+import top.vuhe.admin.spring.security.login.LoginAfterHandler
 import top.vuhe.admin.spring.security.login.LoginAuthenticationProvider
 import top.vuhe.admin.spring.security.login.LoginDetailsSource
-import top.vuhe.admin.spring.security.login.LoginAfterHandler
+import top.vuhe.admin.spring.security.logout.SecureLogoutHandler
 import top.vuhe.admin.spring.security.permission.SecureAccessDeniedHandler
-import top.vuhe.admin.spring.security.logout.*
 import top.vuhe.admin.spring.security.session.RememberMeLoginAfterHandler
 import top.vuhe.admin.spring.security.session.RememberMeTokenService
 import top.vuhe.admin.spring.security.session.SecuritySessionRegistry
@@ -75,6 +75,15 @@ class SecureConfiguration(
     override fun configure(http: HttpSecurity) = http {
         authorizeRequests {
             securityProperty.openApi.forEach { authorize(it, permitAll) }
+            // 开放登录接口
+            authorize("/login/**", permitAll)
+            // 开放验证码接口
+            authorize("/system/captcha/**", permitAll)
+            // 开放静态资源
+            authorize("/assets/**", permitAll)
+            authorize("/admin/**", permitAll)
+            authorize("/component/**", permitAll)
+            authorize("/favicon.ico", permitAll)
             // 其他的需要登录后才能访问
             authorize()
         }

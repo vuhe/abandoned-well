@@ -1,8 +1,7 @@
-package top.vuhe.admin.api.file.info
+package top.vuhe.admin.api.file
 
 import cn.hutool.core.util.NumberUtil
 import oshi.software.os.OSFileStore
-import top.vuhe.admin.api.file.FileInfo
 
 class LocalFileInfo(fs: OSFileStore) : FileInfo {
     private val freeNum = fs.usableSpace

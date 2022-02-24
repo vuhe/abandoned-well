@@ -1,4 +1,4 @@
-package top.vuhe.admin.api.file.property
+package top.vuhe.admin.api.file
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
  * @author vuhe
  */
 @ConfigurationProperties("project.upload.local")
-object LocalFileProperties {
+class LocalFileProperties {
     /**
      * windows 系统文件上传路径
      */

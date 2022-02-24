@@ -5,3 +5,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: ASDasd12
+
+# 日志配置
+#logging:
+#  level:
+#    org:
+#      ktorm: debug
+#  config: classpath:logback-spring.xml

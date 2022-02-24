@@ -12,17 +12,17 @@ object SecurityProperty {
     /**
      * 超级管理员不认证
      */
-    var superAuthOpen = false
+    var superAuthOpen = true
 
     /**
      * 不验证权限角色名
      */
-    var superRole: String? = null
+    var superRole: String = "admin"
 
     /**
      * 记住密码标识
      */
-    var rememberKey: String? = null
+    var rememberKey: String = "VUHE_REMEMBER"
 
     /**
      * 开放接口列表
