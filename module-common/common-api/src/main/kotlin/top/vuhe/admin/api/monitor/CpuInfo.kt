@@ -2,141 +2,175 @@ package top.vuhe.admin.api.monitor
 
 import cn.hutool.core.date.DateUnit
 import cn.hutool.core.date.DateUtil
+import cn.hutool.core.net.NetUtil
 import cn.hutool.core.util.NumberUtil
-import top.vuhe.admin.api.file.FileInfo
+import cn.hutool.system.oshi.OshiUtil
 import java.lang.management.ManagementFactory
+import java.net.InetAddress
 import java.util.*
 
 class CpuInfo {
-    /**
-     * 磁盘相关信息
-     */
-    var sysFiles: List<FileInfo> = emptyList()
+    /** 磁盘相关信息 */
+    val sysFiles: List<LocalFileInfo>
+
+    init {
+        val list = OshiUtil.getOs().fileSystem.fileStores
+        sysFiles = list.map { LocalFileInfo(it) }
+    }
 
     /**
      * 內存相关信息
      */
-    var memInfo: MemInfo? = null
+    val memInfo = MemInfo()
 
     /**
      * 核心数
      */
-    var cpuNum = 0
+    val cpuNum: Int
 
     /**
      * CPU总的使用率
      */
-    var total = 0.0
+    val total: Double
 
     /**
      * CPU系统使用率
      */
-    var sys = 0.0
+    val sys: Double
 
     /**
      * CPU用户使用率
      */
-    var used = 0.0
+    val used: Double
 
     /**
      * CPU当前等待率
      */
-    var wait = 0.0
+    val wait: Double
 
     /**
      * CPU当前空闲率
      */
-    var free = 0.0
+    val free: Double
+
+    init {
+        val info = OshiUtil.getCpuInfo()
+        cpuNum = info.cpuNum
+        total = info.toTal
+        sys = info.sys
+        used = info.used
+        wait = info.wait
+        free = info.wait
+    }
 
     /**
      * 服务器名称
      */
-    var sysInfoComputerName: String = ""
+    val sysInfoComputerName: String = try {
+        InetAddress.getLocalHost().hostName
+    } catch (ignored: Exception) {
+        "未知"
+    }
 
     /**
      * 服务器Ip
      */
-    var sysInfoComputerIp: String = ""
+    val sysInfoComputerIp: String
 
     /**
      * 项目路径
      */
-    var sysInfoUserDir: String = ""
+    val sysInfoUserDir: String
 
     /**
      * 操作系统
      */
-    var sysInfoOsName: String = ""
+    val sysInfoOsName: String
 
     /**
      * 系统架构
      */
-    var sysInfoOsArch: String = ""
+    val sysInfoOsArch: String
+
+    init {
+        val props = System.getProperties()
+        sysInfoComputerIp = NetUtil.getLocalhostStr()
+        sysInfoOsName = props.getProperty("os.name")
+        sysInfoOsArch = props.getProperty("os.arch")
+        sysInfoUserDir = props.getProperty("user.dir")
+    }
 
     /**
      * 当前JVM占用的内存总数(M)
      */
-    var jvmInfoTotal = 0.0
-        get() = NumberUtil.div(field, (1024 * 1024).toFloat(), 2)
+    val jvmInfoTotal = NumberUtil.div(
+        Runtime.getRuntime().totalMemory().toDouble(),
+        (1024 * 1024).toFloat(), 2
+    )
 
     /**
      * JVM最大可用内存总数(M)
      */
-    var jvmInfoMax = 0.0
-        get() = NumberUtil.div(field, (1024 * 1024).toFloat(), 2)
+    val jvmInfoMax = NumberUtil.div(
+        Runtime.getRuntime().maxMemory().toDouble(),
+        (1024 * 1024).toFloat(), 2
+    )
 
     /**
      * JVM空闲内存(M)
      */
-    var jvmInfoFree = 0.0
-        get() = NumberUtil.div(field, (1024 * 1024).toFloat(), 2)
+    val jvmInfoFree = NumberUtil.div(
+        Runtime.getRuntime().freeMemory().toDouble(),
+        (1024 * 1024).toFloat(), 2
+    )
 
     /**
      * JDK版本
      */
-    var jvmInfoVersion: String? = null
+    val jvmInfoVersion: String
 
     /**
      * JDK路径
      */
-    var jvmInfoHome: String? = null
+    val jvmInfoHome: String
 
-    val jvmUsed: Double
-        get() = NumberUtil.div(jvmInfoTotal - jvmInfoFree, (1024 * 1024).toFloat(), 2)
+    init {
+        val props = System.getProperties()
+        jvmInfoVersion = props.getProperty("java.version")
+        jvmInfoHome = props.getProperty("java.home")
+    }
 
-    val jvmUsage: Double
-        get() = NumberUtil.mul(NumberUtil.div(jvmInfoTotal - jvmInfoFree, jvmInfoTotal, 4), 100f)
+    val jvmUsed = NumberUtil.div(jvmInfoTotal - jvmInfoFree, (1024 * 1024).toFloat(), 2)
+
+    val jvmUsage = NumberUtil.mul(NumberUtil.div(jvmInfoTotal - jvmInfoFree, jvmInfoTotal, 4), 100f)
 
     /**
      * 获取JDK名称
      */
-    val jvmInfoName: String
-        get() = ManagementFactory.getRuntimeMXBean().vmName
+    val jvmInfoName: String = ManagementFactory.getRuntimeMXBean().vmName
 
     /**
      * JDK启动时间
      */
-    val jvmInfoStartTime: String
-        get() {
-            val time = ManagementFactory.getRuntimeMXBean().startTime
-            val date = Date(time)
-            return DateUtil.formatDateTime(date)
-        }
+    val jvmInfoStartTime: String by lazy {
+        val time = ManagementFactory.getRuntimeMXBean().startTime
+        val date = Date(time)
+        DateUtil.formatDateTime(date)
+    }
 
     /**
      * JDK运行时间
      */
-    val jvmInfoRunTime: String
-        get() {
-            val time = ManagementFactory.getRuntimeMXBean().startTime
-            val date = Date(time)
-            val runMS: Long = DateUtil.between(date, Date(), DateUnit.MS)
-            val nd = (1000 * 24 * 60 * 60).toLong()
-            val nh = (1000 * 60 * 60).toLong()
-            val nm = (1000 * 60).toLong()
-            val day = runMS / nd
-            val hour = runMS % nd / nh
-            val min = runMS % nd % nh / nm
-            return day.toString() + "天" + hour + "小时" + min + "分钟"
-        }
+    val jvmInfoRunTime: String by lazy {
+        val time = ManagementFactory.getRuntimeMXBean().startTime
+        val date = Date(time)
+        val runMS: Long = DateUtil.between(date, Date(), DateUnit.MS)
+        val nd = (1000 * 24 * 60 * 60).toLong()
+        val nh = (1000 * 60 * 60).toLong()
+        val nm = (1000 * 60).toLong()
+        val day = runMS / nd
+        val hour = runMS % nd / nh
+        val min = runMS % nd % nh / nm
+        day.toString() + "天" + hour + "小时" + min + "分钟"
+    }
 }

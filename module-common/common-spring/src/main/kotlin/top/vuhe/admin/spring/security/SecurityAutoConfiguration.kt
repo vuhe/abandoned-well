@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.web.session.HttpSessionEventPublisher
 import top.vuhe.admin.api.logging.LoggingFactory
-import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.config.SecureConfiguration
 import top.vuhe.admin.spring.security.login.LoginAfterHandler
 import top.vuhe.admin.spring.security.login.LoginAuthenticationProvider
@@ -13,6 +12,7 @@ import top.vuhe.admin.spring.security.login.LoginDetailsSource
 import top.vuhe.admin.spring.security.logout.SecureLogoutHandler
 import top.vuhe.admin.spring.security.permission.SecureAccessDeniedHandler
 import top.vuhe.admin.spring.security.permission.SecurePermissionSupport
+import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.security.session.RememberMeLoginAfterHandler
 import top.vuhe.admin.spring.security.session.SecuritySessionRegistry
 import top.vuhe.admin.spring.security.session.SessionExpiredHandler
@@ -22,7 +22,7 @@ import top.vuhe.admin.spring.security.session.SessionExpiredHandler
  *
  * @author vuhe
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(SecureConfiguration::class)
 class SecurityAutoConfiguration(
     private val sysLogService: LoggingFactory,

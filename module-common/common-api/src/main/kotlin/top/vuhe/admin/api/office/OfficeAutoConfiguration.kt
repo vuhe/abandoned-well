@@ -1,6 +1,5 @@
 package top.vuhe.admin.api.office
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -11,8 +10,6 @@ import org.springframework.context.annotation.Configuration
  */
 @Configuration(proxyBeanMethods = false)
 class OfficeAutoConfiguration {
-
     @Bean
-    @ConditionalOnMissingBean
-    fun officeHandler() = OfficeHandler()
+    fun officeHandler() = OfficeHandler
 }

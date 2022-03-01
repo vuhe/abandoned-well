@@ -12,11 +12,6 @@ import javax.servlet.http.HttpServletResponse
 interface FileOperatorApi {
 
     /**
-     * 文件系统信息
-     */
-    val fileInfos: List<FileInfo>
-
-    /**
      * 初始化操作的客户端
      */
     fun initClient()

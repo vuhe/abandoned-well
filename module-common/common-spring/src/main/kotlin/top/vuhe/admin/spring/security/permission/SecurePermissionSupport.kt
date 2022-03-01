@@ -1,11 +1,10 @@
 package top.vuhe.admin.spring.security.permission
 
-import java.io.Serializable
-import top.vuhe.admin.spring.property.SecurityProperty
 import org.springframework.security.access.PermissionEvaluator
 import org.springframework.security.core.Authentication
 import top.vuhe.admin.spring.security.principal.LoginUserAuthority
 import top.vuhe.admin.spring.security.principal.UserSecurityService
+import java.io.Serializable
 
 /**
  * ### 自定义 Security 权限注解实现
@@ -29,7 +28,7 @@ class SecurePermissionSupport(
         val user = userDetailsService.getLoginUserById(userId)
 
         // 超级用户跳过检查
-        if (SecurityProperty.superAuthOpen && user.isAdmin) {
+        if (user.isAdmin) {
             return true
         }
 

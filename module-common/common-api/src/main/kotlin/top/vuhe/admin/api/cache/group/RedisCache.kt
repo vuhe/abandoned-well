@@ -49,6 +49,8 @@ class RedisCache(
     override fun clearIfNotEmpty(): Boolean {
         val redisKey = "$managerName:$name*"
         val keySet = redisTemplate.keys(redisKey)
+
+        @Suppress("USELESS_ELVIS")
         val result = redisTemplate.delete(keySet) ?: 0
         return result > 0
     }

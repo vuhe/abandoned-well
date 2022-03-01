@@ -1,22 +1,37 @@
-package top.vuhe.admin.api.file
+package top.vuhe.admin.api.monitor
 
 import cn.hutool.core.util.NumberUtil
 import oshi.software.os.OSFileStore
 
-class LocalFileInfo(fs: OSFileStore) : FileInfo {
+class LocalFileInfo(fs: OSFileStore) {
     private val freeNum = fs.usableSpace
     private val totalNum = fs.totalSpace
-    override val dirName: String = fs.mount
-    override val sysTypeName: String = fs.type
-    override val typeName: String = fs.name
-    override val total: String = convertFileSize(totalNum)
-    override val free: String = convertFileSize(freeNum)
-    override val used: String = convertFileSize(totalNum - freeNum)
-    override val usage: String = if (totalNum == 0L) {
+
+    /** 盘符路径 */
+    val dirName: String = fs.mount
+
+    /** 盘符类型 */
+    val sysTypeName: String = fs.type
+
+    /** 文件类型 */
+    val typeName: String = fs.name
+
+    /** 总大小 */
+    val total: String = convertFileSize(totalNum)
+
+    /** 剩余大小 */
+    val free: String = convertFileSize(freeNum)
+
+    /** 已经使用量 */
+    val used: String = convertFileSize(totalNum - freeNum)
+
+    /** 资源的使用率 */
+    val usage: String = if (totalNum == 0L) {
         "0.0 %"
     } else {
-        NumberUtil.mul(NumberUtil.div(totalNum - freeNum, totalNum, 4), 100f)
-            .toString() + " %"
+        NumberUtil.mul(
+            NumberUtil.div(totalNum - freeNum, totalNum, 4), 100f
+        ).toString() + " %"
     }
 
     /**

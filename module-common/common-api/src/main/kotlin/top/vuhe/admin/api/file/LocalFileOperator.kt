@@ -1,5 +1,6 @@
 package top.vuhe.admin.api.file
 
+import cn.hutool.core.io.FileUtil
 import org.springframework.util.FileCopyUtils
 import org.springframework.web.multipart.MultipartFile
 import oshi.PlatformEnum
@@ -13,22 +14,27 @@ import javax.servlet.http.HttpServletResponse
  *
  * @author vuhe
  */
-class LocalFileOperator(
-    private val localFileProperties: LocalFileProperties
-) : FileOperatorApi {
+object LocalFileOperator : FileOperatorApi {
     private var currentSavePath = ""
+    private lateinit var workspace: File
 
-    override val fileInfos: List<FileInfo>
-        get() = SystemInfo().operatingSystem.fileSystem.fileStores
-            .map { LocalFileInfo(it) }
+    /** windows 系统文件上传路径 */
+    private const val windowsPath: String = "D:\\tempFilePath"
+
+    /** linux 系统文件上传路径 */
+    private const val linuxPath: String = "/tmp/tempFilePath"
+
+    /** mac 系统文件上传路径 */
+    private const val macPath: String = "./tmp/tempFilePath"
 
     override fun initClient() {
         val path = when (SystemInfo.getCurrentPlatform()) {
-            PlatformEnum.MACOS -> localFileProperties.macPath
-            PlatformEnum.WINDOWS -> localFileProperties.windowsPath
-            else -> localFileProperties.linuxPath
+            PlatformEnum.MACOS -> macPath
+            PlatformEnum.WINDOWS -> windowsPath
+            else -> linuxPath
         }
-        file(path).ifNotExist { mkdirs() }
+
+        workspace = FileUtil.mkdir(path)
         currentSavePath = path
     }
 
@@ -41,25 +47,23 @@ class LocalFileOperator(
     }
 
     override fun isExisting(id: String): Boolean {
-        val path = "$currentSavePath${File.separator}$id"
-        return file(path).isExist
+        val file = FileUtil.file(workspace, id)
+        return FileUtil.exist(file)
     }
 
     override fun upload(id: String, file: MultipartFile) {
-        val path = "$currentSavePath${File.separator}$id"
+        val path = FileUtil.file(workspace, id)
         // 如果有旧文件，会直接覆盖
-        file.transferTo(file(path).file)
+        file.transferTo(path)
     }
 
     override fun download(id: String, response: HttpServletResponse) {
-        val path = "$currentSavePath${File.separator}$id"
-        file(path).ifExist {
-            FileCopyUtils.copy(FileInputStream(file), response.outputStream)
-        }
+        val file = FileUtil.file(workspace, id)
+        FileCopyUtils.copy(FileInputStream(file), response.outputStream)
     }
 
     override fun delete(id: String) {
-        val file = "$currentSavePath${File.separator}$id"
-        file(file).ifExist { del() }
+        val file = FileUtil.file(workspace, id)
+        FileUtil.del(file)
     }
 }

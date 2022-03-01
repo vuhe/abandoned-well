@@ -1,7 +1,5 @@
 package top.vuhe.admin.api.file
 
-import org.slf4j.LoggerFactory
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 
@@ -12,17 +10,7 @@ import org.springframework.context.annotation.Configuration
  * @author vuhe
  */
 @Configuration(proxyBeanMethods = false)
-@EnableConfigurationProperties(LocalFileProperties::class)
 class FileAutoConfiguration {
-    private val log = LoggerFactory.getLogger(this::class.java)
-
-    /**
-     * 本地文件操作，
-     * 在其它云服务依赖查找不到时使用
-     */
     @Bean
-    fun localFileOperatorApi(prop: LocalFileProperties): FileOperatorApi {
-        log.info("[local file] System File will be saved in local disk !")
-        return LocalFileOperator(prop)
-    }
+    fun localFileOperatorApi(): FileOperatorApi = LocalFileOperator
 }

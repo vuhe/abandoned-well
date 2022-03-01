@@ -1,14 +1,13 @@
 package top.vuhe.admin.spring.config
 
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.info.Contact
 import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import org.springdoc.core.GroupedOpenApi
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import top.vuhe.admin.spring.property.SwaggerProperty
 import javax.annotation.PostConstruct
 
 /**
@@ -18,7 +17,6 @@ import javax.annotation.PostConstruct
  */
 @Configuration
 @ConditionalOnClass(GroupedOpenApi::class)
-@EnableConfigurationProperties(SwaggerProperty::class)
 class SwaggerConfiguration {
     @PostConstruct
     @Suppress("SpellCheckingInspection")
@@ -27,16 +25,20 @@ class SwaggerConfiguration {
     }
 
     @Bean
-    fun apiInfo(documentInfo: SwaggerProperty) = OpenAPI().apply {
+    fun apiInfo() = OpenAPI().apply {
         info = Info().apply {
-            title(documentInfo.title)
-            description(documentInfo.describe)
-            version(documentInfo.version)
-            termsOfService(documentInfo.termsOfServiceUrl)
-            contact(documentInfo.contact)
+            title("井管理系统 API")
+            description("废弃井管理系统")
+            version("Release 1.0.0")
+            termsOfService("https://github.com/vuhe")
+            contact(Contact().apply {
+                name = "vuhe"
+                url = "https://github.com/vuhe"
+                email = "zhuhe202@qq.com"
+            })
             license = License()
-                .name(documentInfo.licence)
-                .url(documentInfo.licenceUrl)
+                .name("MIT")
+                .url("https://github.com/vuhe/AdminTemplate/blob/main/LICENSE")
         }
     }
 }

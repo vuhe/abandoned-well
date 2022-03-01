@@ -1,7 +1,6 @@
 package top.vuhe.admin.spring.config
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -10,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
-import top.vuhe.admin.spring.property.SecurityProperty
 import top.vuhe.admin.spring.security.login.LoginAfterHandler
 import top.vuhe.admin.spring.security.login.LoginAuthenticationProvider
 import top.vuhe.admin.spring.security.login.LoginDetailsSource
@@ -28,13 +26,10 @@ import top.vuhe.admin.spring.security.session.SessionExpiredHandler
  *
  * @author vuhe
  */
-@Configuration
 @EnableWebSecurity
+@Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-@EnableConfigurationProperties(SecurityProperty::class)
-class SecureConfiguration(
-    private val securityProperty: SecurityProperty
-) : WebSecurityConfigurerAdapter() {
+class SecureConfiguration : WebSecurityConfigurerAdapter() {
     @Autowired
     private lateinit var loginAfterHandler: LoginAfterHandler
 
@@ -74,7 +69,6 @@ class SecureConfiguration(
      */
     override fun configure(http: HttpSecurity) = http {
         authorizeRequests {
-            securityProperty.openApi.forEach { authorize(it, permitAll) }
             // 开放登录接口
             authorize("/login/**", permitAll)
             // 开放验证码接口
@@ -122,7 +116,7 @@ class SecureConfiguration(
             rememberMeCookieName = "rememberme-token"
             authenticationSuccessHandler = rememberLoginAfterHandler
             tokenRepository = rememberTokenService
-            key = securityProperty.rememberKey
+            key = "VUHE_REMEMBER"
         }
 
         sessionManagement {
@@ -131,7 +125,7 @@ class SecureConfiguration(
             sessionCreationPolicy = SessionCreationPolicy.IF_REQUIRED
             sessionConcurrency {
                 // 同时登陆多个只保留一个
-                maximumSessions = securityProperty.maximum
+                maximumSessions = 1
                 maxSessionsPreventsLogin = false
                 // 踢出用户操作
                 expiredSessionStrategy = sessionExpiredHandler

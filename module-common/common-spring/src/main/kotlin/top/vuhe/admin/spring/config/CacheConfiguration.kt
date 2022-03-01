@@ -14,8 +14,8 @@ import top.vuhe.admin.api.cache.manager.TimeoutCacheManager
  *
  * @author vuhe
  */
-@Configuration
 @EnableCaching
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureAfter(TimeoutCacheAutoConfiguration::class)
 class CacheConfiguration {
     /**

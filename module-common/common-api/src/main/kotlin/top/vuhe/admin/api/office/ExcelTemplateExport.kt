@@ -1,4 +1,4 @@
-package top.vuhe.admin.api.office.handler
+package top.vuhe.admin.api.office
 
 import cn.afterturn.easypoi.excel.ExcelExportUtil
 import cn.afterturn.easypoi.excel.entity.TemplateExportParams
@@ -20,7 +20,7 @@ internal object ExcelTemplateExport {
      */
     fun <T : Any> templateExport(list: List<T>, templateUrl: String): Workbook {
         val params = TemplateExportParams(templateUrl)
-        val objects = list.map { objToMap(it) }
+        val objects = list.map { BeanUtil.beanToMap(it) }
         val map = mutableMapOf("list" to objects) as MutableMap<String, *>
         return ExcelExportUtil.exportExcel(params, map)
     }
@@ -34,9 +34,5 @@ internal object ExcelTemplateExport {
         } catch (e: Exception) {
             log.error("导出 excel 失败！", e)
         }
-    }
-
-    private fun objToMap(obj: Any): Map<String, Any> {
-        return BeanUtil.beanToMap(obj)
     }
 }

@@ -12,8 +12,8 @@ import top.vuhe.admin.schedule.handler.ScheduleStarted
  *
  * @author vuhe
  */
-@Configuration
 @EnableScheduling
+@Configuration(proxyBeanMethods = false)
 @AutoConfigureBefore(QuartzAutoConfiguration::class)
 class ScheduleAutoConfiguration {
     /**

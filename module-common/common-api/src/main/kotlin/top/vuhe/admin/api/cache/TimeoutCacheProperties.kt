@@ -9,7 +9,7 @@ import java.time.Duration
  * @author vuhe
  */
 @ConfigurationProperties(prefix = "project.cache")
-object TimeoutCacheProperties {
+class TimeoutCacheProperties {
     /**
      * 初始化默认缓存
      */

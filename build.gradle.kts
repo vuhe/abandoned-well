@@ -48,9 +48,6 @@ allprojects {
                 entry("ktorm-jackson")
                 entry("ktorm-support-mysql")
             }
-            // 文件连接器
-            dependency("com.aliyun.oss:aliyun-sdk-oss:3.13.2")
-            dependency("com.qcloud:cos_api:5.6.61")
             // swagger 文档
             dependencySet("org.springdoc:1.6.4") {
                 entry("springdoc-openapi-ui")

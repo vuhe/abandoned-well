@@ -2,7 +2,6 @@ package top.vuhe.admin.system.service.impl
 
 import org.springframework.stereotype.Service
 import top.vuhe.admin.spring.database.service.impl.BaseService
-import top.vuhe.admin.spring.property.SecurityProperty
 import top.vuhe.admin.system.domain.SysMenu
 import top.vuhe.admin.system.mapper.SysPowerMapper
 import top.vuhe.admin.system.mapper.SysRoleMapper
@@ -16,7 +15,6 @@ import top.vuhe.admin.system.service.ISysMenuService
  */
 @Service
 class SysMenuServiceImpl(
-    private val securityProperty: SecurityProperty,
     private val sysUserMapper: SysUserMapper,
     private val sysRoleMapper: SysRoleMapper,
     private val sysPowerMapper: SysPowerMapper
@@ -24,7 +22,7 @@ class SysMenuServiceImpl(
     override fun getUserMenu(userId: String): List<SysMenu> {
         val user = sysUserMapper.selectById(userId)
 
-        val list = if (securityProperty.superAuthOpen && user?.admin == true) {
+        val list = if (user?.admin == true) {
             sysPowerMapper.selectListByAdmin()
         } else {
             // 全部角色信息

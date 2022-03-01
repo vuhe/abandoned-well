@@ -17,12 +17,12 @@ import top.vuhe.admin.api.enums.LoggingType
  */
 @Aspect
 @Component
+@Suppress("unused")
 class LoggingAspect @Autowired constructor(
     private val loggingFactory: LoggingFactory
 ) {
-    @Pointcut("@annotation(top.vuhe.admin.api.logging.Logging) || @within(top.vuhe.admin.api.logging.Logging)")
-    fun dsPointCut() {
-    }
+    @Pointcut("@annotation(top.vuhe.admin.api.logging.Logging)")
+    fun dsPointCut() = Unit
 
     @AfterReturning(pointcut = "dsPointCut()")
     fun afterReturning(joinPoint: JoinPoint) {
@@ -52,13 +52,7 @@ class LoggingAspect @Autowired constructor(
     private val JoinPoint.logging: Logging?
         get() {
             val signature = signature as MethodSignature
-            val targetClass = target.javaClass
-            val targetLogging = targetClass.getAnnotation(Logging::class.java)
-            return if (targetLogging != null) {
-                targetLogging
-            } else {
-                val method = signature.method
-                method.getAnnotation(Logging::class.java)
-            }
+            val method = signature.method
+            return method.getAnnotation(Logging::class.java)
         }
 }

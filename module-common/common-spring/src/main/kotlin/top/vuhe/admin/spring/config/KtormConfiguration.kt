@@ -10,7 +10,7 @@ import javax.sql.DataSource
  *
  * @author vuhe
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class KtormConfiguration {
     /**
      * Register the [Database] instance as a Spring bean.

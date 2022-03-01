@@ -67,7 +67,7 @@ object SqlTextFilter {
     /**
      * @param value sql语句
      *
-     * @特殊方法(不通用) 仅用于字典条件SQL参数，注入过滤
+     * 特殊方法(不通用) 仅用于字典条件SQL参数，注入过滤
      */
     fun specialFilterContent(value: String) {
         val specialXssStr =
@@ -78,7 +78,7 @@ object SqlTextFilter {
     /**
      * @param value sql语句
      *
-     * @特殊方法(不通用) 仅用于Online报表SQL解析，注入过滤
+     * 特殊方法(不通用) 仅用于Online报表SQL解析，注入过滤
      */
     @Deprecated("")
     fun specialFilterContentForOnlineReport(value: String) {

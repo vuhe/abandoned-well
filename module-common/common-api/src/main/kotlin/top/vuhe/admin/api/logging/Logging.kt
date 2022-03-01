@@ -12,7 +12,7 @@ import top.vuhe.admin.api.enums.BusinessType
  */
 @MustBeDocumented
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.CLASS, AnnotationTarget.FUNCTION)
+@Target(AnnotationTarget.FUNCTION)
 annotation class Logging(
     val value: String = "暂无标题",
     val describe: String = "暂无介绍",

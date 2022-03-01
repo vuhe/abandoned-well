@@ -1,4 +1,4 @@
-package top.vuhe.admin.api.office.handler
+package top.vuhe.admin.api.office
 
 import cn.afterturn.easypoi.word.WordExportUtil
 import cn.hutool.core.bean.BeanUtil
@@ -18,7 +18,7 @@ internal object WordTemplateExport {
      * 通过模版导出
      */
     fun <T : Any> templateWord(list: List<T>, templateUrl: String): XWPFDocument {
-        val mapList = list.map { objToMap(it) }
+        val mapList = list.map { BeanUtil.beanToMap(it) }
         return WordExportUtil.exportWord07(templateUrl, mapList)
     }
 
@@ -31,9 +31,5 @@ internal object WordTemplateExport {
         } catch (e: Exception) {
             log.error("导出 word 失败！", e)
         }
-    }
-
-    private fun objToMap(obj: Any): Map<String, Any> {
-        return BeanUtil.beanToMap(obj)
     }
 }

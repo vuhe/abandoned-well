@@ -1,11 +1,7 @@
 package top.vuhe.admin.api.network
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import top.vuhe.admin.api.constant.Browser
-import top.vuhe.admin.api.constant.Header
-import top.vuhe.admin.api.constant.JSON_UTF8
-import top.vuhe.admin.api.constant.SystemType
-import top.vuhe.admin.api.constant.UTF8
+import top.vuhe.admin.api.constant.*
 import top.vuhe.admin.api.spring.spring
 import top.vuhe.admin.api.text.localeLowercase
 import javax.servlet.http.HttpServletRequest

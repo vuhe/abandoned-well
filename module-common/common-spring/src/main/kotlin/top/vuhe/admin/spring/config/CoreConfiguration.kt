@@ -17,26 +17,24 @@ import java.time.format.DateTimeFormatter
  *
  * @author vuhe
  */
-@Configuration
+@Configuration(proxyBeanMethods = false)
 class CoreConfiguration {
     /**
      * jackson 序列化时间
      */
     @Bean
-    fun dateTime(): Module {
-        val javaTimeModule = JavaTimeModule()
-        javaTimeModule.addSerializer(
+    fun dateTime(): Module = JavaTimeModule().apply {
+        addSerializer(
             LocalDateTime::class.java,
             LocalDateTimeSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
         )
-        javaTimeModule.addSerializer(
+        addSerializer(
             LocalDate::class.java,
             LocalDateSerializer(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         )
-        javaTimeModule.addSerializer(
+        addSerializer(
             LocalTime::class.java,
             LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss"))
         )
-        return javaTimeModule
     }
 }
