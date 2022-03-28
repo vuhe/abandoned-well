@@ -5,8 +5,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -36,5 +38,14 @@ class CoreConfiguration {
             LocalTime::class.java,
             LocalTimeSerializer(DateTimeFormatter.ofPattern("HH:mm:ss"))
         )
+    }
+
+    /**
+     * xss 过滤
+     */
+    @Bean
+    fun xssFilterRegistrationBean() = FilterRegistrationBean<XssFilterSupport>().apply {
+        filter = XssFilterSupport()
+        setName("xssHttpFilter")
     }
 }

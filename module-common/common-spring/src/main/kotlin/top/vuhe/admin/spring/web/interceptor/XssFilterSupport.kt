@@ -3,11 +3,9 @@ package top.vuhe.admin.spring.web.interceptor
 import top.vuhe.admin.api.network.XssHttpServletRequest
 import java.util.regex.Pattern
 import javax.servlet.*
-import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-@WebFilter
 class XssFilterSupport : Filter {
     private var isIncludeRichText = false
     private var excludes: List<String> = emptyList()

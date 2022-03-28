@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 dependencies {
     // 系统基础组件
     api(project(":common-api"))
@@ -8,6 +10,7 @@ dependencies {
 
     // 系统安全组件
     api("org.springframework.boot:spring-boot-starter-security")
+    implementation("com.github.whvcse:easy-captcha:1.6.2")
 
     // 系统校验组件
     api("org.springframework.boot:spring-boot-starter-validation")

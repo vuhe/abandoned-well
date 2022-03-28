@@ -3,6 +3,8 @@ package top.vuhe.admin.api.network
 import org.springframework.web.context.request.RequestContextHolder
 import org.springframework.web.context.request.ServletRequestAttributes
 import javax.servlet.http.HttpServletRequest
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
  * 从 Spring Web 的 RequestContext
@@ -10,16 +12,12 @@ import javax.servlet.http.HttpServletRequest
  *
  * @author vuhe
  */
-internal object NullableRequestEntrust : Lazy<HttpServletRequest?> {
-    override val value: HttpServletRequest?
-        get() = try {
-            (RequestContextHolder.getRequestAttributes() as ServletRequestAttributes?)?.request
+internal object NullableRequestEntrust : ReadOnlyProperty<Any, HttpServletRequest?> {
+    override fun getValue(thisRef: Any, property: KProperty<*>): HttpServletRequest? {
+        return try {
+            (RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes)?.request
         } catch (e: Exception) {
             null
         }
-
-    /**
-     * 从 Spring 获取，默认已经初始化
-     */
-    override fun isInitialized(): Boolean = true
+    }
 }

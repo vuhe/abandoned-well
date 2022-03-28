@@ -7,8 +7,6 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-aop")
     // hutool 工具包
     implementation("cn.hutool:hutool-all:5.7.20")
-    // 验证码工具
-    implementation("com.github.whvcse:easy-captcha:1.6.2")
     // xss 工具
     implementation("org.jsoup:jsoup:1.14.3")
     // 系统信息获取

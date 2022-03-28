@@ -3,7 +3,6 @@ package top.vuhe.admin.api.network
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.safety.Safelist
-import top.vuhe.admin.api.constant.EMPTY
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletRequestWrapper
 
@@ -17,37 +16,24 @@ class XssHttpServletRequest(
     private val isIncludeRichText: Boolean
 ) : HttpServletRequestWrapper(request) {
 
-    override fun getParameter(name: String): String {
-        var name0 = name
-        if (("content" == name0 || name0.endsWith("WithHtml")) && !isIncludeRichText) {
-            return super.getParameter(name0)
-        }
-        name0 = clean(name0)
-        var value = super.getParameter(name0)
-        if (value.isNotBlank()) {
-            value = clean(value)
-        }
-        return value
+    override fun getParameter(name: String?): String? {
+        if (("content" == name || name?.endsWith("WithHtml") == true)
+            && !isIncludeRichText
+        ) return super.getParameter(name)
+
+        val name0 = name?.let { clean(it) }
+        return super.getParameter(name0)?.let { clean(it) }
     }
 
-    override fun getParameterValues(name: String): Array<String> {
-        val arr = super.getParameterValues(name)
-        if (arr != null) {
-            for (i in arr.indices) {
-                arr[i] = clean(arr[i])
-            }
+    override fun getParameterValues(name: String?): Array<String?>? {
+        return super.getParameterValues(name)?.also {
+            it.forEachIndexed { i, str -> it[i] = str?.let { s -> clean(s) } }
         }
-        return arr
     }
 
-    override fun getHeader(name: String): String {
-        var name0 = name
-        name0 = clean(name0)
-        var value = super.getHeader(name0)
-        if (value.isNotBlank()) {
-            value = clean(value)
-        }
-        return value
+    override fun getHeader(name: String?): String? {
+        val name0 = name?.let { clean(it) }
+        return super.getHeader(name0)?.let { clean(it) }
     }
 
     companion object {
@@ -58,7 +44,8 @@ class XssHttpServletRequest(
         private val outputSettings = Document.OutputSettings().prettyPrint(false)
 
         private fun clean(content: String): String {
-            return Jsoup.clean(content, EMPTY, safeList, outputSettings)
+            return if (content.isBlank()) content
+            else Jsoup.clean(content, "", safeList, outputSettings)
         }
     }
 }

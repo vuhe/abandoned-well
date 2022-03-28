@@ -1,8 +1,8 @@
 package top.vuhe.admin.spring.security.login
 
+import com.wf.captcha.utils.CaptchaUtil
 import org.springframework.security.authentication.AuthenticationDetailsSource
 import org.springframework.security.web.authentication.WebAuthenticationDetails
-import top.vuhe.admin.api.security.Captcha
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -18,7 +18,7 @@ object LoginDetailsSource : AuthenticationDetailsSource<HttpServletRequest, Logi
         // 检查验证码，并记录信息
         val captcha = context.getParameter("captcha") ?: ""
         val captchaEmpty = captcha.isEmpty()
-        val captchaChecked = !captchaEmpty && Captcha.ver(captcha, context)
+        val captchaChecked = !captchaEmpty && CaptchaUtil.ver(captcha, context)
 
         // 返回登录附加信息
         return LoginParameterDetail(context, captchaEmpty, captchaChecked)

@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping("/well/summary")
 class SummaryController(
     private val infoService: IWellService,
-    private val officeHandler: OfficeHandler
 ) : BaseController() {
 
     /**
@@ -41,7 +40,7 @@ class SummaryController(
     @PreAuthorize("hasPermission('/well/summary/export','well:summary:export')")
     fun excel(response: HttpServletResponse) {
         val list = infoService.exportList()
-        officeHandler.exportExcel(list, "doc/excel.xls", "${data}信息汇总", response)
+        OfficeHandler.exportExcel(list, "doc/excel.xls", "${data}信息汇总", response)
     }
 
     /**
@@ -51,7 +50,7 @@ class SummaryController(
     @PreAuthorize("hasPermission('/well/summary/export','well:summary:export')")
     fun word(response: HttpServletResponse) {
         val list = infoService.exportList()
-        officeHandler.exportWord(list, "doc/doc.docx", "${data}详情汇总", response)
+        OfficeHandler.exportWord(list, "doc/doc.docx", "${data}详情汇总", response)
     }
 
     private val data: String

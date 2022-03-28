@@ -3,8 +3,6 @@ package top.vuhe.admin.system.service.impl
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.multipart.MultipartFile
-import top.vuhe.admin.api.constant.CENTI
-import top.vuhe.admin.api.constant.UNIT
 import top.vuhe.admin.api.exception.BusinessException
 import top.vuhe.admin.api.file.FileOperatorApi
 import top.vuhe.admin.spring.database.entity.column.IdMaker
@@ -111,5 +109,10 @@ class SysFileServiceImpl(
             size = size * CENTI / UNIT
             "${size / CENTI}.${size % CENTI}GB"
         }
+    }
+
+    companion object {
+        private const val UNIT = 1024
+        private const val CENTI = 100
     }
 }

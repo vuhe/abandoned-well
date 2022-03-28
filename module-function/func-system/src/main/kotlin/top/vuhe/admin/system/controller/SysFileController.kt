@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
-import top.vuhe.admin.api.constant.COMMA
 import top.vuhe.admin.api.exception.BusinessException
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.spring.web.request.PageDomain
@@ -95,7 +94,7 @@ class SysFileController(
     @DeleteMapping("batchRemove/{ids}")
     @PreAuthorize("hasPermission('/system/file/remove','sys:file:remove')")
     fun batchRemove(@PathVariable("ids") ids: String): ResultObj<*> {
-        ids.split(COMMA).forEach { fileService.remove(it) }
+        ids.split(",").forEach { fileService.remove(it) }
         return ResultObj.Success<Nothing>(message = "删除成功")
     }
 }

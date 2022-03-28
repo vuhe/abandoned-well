@@ -1,27 +1,28 @@
 package top.vuhe.admin.api.network
 
+import cn.hutool.extra.spring.SpringUtil
+import cn.hutool.http.useragent.UserAgent
+import cn.hutool.http.useragent.UserAgentUtil
 import com.fasterxml.jackson.databind.ObjectMapper
-import top.vuhe.admin.api.constant.*
-import top.vuhe.admin.api.spring.spring
-import top.vuhe.admin.api.text.localeLowercase
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import kotlin.properties.ReadOnlyProperty
 
-private val objectMapper: ObjectMapper by spring()
+private val objectMapper: ObjectMapper by lazy { SpringUtil.getBean(ObjectMapper::class.java) }
 
 /**
  * 此委托字段始终使用 getter 从 Spring 获取
  *
  * @return nullable [HttpServletRequest]
  */
-fun requestContext(): Lazy<HttpServletRequest?> = NullableRequestEntrust
+fun requestContext(): ReadOnlyProperty<Any, HttpServletRequest?> = NullableRequestEntrust
 
 /**
  * 此委托字段始终使用 getter 从 Spring 获取
  *
  * @return nullable [HttpServletResponse]
  */
-fun responseContext(): Lazy<HttpServletResponse?> = NullableResponseEntrust
+fun responseContext(): ReadOnlyProperty<Any, HttpServletResponse?> = NullableResponseEntrust
 
 /**
  * 获取未被包装的 [HttpServletRequest]
@@ -29,14 +30,14 @@ fun responseContext(): Lazy<HttpServletResponse?> = NullableResponseEntrust
 val HttpServletRequest.orgRequest: HttpServletRequest
     get() = if (this is XssHttpServletRequest) request else this
 
+private val HttpServletRequest.xRequestedWith: String
+    get() = getHeader("X-Requested-With") ?: ""
+
 /**
  * 判断是否为 Ajax 请求
  */
 val HttpServletRequest.isAjax: Boolean
-    get() {
-        val requestType = getHeader(Header.X_REQUESTED_WITH)
-        return Header.XML_HTTP_REQUEST == requestType
-    }
+    get() = "XMLHttpRequest" == xRequestedWith
 
 /**
  * 写出 json 对象
@@ -44,8 +45,8 @@ val HttpServletRequest.isAjax: Boolean
  * @param json json 字符串
  */
 fun HttpServletResponse.writeJson(json: Any) {
-    setHeader(Header.CONTENT_TYPE, JSON_UTF8)
-    characterEncoding = UTF8
+    contentType = "application/json;charset=UTF-8"
+    characterEncoding = Charsets.UTF_8.name()
     writer.write(objectMapper.writeValueAsString(json))
 }
 
@@ -55,33 +56,17 @@ fun HttpServletResponse.writeJson(json: Any) {
 val HttpServletRequest.queryParam: String
     get() = queryString ?: ""
 
-/**
- * 获取 UserAgent，为空时不存在
- */
-val HttpServletRequest.userAgent: String
-    get() = getHeader(Header.UA) ?: ""
+private val HttpServletRequest.userAgent: UserAgent
+    get() = UserAgentUtil.parse(getHeader("User-Agent") ?: "")
 
 /**
  * 获取浏览器类型
  */
 val HttpServletRequest.browser: String
-    get() = when {
-        userAgent.contains(Browser.FIRE_FOX_UA) -> Browser.FIRE_FOX_NAME
-        userAgent.contains(Browser.CHROME_UA) -> Browser.CHROME_NAME
-        userAgent.contains(Browser.IE_UA) -> Browser.IE_NAME
-        userAgent.contains(Browser.SAFARI_UA) -> Browser.SAFARI_NAME
-        else -> Browser.UNKNOWN
-    }
+    get() = userAgent.browser.name
 
 /**
  * 获取浏览器类型
  */
 val HttpServletRequest.systemType: String
-    get() = when {
-        userAgent.localeLowercase().contains(SystemType.WIN_UA) -> SystemType.WIN_NAME
-        userAgent.localeLowercase().contains(SystemType.MAC_UA) -> SystemType.MAC_NAME
-        userAgent.localeLowercase().contains(SystemType.UNIX_UA) -> SystemType.UNIX_NAME
-        userAgent.localeLowercase().contains(SystemType.ANDROID_UA) -> SystemType.ANDROID_NAME
-        userAgent.localeLowercase().contains(SystemType.IPHONE_UA) -> SystemType.IPHONE_NAME
-        else -> SystemType.UNKNOWN + userAgent
-    }
+    get() = userAgent.platform.name

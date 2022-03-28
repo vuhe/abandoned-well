@@ -1,14 +1,15 @@
 package top.vuhe.admin.api.monitor
 
-import cn.hutool.core.date.DateUnit
 import cn.hutool.core.date.DateUtil
 import cn.hutool.core.net.NetUtil
 import cn.hutool.core.util.NumberUtil
 import cn.hutool.system.oshi.OshiUtil
 import java.lang.management.ManagementFactory
 import java.net.InetAddress
-import java.util.*
+import java.time.Duration
+import java.time.Instant
 
+@Suppress("MemberVisibilityCanBePrivate", "unused")
 class CpuInfo {
     /** 磁盘相关信息 */
     val sysFiles: List<LocalFileInfo>
@@ -154,7 +155,7 @@ class CpuInfo {
      */
     val jvmInfoStartTime: String by lazy {
         val time = ManagementFactory.getRuntimeMXBean().startTime
-        val date = Date(time)
+        val date = java.util.Date(time)
         DateUtil.formatDateTime(date)
     }
 
@@ -162,15 +163,9 @@ class CpuInfo {
      * JDK运行时间
      */
     val jvmInfoRunTime: String by lazy {
-        val time = ManagementFactory.getRuntimeMXBean().startTime
-        val date = Date(time)
-        val runMS: Long = DateUtil.between(date, Date(), DateUnit.MS)
-        val nd = (1000 * 24 * 60 * 60).toLong()
-        val nh = (1000 * 60 * 60).toLong()
-        val nm = (1000 * 60).toLong()
-        val day = runMS / nd
-        val hour = runMS % nd / nh
-        val min = runMS % nd % nh / nm
-        day.toString() + "天" + hour + "小时" + min + "分钟"
+        val start = Instant.ofEpochMilli(ManagementFactory.getRuntimeMXBean().startTime)
+        val end = Instant.now()
+        val d = Duration.between(start, end)
+        "${d.toDaysPart()}天${d.toHoursPart()}小时${d.toMinutesPart()}分钟"
     }
 }

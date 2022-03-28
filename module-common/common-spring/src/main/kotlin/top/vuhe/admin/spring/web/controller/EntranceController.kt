@@ -1,5 +1,6 @@
 package top.vuhe.admin.spring.web.controller
 
+import com.wf.captcha.utils.CaptchaUtil
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.logging.Logging
-import top.vuhe.admin.api.security.Captcha
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.isAuthentication
 import top.vuhe.admin.spring.security.session.SecuritySessionRegistry
 import top.vuhe.admin.spring.web.response.ResultObj
@@ -87,7 +87,7 @@ class EntranceController(
      */
     @RequestMapping("system/captcha/generate")
     fun generate(request: HttpServletRequest, response: HttpServletResponse) {
-        Captcha.out(request, response)
+        CaptchaUtil.out(request, response)
     }
 
     /**
@@ -99,7 +99,7 @@ class EntranceController(
      */
     @RequestMapping("system/captcha/verify")
     fun verify(request: HttpServletRequest, captcha: String): ResultObj<*> {
-        return if (Captcha.ver(captcha, request)) {
+        return if (CaptchaUtil.ver(captcha, request)) {
             ResultObj.Success<Nothing>(message = "验证成功")
         } else ResultObj.Fail<Nothing>(message = "验证失败")
     }
