@@ -16,17 +16,10 @@
     <div class="layui-card">
       <div class="layui-card-body" style="padding: 25px;">
         <div class="text-center layui-text">
-          <div class="user-info-head" id="userInfoHead">
-            <img alt="" height="115px" id="avatar" width="115px"
-                 th:src="@{/admin/images/default_avatar.png}">
-          </div>
           <h2 style="padding-top: 20px;font-size: 20px;" th:text="${userInfo.realName}"></h2>
-          <p style="padding-top: 8px;margin-top: 10px;font-size: 13.5px;">China ， 中国</p>
+          <p style="padding-top: 8px;margin-top: 10px;font-size: 13px;"
+             th:text="${userInfo.remark}">暂无描述</p>
         </div>
-      </div>
-      <div
-        style="height: 45px;border-top: 1px whitesmoke solid;text-align: center;line-height: 45px;font-size: 13.5px;">
-        <span th:text="${userInfo.remark}">今日事 ，今日毕</span>
       </div>
     </div>
     <div class="layui-card">
@@ -37,7 +30,7 @@
         <ul class="list">
           <li class="list-item" th:each="log:${logs}">
             <span class="title" th:text="${log.title}"></span>
-            <span class="footer" th:text="${log.createTime}"></span>
+            <span class="footer" th:text="${#temporals.format(log.createTime, 'yyyy-MM-dd HH:mm')}"></span>
           </li>
         </ul>
       </div>
@@ -130,26 +123,6 @@
       });
       return false;
     })
-
-    let image = new Image();
-    image.src = "/system/file/download/" + [[${userInfo.avatar}]];
-    image.onload = function () {
-      $("#avatar").attr("src", convert.imageToBase64(image));
-    }
-
-    $("#avatar").click(function () {
-      layer.open({
-        type: 2,
-        title: '更换图片',
-        shade: 0.1,
-        area: ["900px", "500px"],
-        content: '/system/user/profile/' + [[${userInfo.userId}]],
-        btn: ['确定', '取消'],
-        yes: function (index, layero) {
-          window['layui-layer-iframe' + index].submitForm();
-        }
-      });
-    });
 
     form.on('submit(user-update)', function (data) {
       $.ajax({

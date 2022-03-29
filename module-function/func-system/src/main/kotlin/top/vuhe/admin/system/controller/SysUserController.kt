@@ -92,14 +92,14 @@ class SysUserController @Autowired constructor(
         addObject("logs", logs)
     }
 
-    /**
-     * 更换头像
-     */
-    @GetMapping("profile/{id}")
-    fun profile(@PathVariable("id") userId: String) =
-        ModelAndView("system/user/profile").apply {
-            addObject("userId", userId)
-        }
+//    /**
+//     * 更换头像
+//     */
+//    @GetMapping("profile/{id}")
+//    fun profile(@PathVariable("id") userId: String) =
+//        ModelAndView("system/user/profile").apply {
+//            addObject("userId", userId)
+//        }
 
     /* -------------------------------------------------------------------------- */
 
@@ -178,17 +178,17 @@ class SysUserController @Autowired constructor(
         sysUserService.modify(sysUser)
     }
 
-    /**
-     * 头像修改接口
-     */
-    @PutMapping("updateAvatar")
-    @Operation(summary = "修改用户头像")
-    @Logging("修改头像", describe = "修改头像", type = BusinessType.EDIT)
-    fun updateAvatar(@RequestBody sysUser: SysUser) = boolResult {
-        val userId: String = currUserId
-        sysUser.userId = userId
-        sysUserService.modify(sysUser)
-    }
+//    /**
+//     * 头像修改接口
+//     */
+//    @PutMapping("updateAvatar")
+//    @Operation(summary = "修改用户头像")
+//    @Logging("修改头像", describe = "修改头像", type = BusinessType.EDIT)
+//    fun updateAvatar(@RequestBody sysUser: SysUser) = boolResult {
+//        val userId: String = currUserId
+//        sysUser.userId = userId
+//        sysUserService.modify(sysUser)
+//    }
 
     /**
      * 用户批量删除接口

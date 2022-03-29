@@ -27,11 +27,6 @@ class SysUser : BaseEntity() {
     var password: String = ""
 
     /**
-     * 盐
-     */
-    var salt: String = ""
-
-    /**
      * 姓名
      */
     var realName: String = ""

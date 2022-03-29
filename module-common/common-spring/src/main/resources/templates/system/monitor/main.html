@@ -81,11 +81,38 @@
       </div>
       <div class="layui-col-md12">
         <div class="layui-card">
-          <div class="layui-card-header">访客流量</div>
+          <div class="layui-card-header">主机信息</div>
           <div class="layui-card-body">
-            <div class="layui-tab custom-tab layui-tab-brief" lay-filter="docDemoTabBrief">
-              <div id="echarts-records" style="background-color:#ffffff;min-height:400px;"></div>
-            </div>
+            <table class="layui-table" lay-skin="line">
+              <thead>
+              <tr>
+                <th>属性</th>
+                <th>值</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr>
+                <td>名称</td>
+                <td th:text="${cpu.sysInfoComputerName}"></td>
+              </tr>
+              <tr>
+                <td>地址</td>
+                <td th:text="${cpu.sysInfoComputerIp}"></td>
+              </tr>
+              <tr>
+                <td>系统</td>
+                <td th:text="${cpu.sysInfoOsName}"></td>
+              </tr>
+              <tr>
+                <td>模型</td>
+                <td th:text="${cpu.sysInfoOsArch}"></td>
+              </tr>
+              <tr>
+                <td>JDK</td>
+                <td th:text="${'JDK' + cpu.jvmInfoVersion}"></td>
+              </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -105,45 +132,8 @@
             已经使用&nbsp;<span th:text="${sysFile.used}"></span>&nbsp;&nbsp;
             使用概率&nbsp;<span th:text="${sysFile.usage}"></span>
             <br/>
-            <a class="pear-btn pear-btn-xs pear-btn-primary pear-reply" data-id="1"
-               href="javascript:;">详情</a>
           </li>
         </ul>
-      </div>
-    </div>
-    <div class="layui-card">
-      <div class="layui-card-header">主机信息</div>
-      <div class="layui-card-body">
-        <table class="layui-table" lay-skin="line">
-          <thead>
-          <tr>
-            <th>属性</th>
-            <th>值</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td>名称</td>
-            <td th:text="${cpu.sysInfoComputerName}"></td>
-          </tr>
-          <tr>
-            <td>地址</td>
-            <td th:text="${cpu.sysInfoComputerIp}"></td>
-          </tr>
-          <tr>
-            <td>系统</td>
-            <td th:text="${cpu.sysInfoOsName}"></td>
-          </tr>
-          <tr>
-            <td>模型</td>
-            <td th:text="${cpu.sysInfoOsArch}"></td>
-          </tr>
-          <tr>
-            <td>JDK</td>
-            <td th:text="${'JDK' + cpu.jvmInfoVersion}"></td>
-          </tr>
-          </tbody>
-        </table>
       </div>
     </div>
   </div>

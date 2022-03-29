@@ -25,7 +25,6 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     override val id = varchar("user_id").primaryKey().bind(SysUser::userId)
     private val name = varchar("username").bind(SysUser::username)
     private val pwd = varchar("password").bind(SysUser::password)
-    private val salt = varchar("salt").bind(SysUser::salt)
     private val realName = varchar("real_name").bind(SysUser::realName)
     private val email = varchar("email").bind(SysUser::email)
     private val avatar = varchar("avatar").bind(SysUser::avatar)
