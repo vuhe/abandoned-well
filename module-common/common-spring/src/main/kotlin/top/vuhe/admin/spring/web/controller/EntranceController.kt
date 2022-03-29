@@ -9,7 +9,7 @@ import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.isAuthentication
-import top.vuhe.admin.spring.security.session.SecuritySessionRegistry
+import top.vuhe.admin.spring.security.session.SecuritySessionManager
 import top.vuhe.admin.spring.web.response.ResultObj
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -23,7 +23,7 @@ import javax.servlet.http.HttpServletResponse
 @RequestMapping
 @Tag(name = "项目入口")
 class EntranceController(
-    private val sessionRegistry: SecuritySessionRegistry
+    private val sessionRegistry: SecuritySessionManager
 ) : BaseController() {
     /**
      *  获取登录视图
@@ -31,7 +31,7 @@ class EntranceController(
      */
     @GetMapping("login")
     fun login(request: HttpServletRequest) = if (isAuthentication) {
-        sessionRegistry.expiredSession(request.session)
+        sessionRegistry.refreshLastRequest(request.session.id)
         ModelAndView("index")
     } else ModelAndView("login")
 

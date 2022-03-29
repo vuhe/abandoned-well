@@ -43,9 +43,4 @@ interface LoginUser: CredentialsContainer {
      * 用户是否启用
      */
     val isEnable: Boolean
-
-    /**
-     * 登录是否过期，过期登录权限验证失败
-     */
-    val isLoginNonExpired: Boolean
 }

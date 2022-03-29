@@ -2,13 +2,12 @@ package top.vuhe.admin.system.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
-import org.springframework.security.core.session.SessionRegistry
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
+import top.vuhe.admin.spring.security.session.SecuritySessionManager
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.spring.web.response.ResultObj
-import top.vuhe.admin.spring.web.session.HttpSessionCenter
 import top.vuhe.admin.system.service.ISysUserService
 import java.time.Duration
 import java.time.LocalDateTime
@@ -22,7 +21,7 @@ import java.time.LocalDateTime
 @Tag(name = "在线用户")
 @RequestMapping(API_SYSTEM_PREFIX + "online")
 class SysOnlineController(
-    private val sessionRegistry: SessionRegistry,
+    private val sessionRegistry: SecuritySessionManager,
     private val sysUserService: ISysUserService
 ) : BaseController() {
 
@@ -60,22 +59,12 @@ class SysOnlineController(
     @DeleteMapping("/remove/{onlineId}")
     @ResponseBody
     fun remove(@PathVariable onlineId: String): ResultObj<*> {
-        // 从sessionRegistry中获取所有的用户信息
-        val userId = sessionRegistry.allPrincipals.find {
-            it as String == onlineId
-        } as String?
-        sysUserService.getOneById(userId ?: "")?.let {
+        sysUserService.getOneById(onlineId)?.let {
             // 不允许操作admin用户下线
             if (it.admin == true) {
                 return ResultObj.Fail<Nothing>(message = "不允许操作超级管理员[admin]下线")
             }
-            for (sessionInformation in sessionRegistry.getAllSessions(it, false)) {
-                sessionInformation.expireNow()
-                // 从sessionRegistry中清除session信息
-                sessionRegistry.removeSessionInformation(sessionInformation.sessionId)
-                // 销毁session
-                HttpSessionCenter[sessionInformation.sessionId]?.invalidate()
-            }
+            sessionRegistry.deleteSessionByUserId(it.userId)
             return ResultObj.Success<Nothing>(message = "用户[${it.username}]已下线")
         }
         return ResultObj.Fail<Nothing>()

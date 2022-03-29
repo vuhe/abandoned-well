@@ -45,7 +45,6 @@ class LoginAfterHandler(
         val userId = authentication.principal as String
         sysUserService.updateLoginTime(userId)
 
-        request.session.setAttribute("currentUser", userId)
         val result = ResultObj.Success<Nothing>(message = "登录成功")
         response.writeJson(result)
     }

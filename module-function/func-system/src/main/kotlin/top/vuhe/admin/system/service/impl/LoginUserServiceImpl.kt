@@ -7,12 +7,10 @@ import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.spring.security.principal.LoginUser
 import top.vuhe.admin.spring.security.principal.LoginUserAuthority
 import top.vuhe.admin.spring.security.principal.UserSecurityService
-import top.vuhe.admin.spring.web.session.HttpSessionCenter
 import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.mapper.SysPowerMapper
 import top.vuhe.admin.system.mapper.SysRoleMapper
 import top.vuhe.admin.system.mapper.SysUserMapper
-import java.time.Duration
 import java.time.LocalDateTime
 
 /**
@@ -80,13 +78,6 @@ class LoginUserServiceImpl(
         override val isNonLocked: Boolean = user?.unlocked ?: false
         override val isEnable: Boolean
             get() = user?.enable ?: false
-        override val isLoginNonExpired: Boolean
-            get() {
-                // 获取session的目标过期时间
-                val expiredTime = user?.lastTime?.plusSeconds(HttpSessionCenter.timeout.seconds) ?: return false
-                // 若session过期
-                return Duration.between(LocalDateTime.now(), expiredTime).toMinutes() > 0
-            }
 
         override fun eraseCredentials() {
             erased = true

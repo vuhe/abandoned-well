@@ -1,23 +1,16 @@
 package top.vuhe.admin.spring.config
 
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
-import top.vuhe.admin.spring.security.login.LoginAfterHandler
-import top.vuhe.admin.spring.security.login.LoginAuthenticationProvider
-import top.vuhe.admin.spring.security.login.LoginDetailsSource
-import top.vuhe.admin.spring.security.logout.SecureLogoutHandler
-import top.vuhe.admin.spring.security.permission.SecureAccessDeniedHandler
-import top.vuhe.admin.spring.security.session.RememberMeLoginAfterHandler
+import top.vuhe.admin.api.logging.LoggingFactory
+import top.vuhe.admin.spring.security.SpringSecurityAdapter
+import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.security.session.RememberMeTokenService
-import top.vuhe.admin.spring.security.session.SecuritySessionRegistry
-import top.vuhe.admin.spring.security.session.SessionExpiredHandler
 
 /**
  * ### Security 安全配置
@@ -29,34 +22,11 @@ import top.vuhe.admin.spring.security.session.SessionExpiredHandler
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecureConfiguration : WebSecurityConfigurerAdapter() {
-    @Autowired
-    private lateinit var loginAfterHandler: LoginAfterHandler
-
-    @Autowired
-    private lateinit var loginAuthenticationProvider: LoginAuthenticationProvider
-
-    @Autowired
-    private lateinit var loginDetailSource: LoginDetailsSource
-
-    @Autowired
-    private lateinit var logoutHandler: SecureLogoutHandler
-
-    @Autowired
-    private lateinit var accessDenied: SecureAccessDeniedHandler
-
-    @Autowired
-    private lateinit var rememberLoginAfterHandler: RememberMeLoginAfterHandler
-
-    @Autowired
-    private lateinit var rememberTokenService: RememberMeTokenService
-
-    @Autowired
-    private lateinit var sessionRegistryCenter: SecuritySessionRegistry
-
-    @Autowired
-    private lateinit var sessionExpiredHandler: SessionExpiredHandler
-
+class SecureConfiguration(
+    sysLogService: LoggingFactory,
+    userDetailsService: UserSecurityService,
+    private val rememberTokenService: RememberMeTokenService
+) : SpringSecurityAdapter(sysLogService, userDetailsService) {
     /**
      * 身份认证接口
      */
@@ -128,7 +98,7 @@ class SecureConfiguration : WebSecurityConfigurerAdapter() {
                 maximumSessions = 1
                 maxSessionsPreventsLogin = false
                 // 踢出用户操作
-                expiredSessionStrategy = sessionExpiredHandler
+                expiredSessionStrategy = sessionRegistryCenter
                 // 用于统计在线
                 sessionRegistry = sessionRegistryCenter
             }

@@ -10,5 +10,7 @@ spring:
 #logging:
 #  level:
 #    org:
-#      ktorm: debug
-#  config: classpath:logback-spring.xml
+#      springframework:
+#        security:
+#          core:
+#            session: trace

@@ -1,7 +1,10 @@
 package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.*
+import org.ktorm.schema.Table
+import org.ktorm.schema.boolean
+import org.ktorm.schema.datetime
+import org.ktorm.schema.varchar
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
@@ -17,6 +20,7 @@ import top.vuhe.admin.system.domain.SysUser
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     override val id = varchar("user_id").primaryKey().bind(SysUser::userId)
     private val name = varchar("username").bind(SysUser::username)
@@ -52,6 +56,7 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
         return super.selectById(queryId)
     }
 
+    @Suppress("DuplicatedCode")
     override fun Query.listFilter(param: SysUser): Query {
         return whereWithConditions {
             if (param.username.isNotEmpty()) it.add(name like "%${param.username}%")
@@ -153,6 +158,7 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 更改密码
      */
+    @CacheEvict("user", key = "#userId")
     fun updatePassword(userId: String, password: String): Int {
         return database.update(this) {
             set(it.pwd, BCryptPasswordEncoder().encode(password))

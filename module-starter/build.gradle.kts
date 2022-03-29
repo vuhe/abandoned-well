@@ -1,5 +1,4 @@
 dependencies {
-    implementation(project(":func-schedule"))
     implementation(project(":func-system"))
     implementation(project(":func-well"))
 

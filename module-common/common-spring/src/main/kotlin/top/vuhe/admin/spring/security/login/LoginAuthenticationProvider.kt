@@ -33,7 +33,6 @@ class LoginAuthenticationProvider(
         val dbUser = userDetailsService.getLoginUserById(userId)
 
         // 检查用户是否为异常情况
-//        if (!dbUser.isNonExpired) throw AccountExpiredException("")
         if (!dbUser.isNonLocked) throw LockedException("")
         if (!dbUser.isEnable) throw DisabledException("")
 

@@ -30,12 +30,8 @@ class RememberMeLoginAfterHandler(
 
         val userId = authentication.principal as String
         sysUserService.updateLoginTime(userId)
-        request.session.setAttribute("currentUser", userId)
 
-        // 续期
-        SecuritySessionRegistry.expiredSession(request.session)
-
-        // 注册新的SessionInformation
-        SecuritySessionRegistry.registerNewSession(request.session.id, authentication.principal)
+        // Remember Me 老用户登录续期
+        SecuritySessionManager.refreshLastRequest(request.session.id)
     }
 }
