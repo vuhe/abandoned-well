@@ -7,7 +7,11 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":module-starter"))
+    implementation(project(":func-system"))
+    implementation(project(":func-well"))
+
+    implementation("mysql:mysql-connector-java")
+    implementation("org.ktorm:ktorm-support-mysql")
 }
 
 springBoot {
