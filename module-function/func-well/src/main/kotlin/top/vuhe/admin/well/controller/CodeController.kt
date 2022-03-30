@@ -85,7 +85,6 @@ class CodeController(
     /**
      * 批量删除 地质代码
      */
-    @ResponseBody
     @DeleteMapping("/batchRemove")
     @PreAuthorize("hasPermission('/well/code/remove','well:code:remove')")
     fun batchRemove(ids: String) = boolResult {

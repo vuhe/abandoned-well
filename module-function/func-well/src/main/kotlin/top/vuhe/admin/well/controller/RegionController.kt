@@ -92,7 +92,6 @@ class RegionController(
     /**
      * 批量删除 井区域
      */
-    @ResponseBody
     @DeleteMapping("/batchRemove")
     @PreAuthorize("hasPermission('/well/region/remove','well:region:remove')")
     fun batchRemove(ids: String) = boolResult {

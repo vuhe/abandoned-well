@@ -51,7 +51,6 @@ class SysNoticeController(
     /**
      * 查询notice列表
      */
-    @ResponseBody
     @GetMapping("/data")
     @PreAuthorize("hasPermission('/system/notice/data','system:notice:data')")
     fun list(@ModelAttribute sysNotice: SysNotice, pageDomain: PageDomain) = pageTable {
@@ -61,7 +60,6 @@ class SysNoticeController(
     /**
      * 查询消息
      */
-    @ResponseBody
     @GetMapping("notice")
     fun notice(): List<Map<String, Any>> {
         val publicParam = SysNotice().apply { type = "public" }
@@ -88,7 +86,6 @@ class SysNoticeController(
     /**
      * 新增保存notice
      */
-    @ResponseBody
     @PostMapping("/save")
     @PreAuthorize("hasPermission('/system/notice/add','system:notice:add')")
     fun save(@RequestBody sysNotice: SysNotice) = boolResult {
@@ -98,7 +95,6 @@ class SysNoticeController(
     /**
      * 修改保存notice
      */
-    @ResponseBody
     @PutMapping("/update")
     @PreAuthorize("hasPermission('/system/notice/edit','system:notice:edit')")
     fun update(@RequestBody sysNotice: SysNotice) = boolResult {
@@ -108,7 +104,6 @@ class SysNoticeController(
     /**
      * 删除notice
      */
-    @ResponseBody
     @DeleteMapping("/batchRemove")
     @PreAuthorize("hasPermission('/system/notice/remove','system:notice:remove')")
     fun batchRemove(ids: String) = boolResult {
@@ -118,7 +113,6 @@ class SysNoticeController(
     /**
      * 删除
      */
-    @ResponseBody
     @DeleteMapping("/remove/{id}")
     @PreAuthorize("hasPermission('/system/notice/remove','system:notice:remove')")
     fun remove(@PathVariable("id") id: String) = boolResult {

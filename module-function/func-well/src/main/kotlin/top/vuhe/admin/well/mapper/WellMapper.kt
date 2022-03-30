@@ -14,6 +14,7 @@ import top.vuhe.admin.well.domina.WellType
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class WellMapper : CurdMapper<WellInfo>("well_info") {
     override val id = varchar("id").primaryKey().bind(WellInfo::id)
     private val name = varchar("name").bind(WellInfo::name)

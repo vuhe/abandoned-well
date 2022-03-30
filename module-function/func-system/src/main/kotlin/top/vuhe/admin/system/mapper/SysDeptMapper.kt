@@ -1,7 +1,10 @@
 package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.*
+import org.ktorm.schema.boolean
+import org.ktorm.schema.datetime
+import org.ktorm.schema.int
+import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysDept
@@ -12,6 +15,7 @@ import top.vuhe.admin.system.domain.SysDept
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class SysDeptMapper : CurdMapper<SysDept>("sys_dept") {
     override val id = varchar("dept_id").primaryKey().bind(SysDept::deptId)
     private val deptName = varchar("dept_name").bind(SysDept::deptName)

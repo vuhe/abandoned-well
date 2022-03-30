@@ -1,7 +1,11 @@
 package top.vuhe.admin.system.mapper
 
-import org.ktorm.dsl.*
-import org.ktorm.schema.*
+import org.ktorm.dsl.Query
+import org.ktorm.dsl.like
+import org.ktorm.dsl.whereWithConditions
+import org.ktorm.schema.datetime
+import org.ktorm.schema.text
+import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysNotice
@@ -12,6 +16,7 @@ import top.vuhe.admin.system.domain.SysNotice
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class SysNoticeMapper : CurdMapper<SysNotice>("sys_notice") {
     override val id = varchar("id").primaryKey().bind(SysNotice::id)
     private val title = varchar("title").bind(SysNotice::title)
@@ -26,6 +31,7 @@ class SysNoticeMapper : CurdMapper<SysNotice>("sys_notice") {
     private val updateBy = varchar("update_by").bind(SysNotice::updateBy)
     private val remark = varchar("remark").bind(SysNotice::remark)
 
+    @Suppress("DuplicatedCode")
     override fun Query.listFilter(param: SysNotice): Query {
         return whereWithConditions {
             if (param.title.isNotEmpty()) it.add(title like "%${param.title}%")

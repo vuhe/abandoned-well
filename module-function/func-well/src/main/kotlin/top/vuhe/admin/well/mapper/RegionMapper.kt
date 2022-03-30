@@ -1,7 +1,10 @@
 package top.vuhe.admin.well.mapper
 
-import org.ktorm.dsl.*
-import org.ktorm.schema.*
+import org.ktorm.dsl.Query
+import org.ktorm.dsl.like
+import org.ktorm.dsl.whereWithConditions
+import org.ktorm.schema.int
+import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.well.domina.WellRegion
@@ -12,6 +15,7 @@ import top.vuhe.admin.well.domina.WellRegion
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class RegionMapper : CurdMapper<WellRegion>("well_region") {
     override val id = varchar("id").primaryKey().bind(WellRegion::id)
     private val city = varchar("city").bind(WellRegion::city)

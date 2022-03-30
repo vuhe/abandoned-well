@@ -5,6 +5,7 @@ package top.vuhe.admin.well.domina
  *
  * @author vuhe
  */
+@Suppress("unused")
 enum class WellType(val category: String, val type: String) {
     KU("矿井", "竖井"),
     KX("矿井", "斜井"),

@@ -159,7 +159,6 @@ class WellController(
     /**
      * 批量删除 井信息
      */
-    @ResponseBody
     @DeleteMapping("/batchRemove")
     @PreAuthorize("hasPermission('/well/info/remove','well:info:remove')")
     fun batchRemove(ids: String) = boolResult {

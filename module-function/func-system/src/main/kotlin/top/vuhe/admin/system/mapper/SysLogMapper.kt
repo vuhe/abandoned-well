@@ -16,6 +16,7 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class SysLogMapper : CurdMapper<SysLog>("sys_logging") {
     override val id = varchar("id").primaryKey().bind(SysLog::id)
     private val title = varchar("title").bind(SysLog::title)

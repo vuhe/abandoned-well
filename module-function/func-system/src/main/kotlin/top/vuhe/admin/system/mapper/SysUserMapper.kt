@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Repository
-import top.vuhe.admin.spring.database.entity.column.IdMaker
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysUser
 
@@ -181,7 +180,7 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
         val result = database.batchInsert(UserRoleTable) {
             roleIds.forEach { roleId ->
                 item {
-                    set(it.id, IdMaker.next().toString())
+                    set(it.id, defaultId())
                     set(it.userId, userId)
                     set(it.roleId, roleId)
                 }

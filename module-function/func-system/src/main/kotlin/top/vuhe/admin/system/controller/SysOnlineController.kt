@@ -57,7 +57,6 @@ class SysOnlineController(
      * 踢出用户（下线）
      */
     @DeleteMapping("/remove/{onlineId}")
-    @ResponseBody
     fun remove(@PathVariable onlineId: String): ResultObj<*> {
         sysUserService.getOneById(onlineId)?.let {
             // 不允许操作admin用户下线

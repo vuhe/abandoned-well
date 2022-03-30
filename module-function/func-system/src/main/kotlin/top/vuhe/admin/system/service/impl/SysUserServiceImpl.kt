@@ -38,6 +38,7 @@ class SysUserServiceImpl(
         return super.batchRemove(ids)
     }
 
+    @Transactional(rollbackFor = [Exception::class])
     override fun modifyPassword(userId: String, password: String): Boolean {
         return sysUserMapper.updatePassword(userId, password) > 0
     }

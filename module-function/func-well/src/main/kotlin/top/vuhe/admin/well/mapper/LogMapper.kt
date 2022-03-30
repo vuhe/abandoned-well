@@ -1,6 +1,6 @@
 package top.vuhe.admin.well.mapper
 
-import org.ktorm.schema.*
+import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.well.domina.WellLog
@@ -11,6 +11,7 @@ import top.vuhe.admin.well.domina.WellLog
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class LogMapper : CurdMapper<WellLog>("well_log") {
     override val id = varchar("id").primaryKey().bind(WellLog::id)
     private val wellId = varchar("well_id").bind(WellLog::wellId)

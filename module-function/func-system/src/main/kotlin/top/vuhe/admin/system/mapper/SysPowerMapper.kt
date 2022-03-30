@@ -1,7 +1,10 @@
 package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.*
+import org.ktorm.schema.boolean
+import org.ktorm.schema.datetime
+import org.ktorm.schema.int
+import org.ktorm.schema.varchar
 import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.mapper.CurdMapper
@@ -13,6 +16,7 @@ import top.vuhe.admin.system.domain.SysPower
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class SysPowerMapper : CurdMapper<SysPower>("sys_power") {
     override val id = varchar("power_id").primaryKey().bind(SysPower::powerId)
     private val powerName = varchar("power_name").bind(SysPower::powerName)

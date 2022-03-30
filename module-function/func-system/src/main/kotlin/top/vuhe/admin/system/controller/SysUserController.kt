@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
@@ -183,7 +182,6 @@ class SysUserController @Autowired constructor(
     /**
      * 用户删除接口
      */
-    @Transactional(rollbackFor = [Exception::class])
     @DeleteMapping("remove/{id}")
     @Operation(summary = "删除用户数据")
     @PreAuthorize("hasPermission('/system/user/remove','sys:user:remove')")
@@ -224,19 +222,13 @@ class SysUserController @Autowired constructor(
     class EditPassword {
         var userId: String = ""
 
-        /**
-         * 旧密码
-         */
+        /** 旧密码 */
         var oldPassword: String = ""
 
-        /**
-         * 新密码
-         */
+        /** 新密码 */
         var newPassword: String = ""
 
-        /**
-         * 确认密码
-         */
+        /** 确认密码 */
         var confirmPassword: String = ""
     }
 }

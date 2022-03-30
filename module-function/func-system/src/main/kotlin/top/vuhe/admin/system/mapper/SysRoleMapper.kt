@@ -6,7 +6,6 @@ import org.springframework.cache.annotation.CacheEvict
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.cache.annotation.Caching
 import org.springframework.stereotype.Repository
-import top.vuhe.admin.spring.database.entity.column.IdMaker
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysRole
 
@@ -16,6 +15,7 @@ import top.vuhe.admin.system.domain.SysRole
  * @author vuhe
  */
 @Repository
+@Suppress("unused")
 class SysRoleMapper : CurdMapper<SysRole>("sys_role") {
     override val id = varchar("role_id").primaryKey().bind(SysRole::roleId)
     private val roleName = varchar("role_name").bind(SysRole::roleName)
@@ -105,7 +105,7 @@ class SysRoleMapper : CurdMapper<SysRole>("sys_role") {
         val result = database.batchInsert(RolePowerTable) {
             powerIds.forEach { powerId ->
                 item {
-                    set(it.id, IdMaker.next().toString())
+                    set(it.id, defaultId())
                     set(it.roleId, roleId)
                     set(it.powerId, powerId)
                 }

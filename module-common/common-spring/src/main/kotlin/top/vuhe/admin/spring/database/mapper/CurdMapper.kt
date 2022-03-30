@@ -1,10 +1,10 @@
 package top.vuhe.admin.spring.database.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.*
-import top.vuhe.admin.spring.database.entity.column.IdMaker
-import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
+import org.ktorm.schema.Column
+import top.vuhe.admin.api.text.UUIDGenerator
 import top.vuhe.admin.spring.database.entity.BaseEntity
+import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
 import java.time.LocalDateTime
 
 /**
@@ -14,6 +14,11 @@ import java.time.LocalDateTime
  */
 abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tableName) {
     protected abstract val id: Column<String>
+
+    /**
+     * 默认 id 生成方法
+     */
+    protected fun defaultId(): String = UUIDGenerator.create(15)
 
     /**
      * 根据 Id 查询实体
@@ -57,7 +62,7 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
         entity.createBy = currUserId
         return database.insert(this) {
             insertSetting(entity)
-            set(id, IdMaker.next().toString())
+            set(id, defaultId())
         }
     }
 
@@ -74,7 +79,7 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
                 e.createBy = currUserId
                 item {
                     insertSetting(e)
-                    set(id, IdMaker.next().toString())
+                    set(id, defaultId())
                 }
             }
         }.reduce { a, b -> a + b }
