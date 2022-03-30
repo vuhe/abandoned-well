@@ -6,11 +6,11 @@ dependencies {
     // 用于实现切面处理 aop
     implementation("org.springframework.boot:spring-boot-starter-aop")
     // hutool 工具包
-    implementation("cn.hutool:hutool-all:5.7.20")
+    implementation("cn.hutool:hutool-all:5.7.22")
     // xss 工具
     implementation("org.jsoup:jsoup:1.14.3")
     // 系统信息获取
-    implementation("com.github.oshi:oshi-core-java11:6.1.0")
+    implementation("com.github.oshi:oshi-core-java11:6.1.5")
     // excel 工具
     implementation("cn.afterturn:easypoi-spring-boot-starter:4.4.0")
 

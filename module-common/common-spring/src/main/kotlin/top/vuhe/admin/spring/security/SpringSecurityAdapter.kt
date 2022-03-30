@@ -11,6 +11,7 @@ import top.vuhe.admin.spring.security.permission.SecureAccessDeniedHandler
 import top.vuhe.admin.spring.security.permission.SecurePermissionSupport
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.security.session.RememberMeLoginAfterHandler
+import top.vuhe.admin.spring.security.session.RememberMeTokenService
 import top.vuhe.admin.spring.security.session.SecuritySessionManager
 
 /**
@@ -27,6 +28,7 @@ abstract class SpringSecurityAdapter(
     protected val loginDetailSource = LoginDetailsSource
     protected val logoutHandler = SecureLogoutHandler
     protected val accessDenied = SecureAccessDeniedHandler
+    protected val rememberTokenService = RememberMeTokenService
     protected val rememberLoginAfterHandler = RememberMeLoginAfterHandler(sysLogService, userDetailsService)
     protected val sessionRegistryCenter = SecuritySessionManager
 

@@ -5,8 +5,8 @@ import org.ktorm.schema.boolean
 import org.ktorm.schema.datetime
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
-import org.springframework.cache.annotation.CacheEvict
 import org.springframework.stereotype.Repository
+import top.vuhe.admin.api.cache.cacheClear
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysPower
 
@@ -41,22 +41,23 @@ class SysPowerMapper : CurdMapper<SysPower>("sys_power") {
         }.orderBy(sort.asc())
     }
 
-    @CacheEvict("authority", allEntries = true)
     override fun update(entity: SysPower): Int {
+        cacheClear("authority")
         return super.update(entity)
     }
 
-    @CacheEvict("authority", allEntries = true)
     override fun batchUpdate(entities: Collection<SysPower>): Int {
+        cacheClear("authority")
         return super.batchUpdate(entities)
     }
 
     /**
      * 批量删除角色（同时删除关联表）
      */
-    @CacheEvict("authority", allEntries = true)
     override fun batchDelete(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
+        cacheClear("authority")
+
         database.delete(SysRoleMapper.RolePowerTable) { it.powerId inList ids }
         return super.batchDelete(ids)
     }

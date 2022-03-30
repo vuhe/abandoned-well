@@ -5,11 +5,12 @@ import org.ktorm.schema.Table
 import org.ktorm.schema.boolean
 import org.ktorm.schema.datetime
 import org.ktorm.schema.varchar
-import org.springframework.cache.annotation.CacheEvict
-import org.springframework.cache.annotation.Cacheable
-import org.springframework.cache.annotation.Caching
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.stereotype.Repository
+import top.vuhe.admin.api.cache.cacheDelete
+import top.vuhe.admin.api.cache.cacheGet
+import top.vuhe.admin.api.cache.cachePut
+import top.vuhe.admin.api.cache.cacheable
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysUser
 
@@ -49,9 +50,12 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
         val roleId = varchar("role_id")
     }
 
-    @Cacheable("user", key = "#queryId")
     override fun selectById(queryId: String): SysUser? {
-        return super.selectById(queryId)
+        val cache = cacheGet<SysUser>("user", key = queryId)
+        if (cache != null) return cache
+        val value = super.selectById(queryId)
+        if (value != null) cachePut("user", key = queryId, value)
+        return value
     }
 
     @Suppress("DuplicatedCode")
@@ -82,8 +86,8 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 加密密码后，更改
      */
-    @CacheEvict("user", key = "#entity.userId")
     override fun update(entity: SysUser): Int {
+        cacheDelete("user", key = entity.userId)
         entity.password = ""
         return super.update(entity)
     }
@@ -91,23 +95,22 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 加密密码后，批量更改
      */
-    @CacheEvict("user", allEntries = true)
     override fun batchUpdate(entities: Collection<SysUser>): Int {
-        entities.forEach { it.password = "" }
+        entities.forEach {
+            it.password = ""
+            cacheDelete("user", key = it.userId)
+        }
         return super.batchUpdate(entities)
     }
 
     /**
      * 删除用户（同时删除关联表）
      */
-    @Caching(
-        evict = [
-            CacheEvict("user", key = "#id"),
-            CacheEvict("user-role", key = "#id"),
-            CacheEvict("authority", key = "#id")
-        ]
-    )
     override fun delete(id: String): Int {
+        cacheDelete("user", key = id)
+        cacheDelete("user-role", key = id)
+        cacheDelete("authority", key = id)
+
         database.delete(UserRoleTable) { it.userId eq id }
         return database.delete(this) { this.id eq id }
     }
@@ -115,15 +118,14 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 批量删除用户（同时删除关联表）
      */
-    @Caching(
-        evict = [
-            CacheEvict("user", allEntries = true),
-            CacheEvict("user-role", allEntries = true),
-            CacheEvict("authority", allEntries = true)
-        ]
-    )
     override fun batchDelete(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
+        ids.forEach {
+            cacheDelete("user", key = it)
+            cacheDelete("user-role", key = it)
+            cacheDelete("authority", key = it)
+        }
+
         // 在执行本表删除前，先删除 user - role 表数据
         database.delete(UserRoleTable) { it.userId inList ids }
         return super.batchDelete(ids)
@@ -144,20 +146,21 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 通过 userId 查询 roleId 列表
      */
-    @Cacheable("user-role", key = "#userId")
-    fun selectRoleIdByUserId(userId: String): Set<String> {
-        return database.from(UserRoleTable)
-            .select(UserRoleTable.roleId)
-            .where { UserRoleTable.userId eq userId }
-            .mapNotNull { it[UserRoleTable.roleId] }
-            .toSet()
-    }
+    fun selectRoleIdByUserId(userId: String): Set<String> =
+        cacheable("user-role", key = userId) {
+            database.from(UserRoleTable)
+                .select(UserRoleTable.roleId)
+                .where { UserRoleTable.userId eq userId }
+                .mapNotNull { it[UserRoleTable.roleId] }
+                .toSet()
+        }
 
     /**
      * 更改密码
      */
-    @CacheEvict("user", key = "#userId")
     fun updatePassword(userId: String, password: String): Int {
+        cacheDelete("user", key = userId)
+
         return database.update(this) {
             set(it.pwd, BCryptPasswordEncoder().encode(password))
             where { id eq userId }
@@ -167,13 +170,10 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 批量更改 user - role 映射
      */
-    @Caching(
-        evict = [
-            CacheEvict("user-role", key = "#userId"),
-            CacheEvict("authority", key = "#userId")
-        ]
-    )
     fun batchInsertUserRole(userId: String, roleIds: List<String>): Int {
+        cacheDelete("user-role", key = userId)
+        cacheDelete("authority", key = userId)
+
         // 删除原先的角色映射
         database.delete(UserRoleTable) { it.userId eq userId }
         // 新建映射

@@ -1,12 +1,10 @@
 package top.vuhe.admin.spring.security.session
 
-import org.springframework.cache.annotation.CacheEvict
-import org.springframework.cache.annotation.CachePut
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository
-import org.springframework.stereotype.Service
-import java.util.*
+import top.vuhe.admin.api.cache.cacheDelete
+import top.vuhe.admin.api.cache.cacheGet
+import top.vuhe.admin.api.cache.cachePut
 
 /**
  * ### rememberMe 的 token 服务
@@ -14,13 +12,12 @@ import java.util.*
  *
  * @author vuhe
  */
-@Service
-class RememberMeTokenService : PersistentTokenRepository {
+object RememberMeTokenService : PersistentTokenRepository {
 
     /**
      * 创建 token 对象，主要包括：
-     * - 调用 [cacheSeriesId] 缓存 SeriesId
-     * - 调用 [cacheTokenObj] 缓存 TokenObj
+     * - 缓存 SeriesId
+     * - 缓存 TokenObj
      */
     override fun createNewToken(token: PersistentRememberMeToken) {
         val tokenObj = RememberMeToken().also {
@@ -29,19 +26,19 @@ class RememberMeTokenService : PersistentTokenRepository {
             it.date = token.date.time
         }
 
-        cacheSeriesId(token.username, token.series)
-        cacheTokenObj(token.series, tokenObj)
+        cachePut("remember-me", key = token.username, value = token.series)
+        cachePut("remember-me", key = token.series, value = tokenObj)
     }
 
     /**
-     * 更新 token 对象，只需要更新 TokenObj，
-     * 因此只需要调用 [cacheTokenObj]
+     * 更新 token 对象，只需要更新 TokenObj
      */
-    override fun updateToken(series: String, tokenValue: String, lastUsed: Date?) {
-        val map: RememberMeToken? = findTokenObj(series)
-        map?.let {
+    override fun updateToken(series: String, tokenValue: String, lastUsed: java.util.Date?) {
+        // 获取缓存
+        cacheGet<RememberMeToken>("remember-me", key = series)?.let {
+            // 存在缓存则更新设置
             it.token = tokenValue
-            cacheTokenObj(series, it)
+            cachePut("remember-me", key = series, value = it)
         }
     }
 
@@ -50,41 +47,21 @@ class RememberMeTokenService : PersistentTokenRepository {
      * 如果缓存中没有直接返回 null
      */
     override fun getTokenForSeries(seriesId: String): PersistentRememberMeToken? {
-        val tokenObj: RememberMeToken? = findTokenObj(seriesId)
+        val tokenObj: RememberMeToken? = cacheGet("remember-me", key = seriesId)
         return tokenObj?.let {
-            PersistentRememberMeToken(it.username, seriesId, it.token, Date(it.date))
+            PersistentRememberMeToken(it.username, seriesId, it.token, java.util.Date(it.date))
         }
     }
 
     /**
-     * 此方法会先调用 [deleteTokenObj] 删除 TokenObj，
-     * 再调用代理中的方法删除 SeriesId
+     * 此方法会先删除 TokenObj，再删除 SeriesId
      */
-    @CacheEvict("remember-me", key = "#username")
     override fun removeUserTokens(username: String) {
-        val seriesId = findSeriesId(username)
-        deleteTokenObj(seriesId)
-    }
-
-    /* ----------------------------- username -> seriesId 缓存方法 -------------------------- */
-
-    @CachePut("remember-me", key = "#username")
-    fun cacheSeriesId(username: String, seriesId: String): String = seriesId
-
-    @Cacheable("remember-me", key = "#username")
-    fun findSeriesId(username: String): String = ""
-
-    /* ----------------------------- seriesId -> tokenObj 缓存方法 -------------------------- */
-
-    @CachePut("remember-me", key = "#seriesId")
-    fun cacheTokenObj(seriesId: String, token: RememberMeToken) = token
-
-    @Cacheable("remember-me", key = "#seriesId")
-    fun findTokenObj(seriesId: String): RememberMeToken? = null
-
-    @CacheEvict("remember-me", key = "#seriesId")
-    fun deleteTokenObj(seriesId: String) {
-        // spring cache will delete token obj
+        // 查找 seriesId 缓存
+        val seriesId: String? = cacheGet("remember-me", key = username)
+        // 删除缓存
+        seriesId?.let { cacheDelete("remember-me", key = seriesId) }
+        cacheDelete("remember-me", key = username)
     }
 
     /**

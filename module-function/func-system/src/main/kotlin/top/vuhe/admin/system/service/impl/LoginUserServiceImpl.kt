@@ -1,9 +1,9 @@
 package top.vuhe.admin.system.service.impl
 
-import org.springframework.cache.annotation.Cacheable
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import top.vuhe.admin.api.cache.cacheGet
 import top.vuhe.admin.spring.security.principal.LoginUser
 import top.vuhe.admin.spring.security.principal.LoginUserAuthority
 import top.vuhe.admin.spring.security.principal.UserSecurityService
@@ -34,7 +34,6 @@ class LoginUserServiceImpl(
     /**
      * 此方法会缓存用户权限列表，出现权限变化时会清空缓存
      */
-    @Cacheable("authority", key = "#userId")
     fun getAuthorities(userId: String): Set<GrantedAuthority> {
         // 转换为 roleId
         val roleIds = sysUserMapper.selectRoleIdByUserId(userId)
@@ -45,9 +44,13 @@ class LoginUserServiceImpl(
         }.flatten()
 
         // 查询 power 权限，加入列表
-        return sysPowerMapper.selectListByIds(powerIds).asSequence().map {
+        val powerList = sysPowerMapper.selectListByIds(powerIds).asSequence().map {
             LoginUserAuthority(it.powerCode)
         }.toSet()
+
+        // 缓存后返回
+        cacheGet("authority", key = userId) { powerList }
+        return powerList
     }
 
     override fun getLoginUserId(username: String): String? {

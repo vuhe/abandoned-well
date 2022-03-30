@@ -10,7 +10,6 @@ import org.springframework.security.config.web.servlet.invoke
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.spring.security.SpringSecurityAdapter
 import top.vuhe.admin.spring.security.principal.UserSecurityService
-import top.vuhe.admin.spring.security.session.RememberMeTokenService
 
 /**
  * ### Security 安全配置
@@ -24,8 +23,7 @@ import top.vuhe.admin.spring.security.session.RememberMeTokenService
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecureConfiguration(
     sysLogService: LoggingFactory,
-    userDetailsService: UserSecurityService,
-    private val rememberTokenService: RememberMeTokenService
+    userDetailsService: UserSecurityService
 ) : SpringSecurityAdapter(sysLogService, userDetailsService) {
     /**
      * 身份认证接口
