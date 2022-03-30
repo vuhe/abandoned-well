@@ -2,7 +2,6 @@ package top.vuhe.admin.system.domain
 
 import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.enums.LoggingType
-import top.vuhe.admin.api.enums.RequestMethod
 import top.vuhe.admin.api.logging.LogRecord
 import top.vuhe.admin.spring.database.entity.BaseEntity
 
@@ -19,11 +18,6 @@ class SysLog : BaseEntity(), LogRecord {
     override var success: Boolean? = true
     override var loggingType: LoggingType? = LoggingType.OPERATE
     override var errorMsg: String = ""
-
-    /**
-     * 请求方式
-     */
-    var requestMethod: RequestMethod? = RequestMethod.GET
 
     /**
      * 请求的方法
@@ -74,9 +68,4 @@ class SysLog : BaseEntity(), LogRecord {
      * 操 作 人 员
      */
     var operateName: String = ""
-
-    /**
-     * 扩 展 信 息
-     */
-    var map: Map<String, String> = emptyMap()
 }

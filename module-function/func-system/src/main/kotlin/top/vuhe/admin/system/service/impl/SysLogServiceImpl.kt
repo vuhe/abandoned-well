@@ -3,7 +3,6 @@ package top.vuhe.admin.system.service.impl
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.enums.LoggingType
-import top.vuhe.admin.api.enums.RequestMethod
 import top.vuhe.admin.api.logging.LogRecord
 import top.vuhe.admin.api.network.browser
 import top.vuhe.admin.api.network.queryParam
@@ -31,19 +30,15 @@ class SysLogServiceImpl(
     @Transactional(rollbackFor = [Exception::class])
     override fun record(setting: (LogRecord) -> Unit) {
         val user = sysUserMapper.selectById(currUserId)
+        val request = requireNotNull(request) { "内部错误(request is null)" }
         val log = SysLog().apply {
-            operateAddress = request?.remoteHost ?: "未知"
-            method = request?.requestURI ?: "未知"
+            operateAddress = request.remoteHost ?: "未知"
+            method = request.method ?: "未知"
             createTime = LocalDateTime.now()
-            requestMethod = try {
-                RequestMethod.valueOf(request?.method ?: "")
-            } catch (_: IllegalArgumentException) {
-                RequestMethod.GET
-            }
-            operateUrl = request?.requestURI ?: "未知"
-            browser = request?.browser ?: "未知"
-            requestBody = request?.queryParam ?: "未知"
-            systemOs = request?.systemType ?: "未知"
+            operateUrl = request.requestURI ?: "未知"
+            browser = request.browser
+            requestBody = request.queryParam
+            systemOs = request.systemType
             operateId = currUserId
             operateName = user?.username ?: "未登录用户"
         }

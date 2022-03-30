@@ -5,7 +5,6 @@ import org.ktorm.schema.*
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.enums.LoggingType
-import top.vuhe.admin.api.enums.RequestMethod
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysLog
 import java.time.LocalDateTime
@@ -22,7 +21,6 @@ class SysLogMapper : CurdMapper<SysLog>("sys_logging") {
     private val title = varchar("title").bind(SysLog::title)
     private val method = varchar("method").bind(SysLog::method)
     private val businessType = enum<BusinessType>("business_type").bind(SysLog::businessType)
-    private val requestMethod = enum<RequestMethod>("request_method").bind(SysLog::requestMethod)
     private val operateId = varchar("operate_id").bind(SysLog::operateId)
     private val operateName = varchar("operate_name").bind(SysLog::operateName)
     private val operateUrl = varchar("operate_url").bind(SysLog::operateUrl)

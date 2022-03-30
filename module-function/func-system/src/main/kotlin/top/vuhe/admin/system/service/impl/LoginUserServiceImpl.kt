@@ -3,7 +3,7 @@ package top.vuhe.admin.system.service.impl
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import top.vuhe.admin.api.cache.cacheGet
+import top.vuhe.admin.api.cache.cacheable
 import top.vuhe.admin.spring.security.principal.LoginUser
 import top.vuhe.admin.spring.security.principal.LoginUserAuthority
 import top.vuhe.admin.spring.security.principal.UserSecurityService
@@ -34,24 +34,21 @@ class LoginUserServiceImpl(
     /**
      * 此方法会缓存用户权限列表，出现权限变化时会清空缓存
      */
-    fun getAuthorities(userId: String): Set<GrantedAuthority> {
-        // 转换为 roleId
-        val roleIds = sysUserMapper.selectRoleIdByUserId(userId)
+    fun getAuthorities(userId: String): Set<GrantedAuthority> =
+        cacheable("authority", key = userId) {
+            // 转换为 roleId
+            val roleIds = sysUserMapper.selectRoleIdByUserId(userId)
 
-        // 转换为 powerId
-        val powerIds = roleIds.map {
-            sysRoleMapper.selectPowerIdByRoleId(it)
-        }.flatten()
+            // 转换为 powerId
+            val powerIds = roleIds.map {
+                sysRoleMapper.selectPowerIdByRoleId(it)
+            }.flatten()
 
-        // 查询 power 权限，加入列表
-        val powerList = sysPowerMapper.selectListByIds(powerIds).asSequence().map {
-            LoginUserAuthority(it.powerCode)
-        }.toSet()
-
-        // 缓存后返回
-        cacheGet("authority", key = userId) { powerList }
-        return powerList
-    }
+            // 查询 power 权限，加入列表
+            sysPowerMapper.selectListByIds(powerIds).asSequence().map {
+                LoginUserAuthority(it.powerCode)
+            }.toSet()
+        }
 
     override fun getLoginUserId(username: String): String? {
         return sysUserMapper.selectByUsername(username)?.userId

@@ -51,6 +51,9 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     }
 
     override fun selectById(queryId: String): SysUser? {
+        // 由于不存在空白串id，此处可提高调用速度
+        // 系统中使用id检查比较多，高频调用
+        if (queryId.isBlank()) return null
         val cache = cacheGet<SysUser>("user", key = queryId)
         if (cache != null) return cache
         val value = super.selectById(queryId)
