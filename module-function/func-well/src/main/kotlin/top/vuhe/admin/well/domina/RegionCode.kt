@@ -7,12 +7,15 @@ import top.vuhe.admin.spring.database.entity.BaseEntity
  *
  * @author vuhe
  */
-class RegionCode: BaseEntity() {
+class RegionCode : BaseEntity() {
     /** 主键 id */
     override var id: String = ""
 
     /** 分区代码 */
     var code: String = ""
+
+    /** 分区信息 */
+    var remark: String = ""
 
     /** 是否选中，用于前端显示 */
     var checked: Boolean = false

@@ -105,6 +105,9 @@ class WellInfo : BaseEntity() {
     /** 回填结束时间 */
     var fillEndTime: LocalDate? = null
 
+    /** 注释 */
+    var remark: String = ""
+
     /* ------------------------------------- 辅助字段 -------------------------------------- */
 
     /** 经度 */

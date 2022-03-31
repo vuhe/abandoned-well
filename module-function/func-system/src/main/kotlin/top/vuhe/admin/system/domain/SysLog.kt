@@ -4,6 +4,7 @@ import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.enums.LoggingType
 import top.vuhe.admin.api.logging.LogRecord
 import top.vuhe.admin.spring.database.entity.BaseEntity
+import java.time.LocalDateTime
 
 /**
  * 日志实体类
@@ -68,4 +69,7 @@ class SysLog : BaseEntity(), LogRecord {
      * 操 作 人 员
      */
     var operateName: String = ""
+
+    /** 创建时间 */
+    var createTime: LocalDateTime? = null
 }

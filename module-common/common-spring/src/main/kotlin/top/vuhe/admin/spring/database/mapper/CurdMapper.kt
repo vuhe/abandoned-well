@@ -4,8 +4,6 @@ import org.ktorm.dsl.*
 import org.ktorm.schema.Column
 import top.vuhe.admin.api.text.UUIDGenerator
 import top.vuhe.admin.spring.database.entity.BaseEntity
-import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
-import java.time.LocalDateTime
 
 /**
  * 数据库增删改查方法
@@ -58,8 +56,6 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
      * @param entity 实体
      */
     open fun insert(entity: E): Int {
-        entity.createTime = LocalDateTime.now()
-        entity.createBy = currUserId
         return database.insert(this) {
             insertSetting(entity)
             set(id, defaultId())
@@ -75,8 +71,6 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
     open fun batchInsert(entities: Collection<E>): Int {
         return database.batchInsert(this) {
             entities.forEach { e ->
-                e.createTime = LocalDateTime.now()
-                e.createBy = currUserId
                 item {
                     insertSetting(e)
                     set(id, defaultId())
@@ -92,8 +86,6 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
      * @param entity 实体
      */
     open fun update(entity: E): Int {
-        entity.updateTime = LocalDateTime.now()
-        entity.updateBy = currUserId
         return database.update(this) {
             updateSetting(entity)
             where { id eq entity.id }
@@ -109,8 +101,6 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
     open fun batchUpdate(entities: Collection<E>): Int {
         return database.batchUpdate(this) {
             entities.forEach { e ->
-                e.updateTime = LocalDateTime.now()
-                e.updateBy = currUserId
                 item {
                     updateSetting(e)
                     where { id eq e.id }

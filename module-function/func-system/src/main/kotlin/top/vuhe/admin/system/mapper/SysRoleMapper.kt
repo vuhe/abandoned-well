@@ -1,7 +1,10 @@
 package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.*
+import org.ktorm.schema.Table
+import org.ktorm.schema.boolean
+import org.ktorm.schema.int
+import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.api.cache.cacheClear
 import top.vuhe.admin.api.cache.cacheDelete
@@ -23,12 +26,6 @@ class SysRoleMapper : CurdMapper<SysRole>("sys_role") {
     private val enable = boolean("enable").bind(SysRole::enable, true)
     private val details = varchar("details").bind(SysRole::details)
     private val sort = int("sort").bind(SysRole::sort, 0)
-
-    private val createTime = datetime("create_time").bind(SysRole::createTime)
-    private val createBy = varchar("create_by").bind(SysRole::createBy)
-    private val updateTime = datetime("update_time").bind(SysRole::updateTime)
-    private val updateBy = varchar("update_by").bind(SysRole::updateBy)
-    private val remark = varchar("remark").bind(SysRole::remark)
 
     // user-power 映射表
     object RolePowerTable : Table<Nothing>("sys_role_power") {

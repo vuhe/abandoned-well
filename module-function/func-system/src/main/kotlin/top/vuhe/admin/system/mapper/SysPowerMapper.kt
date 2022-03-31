@@ -2,7 +2,6 @@ package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
 import org.ktorm.schema.boolean
-import org.ktorm.schema.datetime
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
@@ -28,12 +27,6 @@ class SysPowerMapper : CurdMapper<SysPower>("sys_power") {
     private val icon = varchar("icon").bind(SysPower::icon)
     private val sort = int("sort").bind(SysPower::sort, 0)
     private val enable = boolean("enable").bind(SysPower::enable, true)
-
-    private val createTime = datetime("create_time").bind(SysPower::createTime)
-    private val createBy = varchar("create_by").bind(SysPower::createBy)
-    private val updateTime = datetime("update_time").bind(SysPower::updateTime)
-    private val updateBy = varchar("update_by").bind(SysPower::updateBy)
-    private val remark = varchar("remark").bind(SysPower::remark)
 
     override fun Query.listFilter(param: SysPower): Query {
         return whereWithConditions {

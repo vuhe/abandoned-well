@@ -8,6 +8,7 @@ import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.mapper.SysRoleMapper
 import top.vuhe.admin.system.mapper.SysUserMapper
 import top.vuhe.admin.system.service.ISysUserService
+import java.time.LocalDateTime
 
 /**
  * 用户服务实现类
@@ -26,6 +27,7 @@ class SysUserServiceImpl(
         if (sysUserMapper.selectByUsername(entity.username) != null) {
             return false
         }
+        entity.createTime = LocalDateTime.now()
         // 插入用户
         return super.add(entity)
     }

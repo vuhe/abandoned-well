@@ -2,7 +2,6 @@ package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
 import org.ktorm.schema.boolean
-import org.ktorm.schema.datetime
 import org.ktorm.schema.int
 import org.ktorm.schema.varchar
 import org.springframework.stereotype.Repository
@@ -26,12 +25,6 @@ class SysDeptMapper : CurdMapper<SysDept>("sys_dept") {
     private val email = varchar("email").bind(SysDept::email)
     private val enable = boolean("status").bind(SysDept::enable, true)
     private val sort = int("sort").bind(SysDept::sort, 0)
-
-    private val createTime = datetime("create_time").bind(SysDept::createTime)
-    private val createBy = varchar("create_by").bind(SysDept::createBy)
-    private val updateTime = datetime("update_time").bind(SysDept::updateTime)
-    private val updateBy = varchar("update_by").bind(SysDept::updateBy)
-    private val remark = varchar("remark").bind(SysDept::remark)
 
     override fun Query.listFilter(param: SysDept): Query {
         return whereWithConditions {

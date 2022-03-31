@@ -36,10 +36,10 @@ class SysUser : BaseEntity() {
      */
     var email: String = ""
 
-    /**
-     * 头像
-     */
-    var avatar: String = ""
+//    /**
+//     * 头像
+//     */
+//    var avatar: String = ""
 
     /**
      * 性别
@@ -66,10 +66,10 @@ class SysUser : BaseEntity() {
      */
     var enable: Boolean? = null
 
-    /**
-     * 是否登录
-     */
-    var login: Boolean? = null
+//    /**
+//     * 是否登录
+//     */
+//    var login: Boolean? = null
 
     /**
      * 是否为管理员
@@ -80,6 +80,16 @@ class SysUser : BaseEntity() {
      * 最后一次登录时间
      */
     var lastTime: LocalDateTime? = null
+
+    /**
+     * 注册时间
+     */
+    var createTime: LocalDateTime? = null
+
+    /**
+     * 备注
+     */
+    var remark: String = ""
 
     /**
      * 角色 ids，用于修改

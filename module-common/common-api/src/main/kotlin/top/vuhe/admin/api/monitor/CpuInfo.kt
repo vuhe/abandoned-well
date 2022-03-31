@@ -12,12 +12,10 @@ import java.time.Instant
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 class CpuInfo {
     /** 磁盘相关信息 */
-    val sysFiles: List<LocalFileInfo>
-
-    init {
-        val list = OshiUtil.getOs().fileSystem.fileStores
-        sysFiles = list.map { LocalFileInfo(it) }
-    }
+    val sysFiles = OshiUtil.getOs().fileSystem.fileStores.asSequence()
+        .take(3)
+        .map { LocalFileInfo(it) }
+        .toList()
 
     /**
      * 內存相关信息
