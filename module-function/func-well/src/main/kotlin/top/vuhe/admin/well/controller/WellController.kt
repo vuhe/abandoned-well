@@ -8,7 +8,6 @@ import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
-import top.vuhe.admin.well.service.ILogService
 import top.vuhe.admin.well.service.IRegionService
 import top.vuhe.admin.well.service.IWellService
 import javax.validation.Valid
@@ -24,7 +23,6 @@ import javax.validation.Valid
 class WellController(
     private val infoService: IWellService,
     private val regionService: IRegionService,
-    private val logService: ILogService
 ) : BaseController() {
 
     /**
@@ -118,7 +116,7 @@ class WellController(
     @PutMapping("report")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
     fun report(@RequestBody info: WellInfo) = boolResult {
-        infoService.modify(info).also { if (it) logService.record(info.id, "动态更新") }
+        infoService.modify(info)
     }
 
     /**
