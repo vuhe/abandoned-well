@@ -22,17 +22,17 @@ interface LogRecord {
     /**
      * 业务类型
      */
-    var businessType: BusinessType?
+    var businessType: BusinessType
 
     /**
      * 接 口 执 行 状 态
      */
-    var success: Boolean?
+    var success: Boolean
 
     /**
      * 日 志 类 型
      */
-    var loggingType: LoggingType?
+    var loggingType: LoggingType
 
     /**
      * 异 常 信 息

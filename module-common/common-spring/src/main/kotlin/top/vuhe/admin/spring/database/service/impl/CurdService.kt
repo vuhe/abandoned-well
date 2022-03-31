@@ -10,7 +10,11 @@ import top.vuhe.admin.spring.database.service.ICurdService
  *
  * @author vuhe
  */
-abstract class CurdService<E: BaseEntity>(private val mapper: CurdMapper<E>): ICurdService<E> {
+abstract class CurdService<E : BaseEntity>(private val mapper: CurdMapper<E>) : ICurdService<E> {
+    override fun list(): List<E> {
+        return mapper.selectList()
+    }
+
     override fun list(param: E): List<E> {
         return mapper.selectList(param)
     }

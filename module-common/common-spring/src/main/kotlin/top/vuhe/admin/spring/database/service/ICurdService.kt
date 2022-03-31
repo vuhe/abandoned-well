@@ -12,6 +12,11 @@ import top.vuhe.admin.spring.web.request.PageDomain
  */
 interface ICurdService<E : BaseEntity> {
     /**
+     * 查询全部列表数据
+     */
+    fun list(): List<E>
+
+    /**
      * 根据条件查询列表数据
      */
     fun list(param: E): List<E>

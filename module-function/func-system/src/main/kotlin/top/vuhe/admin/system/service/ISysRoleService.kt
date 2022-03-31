@@ -10,12 +10,6 @@ import top.vuhe.admin.system.domain.SysRole
  * @author vuhe
  */
 interface ISysRoleService : ICurdService<SysRole> {
-
-    /**
-     * 查询角色数据
-     */
-    fun list(): List<SysRole> = list(SysRole())
-
     /**
      * 获取角色权限
      */

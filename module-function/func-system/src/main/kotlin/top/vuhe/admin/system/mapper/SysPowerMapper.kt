@@ -1,10 +1,6 @@
 package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.boolean
-import org.ktorm.schema.int
-import org.ktorm.schema.varchar
-import org.springframework.stereotype.Repository
 import top.vuhe.admin.api.cache.cacheClear
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysPower
@@ -14,34 +10,15 @@ import top.vuhe.admin.system.domain.SysPower
  *
  * @author vuhe
  */
-@Repository
-@Suppress("unused")
-class SysPowerMapper : CurdMapper<SysPower>("sys_power") {
-    override val id = varchar("power_id").primaryKey().bind(SysPower::powerId)
-    private val powerName = varchar("power_name").bind(SysPower::powerName)
-    private val powerType = varchar("power_type").bind(SysPower::powerType)
-    private val powerCode = varchar("power_code").bind(SysPower::powerCode)
-    private val powerUrl = varchar("power_url").bind(SysPower::powerUrl)
-    private val openType = varchar("open_type").bind(SysPower::openType)
-    private val parentId = varchar("parent_id").bind(SysPower::parentId)
-    private val icon = varchar("icon").bind(SysPower::icon)
-    private val sort = int("sort").bind(SysPower::sort, 0)
-    private val enable = boolean("enable").bind(SysPower::enable, true)
+object SysPowerMapper : CurdMapper<SysPower>("sys_power") {
 
-    override fun Query.listFilter(param: SysPower): Query {
-        return whereWithConditions {
-            if (param.powerId.isNotEmpty()) it.add(id eq param.powerId)
-        }.orderBy(sort.asc())
+    override fun selectList(param: SysPower): List<SysPower> {
+        return super.selectList(param).sortedBy { it.sort }
     }
 
     override fun update(entity: SysPower): Int {
         cacheClear("authority")
         return super.update(entity)
-    }
-
-    override fun batchUpdate(entities: Collection<SysPower>): Int {
-        cacheClear("authority")
-        return super.batchUpdate(entities)
     }
 
     /**
@@ -61,8 +38,9 @@ class SysPowerMapper : CurdMapper<SysPower>("sys_power") {
      * 通过 parentId 列表查询
      */
     fun selectByParentId(parentId: String): List<SysPower> {
-        return database.from(this).select().where { this.parentId eq parentId }
-            .map { createEntity(it) }
+        return selectByConditions {
+            it.add(col("parent_id") eq parentId)
+        }
     }
 
     /**
@@ -89,7 +67,7 @@ class SysPowerMapper : CurdMapper<SysPower>("sys_power") {
                 if (!useAdmin) {
                     it.add(id inList ids)
                 }
-                it.add(enable eq true)
+                it.add(col("enable") eq true)
             }
             .map { createEntity(it) }
     }

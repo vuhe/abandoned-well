@@ -12,10 +12,8 @@ import top.vuhe.admin.system.service.ISysPowerService
  * @author vuhe
  */
 @Service
-class SysPowerServiceImpl(
-    private val sysPowerMapper: SysPowerMapper
-) : CurdService<SysPower>(sysPowerMapper), ISysPowerService {
+class SysPowerServiceImpl : CurdService<SysPower>(SysPowerMapper), ISysPowerService {
     override fun getByParentId(parentId: String): List<SysPower> {
-        return sysPowerMapper.selectByParentId(parentId)
+        return SysPowerMapper.selectByParentId(parentId)
     }
 }

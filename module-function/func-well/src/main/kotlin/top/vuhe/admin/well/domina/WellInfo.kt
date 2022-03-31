@@ -2,7 +2,6 @@ package top.vuhe.admin.well.domina
 
 import org.hibernate.validator.constraints.Range
 import top.vuhe.admin.spring.database.entity.BaseEntity
-import java.time.LocalDate
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
 import javax.validation.constraints.Pattern
@@ -14,97 +13,98 @@ import javax.validation.constraints.Pattern
  */
 class WellInfo : BaseEntity() {
     /** 主键 id */
-    override var id: String = ""
+    var id by varchar("id").primary()
 
     /** 废弃井名称 */
-    var name: String = ""
+    var name by varchar("name")
 
     /** 原始编号 */
-    var originCode: String = ""
+    var originCode by varchar("origin_code")
 
     /** 废弃井类型 */
-    var wellType: WellType? = null
+    var wellType by enum("well_type", WellType.KU)
 
     /** 废弃井区域 id */
-    var regionId: String = ""
+    var regionId by varchar("region_id")
 
     /** 乡镇(街道办) */
-    var street: String = ""
+    var street by varchar("street")
 
     /** 村(街)、门牌号 */
-    var address: String = ""
+    var address by varchar("address")
 
     /** 井所属单位 */
-    var company: String = ""
+    var company by varchar("company")
 
     /** 建井时间 */
-    var digTime: LocalDate? = null
+    var digTime by date("dig_time")
 
     /** 联系人 */
-    var contacts: String = ""
+    var contacts by varchar("contacts")
 
     /** 联系电话 */
-    var phone: String = ""
+    var phone by varchar("phone")
 
     /** 废弃原因 */
-    var abandonRemark: String = ""
+    var abandonRemark by text("abandon_remark")
 
     /** 废弃时间 */
-    var abandonTime: LocalDate? = null
+    var abandonTime by date("abandon_time")
 
     /** 经度-度 */
-    @NotNull(message = "废弃井经度(分)未填报")
-    @Range(message = "废弃井经度超出河南省边界，范围在[110-116]之内", min = 110L, max = 116L)
-    var lng1: Int? = null
+    @get:NotNull(message = "废弃井经度(分)未填报")
+    @get:Range(message = "废弃井经度超出河南省边界，范围在[110-116]之内", min = 110L, max = 116L)
+    var lng1 by int("lng1")
 
     /** 经度-分 */
-    @NotNull(message = "废弃井纬度(分)未填报")
-    @Range(message = "废弃井经度（分）填报有误，范围在[0-60)之内", min = 0, max = 59L)
-    var lng2: Int? = null
+    @get:NotNull(message = "废弃井纬度(分)未填报")
+    @get:Range(message = "废弃井经度（分）填报有误，范围在[0-60)之内", min = 0, max = 59L)
+    var lng2 by int("lng2")
 
     /** 经度-秒 */
-    @NotNull(message = "废弃井经度(秒)未填报")
-    @Range(message = "废弃井经度（秒）填报有误，范围在[0-60)之内", min = 0, max = 59L)
-    var lng3: Int? = null
+    @get:NotNull(message = "废弃井经度(秒)未填报")
+    @get:Range(message = "废弃井经度（秒）填报有误，范围在[0-60)之内", min = 0, max = 59L)
+    var lng3 by int("lng3")
 
     /** 纬度-度 */
-    @NotNull(message = "废弃井纬度(度)未填报")
-    @Range(message = "废弃井纬度超出河南省边界，范围在[31-36]之内", min = 31L, max = 36L)
-    var lat1: Int? = null
+    @get:NotNull(message = "废弃井纬度(度)未填报")
+    @get:Range(message = "废弃井纬度超出河南省边界，范围在[31-36]之内", min = 31L, max = 36L)
+    var lat1 by int("lat1")
 
     /** 纬度-分 */
-    @NotNull(message = "废弃井纬度(分)未填报")
-    @Range(message = "废弃井纬度（分）填报有误，范围在[0-60)之内", min = 0, max = 59L)
-    var lat2: Int? = null
+    @get:NotNull(message = "废弃井纬度(分)未填报")
+    @get:Range(message = "废弃井纬度（分）填报有误，范围在[0-60)之内", min = 0, max = 59L)
+    var lat2 by int("lat2")
 
     /** 纬度-秒 */
-    @NotNull(message = "废弃井纬度(秒)未填报")
-    @Range(message = "废弃井纬度（秒）填报有误，范围在[0-60)之内", min = 0, max = 59L)
-    var lat3: Int? = null
+    @get:NotNull(message = "废弃井纬度(秒)未填报")
+    @get:Range(message = "废弃井纬度（秒）填报有误，范围在[0-60)之内", min = 0, max = 59L)
+    var lat3 by int("lat3")
 
     /** 填表人 */
-    @NotBlank(message = "填表人未填报")
-    @Pattern(regexp = "^[\\u4e00-\\u9fa5]*$", message = "填表人填报有误")
-    var informer: String = ""
+    @get:NotBlank(message = "填表人未填报")
+    @get:Pattern(regexp = "^[\\u4e00-\\u9fa5]*$", message = "填表人填报有误")
+    var informer by varchar("informer")
 
     /** 排查人 */
-    @NotBlank(message = "排查人未填报")
-    @Pattern(regexp = "^[\\u4e00-\\u9fa5]*$", message = "排查人填报有误")
-    var investigator: String = ""
+    @get:NotBlank(message = "排查人未填报")
+    @get:Pattern(regexp = "^[\\u4e00-\\u9fa5]*$", message = "排查人填报有误")
+    var investigator by varchar("investigator")
 
     /** 填表时间 */
-    @NotNull(message = "报出时间未填报")
-    var informTime: LocalDate? = null
+    @get:NotNull(message = "填表时间未填报")
+    var informTime by date("inform_time")
 
     /** 信息状态 */
-    var status: WellStatus? = null
+    var status by enum("status", WellStatus.Reported)
 
     /** 回填开始时间 */
-    var fillStartTime: LocalDate? = null
+    var fillStartTime by date("fill_start_time").nullable()
 
     /** 回填结束时间 */
-    var fillEndTime: LocalDate? = null
+    var fillEndTime by date("fill_end_time").nullable()
 
+    // TODO it will be save to database!
     /** 注释 */
     var remark: String = ""
 
@@ -117,13 +117,13 @@ class WellInfo : BaseEntity() {
     val lat: String get() = "${lat1}°${lat2}′${lat3}″"
 
     /** 井类型字符串 */
-    val type: String get() = "${wellType?.category}-${wellType?.type}"
+    val type: String get() = "${wellType.category}-${wellType.type}"
 
     /** 井状态字符串 */
     val statusStr: String
         get() = when (status) {
             WellStatus.NotAccepted -> "审核不通过（打回修改）"
             WellStatus.Approved -> "审核通过"
-            else -> "已上报（审核中）"
+            WellStatus.Reported -> "已上报（审核中）"
         }
 }

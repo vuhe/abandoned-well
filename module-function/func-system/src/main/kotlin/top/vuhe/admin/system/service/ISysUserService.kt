@@ -1,8 +1,8 @@
 package top.vuhe.admin.system.service
 
 import top.vuhe.admin.spring.database.service.ICurdService
-import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.domain.SysRole
+import top.vuhe.admin.system.domain.SysUser
 
 /**
  * 用户服务接口类
@@ -10,12 +10,6 @@ import top.vuhe.admin.system.domain.SysRole
  * @author vuhe
  */
 interface ISysUserService : ICurdService<SysUser> {
-
-    /**
-     * 查询用户列表数据
-     */
-    fun list(): List<SysUser> = list(SysUser())
-
     /**
      * 修改用户密码
      */

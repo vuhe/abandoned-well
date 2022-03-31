@@ -12,7 +12,7 @@ dependencies {
     // 系统信息获取
     implementation("com.github.oshi:oshi-core-java11:6.1.5")
     // excel 工具
-    implementation("cn.afterturn:easypoi-spring-boot-starter:4.4.0")
+    implementation("cn.afterturn:easypoi-base:4.4.0")
 
     // 仅编译，如果最终不引入，直接使用内存和本地存储
     compileOnly("org.springframework.data:spring-data-redis")

@@ -8,9 +8,4 @@ import top.vuhe.admin.well.domina.WellRegion
  *
  * @author vuhe
  */
-interface IRegionService: ICurdService<WellRegion> {
-    /**
-     * 获取全部区域信息
-     */
-    fun getAllRegion(): List<WellRegion>
-}
+interface IRegionService: ICurdService<WellRegion>

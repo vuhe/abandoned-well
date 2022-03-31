@@ -12,8 +12,4 @@ import top.vuhe.admin.well.service.IRegionService
  * @author vuhe
  */
 @Service
-class RegionServiceImpl(regionMapper: RegionMapper) :
-    CurdService<WellRegion>(regionMapper), IRegionService {
-    private val emptyParam = WellRegion()
-    override fun getAllRegion(): List<WellRegion> = list(emptyParam)
-}
+class RegionServiceImpl : CurdService<WellRegion>(RegionMapper), IRegionService

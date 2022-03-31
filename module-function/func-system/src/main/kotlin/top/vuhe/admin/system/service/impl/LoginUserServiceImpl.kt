@@ -19,11 +19,10 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Service
-class LoginUserServiceImpl(
-    private val sysUserMapper: SysUserMapper,
-    private val sysRoleMapper: SysRoleMapper,
-    private val sysPowerMapper: SysPowerMapper
-) : UserSecurityService {
+class LoginUserServiceImpl : UserSecurityService {
+    private val sysUserMapper = SysUserMapper
+    private val sysRoleMapper = SysRoleMapper
+    private val sysPowerMapper = SysPowerMapper
 
     /**
      * 为减少数据库访问，此方法会缓存数据，在数据库发生数据更改时，

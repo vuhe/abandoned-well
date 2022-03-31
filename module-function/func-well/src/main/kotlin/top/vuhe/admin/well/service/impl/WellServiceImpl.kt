@@ -17,15 +17,13 @@ import top.vuhe.admin.well.service.IWellService
  * @author vuhe
  */
 @Service
-class WellServiceImpl(
-    private val infoMapper: WellMapper,
-    private val regionMapper: RegionMapper,
-    private val regionCodeMapper: CodeMapper
-) : CurdService<WellInfo>(infoMapper), IWellService {
-    private val emptyParam = WellInfo()
+class WellServiceImpl : CurdService<WellInfo>(WellMapper), IWellService {
+    private val infoMapper = WellMapper
+    private val regionMapper = RegionMapper
+    private val regionCodeMapper = CodeMapper
 
     override fun exportList(): List<ExportWell> {
-        return list(emptyParam).mapNotNull {
+        return list().mapNotNull {
             val region = regionMapper.selectById(it.regionId)
             if (region != null) ExportWell(it, region)
             else null
@@ -41,7 +39,7 @@ class WellServiceImpl(
             ?: throw BusinessException("地区错误，请刷新后重试")
 
         // 地区顺序码 + 1
-        region.next = region.next?.plus(1)
+        region.next = region.next + 1
 
         val code = regionCodeMapper.selectById(region.regionCodeId)
             ?: throw BusinessException("水文代码错误，请刷新后重试")

@@ -1,5 +1,6 @@
 package top.vuhe.admin.well.controller
 
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
@@ -49,7 +50,7 @@ class WellController(
     @GetMapping("add")
     @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
     fun add() = ModelAndView("well/info/add").apply {
-        addObject("regions", regionService.getAllRegion())
+        addObject("regions", regionService.list())
     }
 
     /**
@@ -75,7 +76,7 @@ class WellController(
             }
             // 未通过审核的是全部更改
         } else ModelAndView("well/info/edit").apply {
-            addObject("regions", regionService.getAllRegion())
+            addObject("regions", regionService.list())
             addObject("well", infoService.getOneById(id))
         }
     }
@@ -87,6 +88,7 @@ class WellController(
      * 分页查询 井信息
      */
     @GetMapping("page")
+    @Operation(summary = "分页查询井信息")
     @PreAuthorize("hasPermission('/well/info/page','well:info:page')")
     fun page(info: WellInfo, pageDomain: PageDomain) = pageTable {
         infoService.page(info, pageDomain)
@@ -96,6 +98,7 @@ class WellController(
      * 添加 井信息
      */
     @PostMapping("save")
+    @Operation(summary = "添加井信息")
     @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
     fun save(@RequestBody @Valid info: WellInfo) = boolResult {
         infoService.add(info)
@@ -105,6 +108,7 @@ class WellController(
      * 修改 井信息
      */
     @PutMapping("update")
+    @Operation(summary = "修改井信息")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
     fun update(@RequestBody @Valid info: WellInfo) = boolResult {
         infoService.modify(info)
@@ -114,6 +118,7 @@ class WellController(
      * 动态更新 井信息
      */
     @PutMapping("report")
+    @Operation(summary = "动态更新井信息")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
     fun report(@RequestBody info: WellInfo) = boolResult {
         infoService.modify(info)
@@ -123,6 +128,7 @@ class WellController(
      * 通过审核 井信息
      */
     @PutMapping("approved/{id}")
+    @Operation(summary = "通过审核井信息")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
     fun pass(@PathVariable("id") id: String) = boolResult {
         val info = WellInfo().apply {
@@ -136,6 +142,7 @@ class WellController(
      * 打回修改 井信息
      */
     @PutMapping("not_approved/{id}")
+    @Operation(summary = "打回修改井信息")
     @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
     fun notPass(@PathVariable("id") id: String) = boolResult {
         val info = WellInfo().apply {
@@ -149,6 +156,7 @@ class WellController(
      * 删除 井信息
      */
     @DeleteMapping("remove/{id}")
+    @Operation(summary = "删除井信息")
     @PreAuthorize("hasPermission('/well/info/remove','well:info:remove')")
     fun remove(@PathVariable("id") id: String) = boolResult {
         infoService.remove(id)
@@ -158,6 +166,7 @@ class WellController(
      * 批量删除 井信息
      */
     @DeleteMapping("/batchRemove")
+    @Operation(summary = "批量删除井信息")
     @PreAuthorize("hasPermission('/well/info/remove','well:info:remove')")
     fun batchRemove(ids: String) = boolResult {
         infoService.batchRemove(ids.split(","))

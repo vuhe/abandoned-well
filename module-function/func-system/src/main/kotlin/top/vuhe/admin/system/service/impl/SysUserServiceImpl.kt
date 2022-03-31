@@ -16,10 +16,9 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Service
-class SysUserServiceImpl(
-    private val sysUserMapper: SysUserMapper,
-    private val sysRoleMapper: SysRoleMapper
-) : CurdService<SysUser>(sysUserMapper), ISysUserService {
+class SysUserServiceImpl : CurdService<SysUser>(SysUserMapper), ISysUserService {
+    private val sysUserMapper = SysUserMapper
+    private val sysRoleMapper = SysRoleMapper
 
     @Transactional(rollbackFor = [Exception::class])
     override fun add(entity: SysUser): Boolean {
@@ -30,14 +29,6 @@ class SysUserServiceImpl(
         entity.createTime = LocalDateTime.now()
         // 插入用户
         return super.add(entity)
-    }
-
-    /**
-     * 删除用户会清除全部缓存
-     */
-    @Transactional(rollbackFor = [Exception::class])
-    override fun batchRemove(ids: List<String>): Boolean {
-        return super.batchRemove(ids)
     }
 
     @Transactional(rollbackFor = [Exception::class])

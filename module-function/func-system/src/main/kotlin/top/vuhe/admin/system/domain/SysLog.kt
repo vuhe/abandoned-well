@@ -4,7 +4,6 @@ import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.enums.LoggingType
 import top.vuhe.admin.api.logging.LogRecord
 import top.vuhe.admin.spring.database.entity.BaseEntity
-import java.time.LocalDateTime
 
 /**
  * 日志实体类
@@ -12,64 +11,64 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 class SysLog : BaseEntity(), LogRecord {
-    override var id: String = ""
-    override var title: String = ""
-    override var description: String = ""
-    override var businessType: BusinessType? = BusinessType.OTHER
-    override var success: Boolean? = true
-    override var loggingType: LoggingType? = LoggingType.OPERATE
-    override var errorMsg: String = ""
+    var id by varchar("id").primary()
+    override var title by varchar("title")
+    override var description by varchar("description")
+    override var businessType by enum("business_type", BusinessType.OTHER)
+    override var success by boolean("success")
+    override var loggingType by enum("logging_type", LoggingType.OPERATE)
+    override var errorMsg by varchar("error_msg")
 
     /**
      * 请求的方法
      */
-    var method: String = ""
+    var method by varchar("method")
 
     /**
      * 请求的连接
      */
-    var operateUrl: String = ""
+    var operateUrl by varchar("operate_url")
 
     /**
      * 用户 IP 地址
      */
-    var operateAddress: String = ""
+    var operateAddress by varchar("operate_address")
 
     /**
      * 请 求 参 数
      */
-    var requestParam: String = ""
+    var requestParam by varchar("request_param")
 
     /**
      * 获 取 请 求 体
      */
-    var requestBody: String = ""
+    var requestBody by varchar("request_body")
 
     /**
      * 接 口 响 应 数 据
      */
-    var responseBody: String = ""
+    var responseBody by varchar("response_body")
 
     /**
      * 使用浏览器
      */
-    var browser: String = ""
+    var browser by varchar("browser")
 
     /**
      * 操作系统
      */
-    var systemOs: String = ""
+    var systemOs by varchar("system_os")
 
     /**
      * 操 作 人 员 id
      */
-    var operateId: String = ""
+    var operateId by varchar("operate_id")
 
     /**
      * 操 作 人 员
      */
-    var operateName: String = ""
+    var operateName by varchar("operate_name")
 
     /** 创建时间 */
-    var createTime: LocalDateTime? = null
+    var createTime by datetime("create_time")
 }

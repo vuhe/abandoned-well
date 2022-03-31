@@ -8,37 +8,23 @@ import top.vuhe.admin.spring.database.entity.BaseEntity
  * @author vuhe
  */
 class SysRole : BaseEntity() {
-    override val id: String get() = roleId
+    /** 编号 */
+    var roleId by varchar("role_id").primary()
 
-    /**
-     * 编号
-     */
-    var roleId: String = ""
+    /** 角色名称 */
+    var roleName by varchar("role_name")
 
-    /**
-     * 角色名称
-     */
-    var roleName: String = ""
+    /** 角色值 */
+    var roleCode by varchar("role_code")
 
-    /**
-     * 角色值
-     */
-    var roleCode: String = ""
+    /** 状态 */
+    var enable by boolean("enable")
 
-    /**
-     * 状态
-     */
-    var enable: Boolean? = null
+    /** 描述 */
+    var details by varchar("details")
 
-    /**
-     * 描述
-     */
-    var details: String = ""
-
-    /**
-     * 排序
-     */
-    var sort: Int? = null
+    /** 排序 */
+    var sort by int("sort")
 
     /**
      * 提供前端的选中显示，默认为不选中(false)

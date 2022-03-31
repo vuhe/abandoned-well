@@ -1,7 +1,6 @@
 package top.vuhe.admin.system.service.impl
 
 import org.springframework.stereotype.Service
-import top.vuhe.admin.spring.database.service.impl.BaseService
 import top.vuhe.admin.system.domain.SysMenu
 import top.vuhe.admin.system.mapper.SysPowerMapper
 import top.vuhe.admin.system.mapper.SysRoleMapper
@@ -14,11 +13,11 @@ import top.vuhe.admin.system.service.ISysMenuService
  * @author vuhe
  */
 @Service
-class SysMenuServiceImpl(
-    private val sysUserMapper: SysUserMapper,
-    private val sysRoleMapper: SysRoleMapper,
-    private val sysPowerMapper: SysPowerMapper
-) : BaseService(), ISysMenuService {
+class SysMenuServiceImpl : ISysMenuService {
+    private val sysUserMapper = SysUserMapper
+    private val sysRoleMapper = SysRoleMapper
+    private val sysPowerMapper = SysPowerMapper
+
     override fun getUserMenu(userId: String): List<SysMenu> {
         val user = sysUserMapper.selectById(userId)
 
@@ -39,7 +38,7 @@ class SysMenuServiceImpl(
             SysMenu(
                 id = it.powerId, parentId = it.parentId, title = it.powerName,
                 username = userId, type = it.powerType, icon = it.icon,
-                openType = it.openType, href = it.powerUrl, sort = it.sort ?: 0
+                openType = it.openType, href = it.powerUrl, sort = it.sort
             )
         }
     }

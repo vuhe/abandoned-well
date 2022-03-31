@@ -8,50 +8,30 @@ import top.vuhe.admin.spring.database.entity.BaseEntity
  * @author vuhe
  */
 class SysDept : BaseEntity() {
-    override val id: String get() = deptId
+    /** 部门编号 */
+    var deptId by varchar("dept_id").primary()
 
-    /**
-     * 部门编号
-     */
-    var deptId: String = ""
+    /** 部门名称 */
+    var deptName by varchar("dept_name")
 
-    /**
-     * 部门名称
-     */
-    var deptName: String = ""
+    /** 部门地址 */
+    var address by varchar("address")
 
-    /**
-     * 部门地址
-     */
-    var address: String = ""
+    /** 父级编号 */
+    var parentId by varchar("parent_id")
 
-    /**
-     * 父级编号
-     */
-    var parentId: String = ""
+    /** 负责人 */
+    var leader by varchar("leader")
 
-    /**
-     * 负责人
-     */
-    var leader: String = ""
+    /** 手机号 */
+    var phone by varchar("phone")
 
-    /**
-     * 手机号
-     */
-    var phone: String = ""
+    /** 邮箱 */
+    var email by varchar("email")
 
-    /**
-     * 邮箱
-     */
-    var email: String = ""
+    /** 状态 */
+    var enable by boolean("status")
 
-    /**
-     * 状态
-     */
-    var enable: Boolean? = null
-
-    /**
-     * 排序
-     */
-    var sort: Int? = null
+    /** 排序 */
+    var sort by int("sort")
 }

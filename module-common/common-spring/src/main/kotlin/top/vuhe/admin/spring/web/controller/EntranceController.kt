@@ -1,6 +1,7 @@
 package top.vuhe.admin.spring.web.controller
 
 import com.wf.captcha.utils.CaptchaUtil
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,7 +11,6 @@ import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.isAuthentication
 import top.vuhe.admin.spring.security.session.SecuritySessionManager
-import top.vuhe.admin.spring.web.response.ResultObj
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -85,22 +85,9 @@ class EntranceController(
      * @param request  请求报文
      * @param response 响应报文
      */
-    @RequestMapping("system/captcha/generate")
+    @Operation(summary = "获取验证码图片")
+    @GetMapping("system/captcha/generate")
     fun generate(request: HttpServletRequest, response: HttpServletResponse) {
         CaptchaUtil.out(request, response)
-    }
-
-    /**
-     * 异步验证
-     *
-     * @param request 请求报文
-     * @param captcha 验证码
-     * @return 验证结果
-     */
-    @RequestMapping("system/captcha/verify")
-    fun verify(request: HttpServletRequest, captcha: String): ResultObj<*> {
-        return if (CaptchaUtil.ver(captcha, request)) {
-            ResultObj.Success<Nothing>(message = "验证成功")
-        } else ResultObj.Fail<Nothing>(message = "验证失败")
     }
 }

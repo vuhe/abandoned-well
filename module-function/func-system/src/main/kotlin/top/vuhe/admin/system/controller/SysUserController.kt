@@ -77,6 +77,7 @@ class SysUserController @Autowired constructor(
      * 用户密码修改视图
      */
     @GetMapping("editPassword")
+    @Operation(summary = "普通用户修改密码")
     fun editPasswordView() = ModelAndView("system/user/password")
 
     /**

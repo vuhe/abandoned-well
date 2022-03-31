@@ -2,11 +2,7 @@ package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
 import org.ktorm.schema.Table
-import org.ktorm.schema.boolean
-import org.ktorm.schema.datetime
 import org.ktorm.schema.varchar
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.stereotype.Repository
 import top.vuhe.admin.api.cache.cacheDelete
 import top.vuhe.admin.api.cache.cacheGet
 import top.vuhe.admin.api.cache.cachePut
@@ -19,29 +15,7 @@ import top.vuhe.admin.system.domain.SysUser
  *
  * @author vuhe
  */
-@Repository
-@Suppress("unused")
-class SysUserMapper : CurdMapper<SysUser>("sys_user") {
-    override val id = varchar("user_id").primaryKey().bind(SysUser::userId)
-    private val name = varchar("username").bind(SysUser::username)
-    private val pwd = varchar("password").bind(SysUser::password)
-    private val realName = varchar("real_name").bind(SysUser::realName)
-    private val email = varchar("email").bind(SysUser::email)
-//    private val avatar = varchar("avatar").bind(SysUser::avatar)
-    private val sex = varchar("sex").bind(SysUser::sex)
-    private val phone = varchar("phone").bind(SysUser::phone)
-    private val deptId = varchar("dept_id").bind(SysUser::deptId)
-    private val unlocked = boolean("status").bind(SysUser::unlocked, true)
-    private val enable = boolean("enable").bind(SysUser::enable, true)
-    private val admin = boolean("admin").bind(SysUser::admin, false)
-//    private val login = boolean("login").bind(SysUser::login, false)
-    private val lastTime = datetime("last_time").bind(SysUser::lastTime)
-
-    private val createTime = datetime("create_time").bind(SysUser::createTime)
-//    private val createBy = varchar("create_by").bind(SysUser::createBy)
-//    private val updateTime = datetime("update_time").bind(SysUser::updateTime)
-//    private val updateBy = varchar("update_by").bind(SysUser::updateBy)
-    private val remark = varchar("remark").bind(SysUser::remark)
+object SysUserMapper : CurdMapper<SysUser>("sys_user") {
 
     // user-role 映射表
     object UserRoleTable : Table<Nothing>("sys_user_role") {
@@ -61,61 +35,13 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
         return value
     }
 
-    @Suppress("DuplicatedCode")
-    override fun Query.listFilter(param: SysUser): Query {
-        return whereWithConditions {
-            if (param.username.isNotEmpty()) it.add(name like "%${param.username}%")
-            if (param.realName.isNotEmpty()) it.add(realName like "%${param.realName}%")
-            if (param.deptId.isNotEmpty()) it.add(deptId like "%${param.deptId}%")
-        }
-    }
-
     /**
-     * 加密密码后插入
-     */
-    override fun insert(entity: SysUser): Int {
-        entity.password = BCryptPasswordEncoder().encode(entity.password)
-        return super.insert(entity)
-    }
-
-    /**
-     * 加密密码后，批量插入
-     */
-    override fun batchInsert(entities: Collection<SysUser>): Int {
-        entities.forEach { it.password = BCryptPasswordEncoder().encode(it.password) }
-        return super.batchInsert(entities)
-    }
-
-    /**
-     * 加密密码后，更改
+     * 更改
      */
     override fun update(entity: SysUser): Int {
         cacheDelete("user", key = entity.userId)
-        entity.password = ""
+
         return super.update(entity)
-    }
-
-    /**
-     * 加密密码后，批量更改
-     */
-    override fun batchUpdate(entities: Collection<SysUser>): Int {
-        entities.forEach {
-            it.password = ""
-            cacheDelete("user", key = it.userId)
-        }
-        return super.batchUpdate(entities)
-    }
-
-    /**
-     * 删除用户（同时删除关联表）
-     */
-    override fun delete(id: String): Int {
-        cacheDelete("user", key = id)
-        cacheDelete("user-role", key = id)
-        cacheDelete("authority", key = id)
-
-        database.delete(UserRoleTable) { it.userId eq id }
-        return database.delete(this) { this.id eq id }
     }
 
     /**
@@ -141,7 +67,7 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
      */
     fun selectByUsername(username: String): SysUser? {
         val list = database.from(this).select()
-            .where { name eq username }
+            .where { col("username") eq username }
             .map { createEntity(it) }
         return list.getOrNull(0)
     }
@@ -161,14 +87,10 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
     /**
      * 更改密码
      */
-    fun updatePassword(userId: String, password: String): Int {
-        cacheDelete("user", key = userId)
-
-        return database.update(this) {
-            set(it.pwd, BCryptPasswordEncoder().encode(password))
-            where { id eq userId }
-        }
-    }
+    fun updatePassword(userId: String, password: String) = update(SysUser().apply {
+        this.userId = userId
+        this.password = password
+    })
 
     /**
      * 批量更改 user - role 映射
@@ -197,8 +119,8 @@ class SysUserMapper : CurdMapper<SysUser>("sys_user") {
      */
     fun batchDeleteDept(deptIds: Collection<String>): Int {
         return database.update(this) {
-            set(it.deptId, "")
-            where { it.deptId inList deptIds }
+            set(col("dept_id"), "")
+            where { col("dept_id") inList deptIds }
         }
     }
 }

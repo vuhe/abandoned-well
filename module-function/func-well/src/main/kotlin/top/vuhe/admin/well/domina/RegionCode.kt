@@ -9,13 +9,13 @@ import top.vuhe.admin.spring.database.entity.BaseEntity
  */
 class RegionCode : BaseEntity() {
     /** 主键 id */
-    override var id: String = ""
+    var id by varchar("id").primary()
 
     /** 分区代码 */
-    var code: String = ""
+    var code by varchar("code")
 
     /** 分区信息 */
-    var remark: String = ""
+    var remark by text("remark")
 
     /** 是否选中，用于前端显示 */
     var checked: Boolean = false

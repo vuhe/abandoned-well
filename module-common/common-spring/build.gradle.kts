@@ -22,10 +22,12 @@ dependencies {
 
     // 系统数据库组件
     api("org.springframework.boot:spring-boot-starter-jdbc")
-    api("org.ktorm:ktorm-core")
-    implementation("org.ktorm:ktorm-jackson")
+    api("org.ktorm:ktorm-core:3.4.1")
+    implementation("org.ktorm:ktorm-jackson:3.4.1")
+    implementation("org.ktorm:ktorm-support-mysql:3.4.1")
+    implementation("mysql:mysql-connector-java")
 
     // 系统文档组件
-    api("org.springdoc:springdoc-openapi-ui")
-    api("org.springdoc:springdoc-openapi-kotlin")
+    api("org.springdoc:springdoc-openapi-ui:1.6.4")
+    api("org.springdoc:springdoc-openapi-kotlin:1.6.4")
 }

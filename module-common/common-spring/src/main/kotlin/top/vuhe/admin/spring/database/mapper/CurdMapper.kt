@@ -1,8 +1,6 @@
 package top.vuhe.admin.spring.database.mapper
 
 import org.ktorm.dsl.*
-import org.ktorm.schema.Column
-import top.vuhe.admin.api.text.UUIDGenerator
 import top.vuhe.admin.spring.database.entity.BaseEntity
 
 /**
@@ -11,13 +9,6 @@ import top.vuhe.admin.spring.database.entity.BaseEntity
  * @author vuhe
  */
 abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tableName) {
-    protected abstract val id: Column<String>
-
-    /**
-     * 默认 id 生成方法
-     */
-    protected fun defaultId(): String = UUIDGenerator.create(15)
-
     /**
      * 根据 Id 查询实体
      */
@@ -31,7 +22,7 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
     /**
      * 查询全部实体列表
      */
-    open fun selectList(): List<E> {
+    fun selectList(): List<E> {
         return database.from(this).select().map { createEntity(it) }
     }
 
@@ -39,44 +30,23 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
      * 查询实体列表
      */
     open fun selectList(param: E): List<E> {
-        return database.from(this).select().listFilter(param).map { createEntity(it) }
+        return database.from(this).select().whereWithConditions {
+            param.properties.forEach { p ->
+                if (p.isChanged) it.add(p.sqlOp(this[p.column]))
+            }
+        }.map { createEntity(it) }
     }
 
     /**
-     * 查询实体列表时的 where 条件
-     */
-    protected open fun Query.listFilter(param: E) = apply {
-        // default is no where filter
-    }
-
-    /**
-     * 数据库插入，
-     * 如果有 create 字段会赋值插入
+     * 数据库插入
      *
      * @param entity 实体
      */
-    open fun insert(entity: E): Int {
-        return database.insert(this) {
-            insertSetting(entity)
-            set(id, defaultId())
-        }
-    }
-
-    /**
-     * 数据库批量插入，
-     * 如果有 create 字段会赋值插入
-     *
-     * @param entities 实体集合
-     */
-    open fun batchInsert(entities: Collection<E>): Int {
-        return database.batchInsert(this) {
-            entities.forEach { e ->
-                item {
-                    insertSetting(e)
-                    set(id, defaultId())
-                }
-            }
-        }.reduce { a, b -> a + b }
+    fun insert(entity: E): Int = database.insert(this) {
+        entity.properties.asSequence()
+            .filter { !it.isPrimary }
+            .forEach { set(col(it.column), it.insertValue) }
+        set(id, generateId(entity))
     }
 
     /**
@@ -85,28 +55,14 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
      *
      * @param entity 实体
      */
-    open fun update(entity: E): Int {
-        return database.update(this) {
-            updateSetting(entity)
-            where { id eq entity.id }
-        }
-    }
-
-    /**
-     * 数据库批量修改，
-     * 如果有 update 字段会赋值插入
-     *
-     * @param entities 实体集合
-     */
-    open fun batchUpdate(entities: Collection<E>): Int {
-        return database.batchUpdate(this) {
-            entities.forEach { e ->
-                item {
-                    updateSetting(e)
-                    where { id eq e.id }
-                }
+    open fun update(entity: E): Int = database.update(this) {
+        entity.properties.forEach {
+            if (it.isChanged && !it.isPrimary) {
+                set(col(it.column), it.updateValue)
             }
-        }.reduce { a, b -> a + b }
+        }
+        val idValue = entity.properties.find { it.isPrimary }?.rawValue as String
+        where { id eq idValue }
     }
 
     /**
@@ -114,7 +70,7 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : BaseMapper<E>(tab
      *
      * @param id 实体 id
      */
-    open fun delete(id: String): Int = batchDelete(listOf(id))
+    fun delete(id: String): Int = batchDelete(listOf(id))
 
     /**
      * 数据库批量删除

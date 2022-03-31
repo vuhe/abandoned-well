@@ -2,10 +2,7 @@ package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
 import org.ktorm.schema.Table
-import org.ktorm.schema.boolean
-import org.ktorm.schema.int
 import org.ktorm.schema.varchar
-import org.springframework.stereotype.Repository
 import top.vuhe.admin.api.cache.cacheClear
 import top.vuhe.admin.api.cache.cacheDelete
 import top.vuhe.admin.api.cache.cacheable
@@ -17,40 +14,13 @@ import top.vuhe.admin.system.domain.SysRole
  *
  * @author vuhe
  */
-@Repository
-@Suppress("unused")
-class SysRoleMapper : CurdMapper<SysRole>("sys_role") {
-    override val id = varchar("role_id").primaryKey().bind(SysRole::roleId)
-    private val roleName = varchar("role_name").bind(SysRole::roleName)
-    private val roleCode = varchar("role_code").bind(SysRole::roleCode)
-    private val enable = boolean("enable").bind(SysRole::enable, true)
-    private val details = varchar("details").bind(SysRole::details)
-    private val sort = int("sort").bind(SysRole::sort, 0)
+object SysRoleMapper : CurdMapper<SysRole>("sys_role") {
 
     // user-power 映射表
     object RolePowerTable : Table<Nothing>("sys_role_power") {
         val id = varchar("id").primaryKey()
         val roleId = varchar("role_id")
         val powerId = varchar("power_id")
-    }
-
-    override fun Query.listFilter(param: SysRole): Query {
-        return whereWithConditions {
-            if (param.roleCode.isNotEmpty()) it.add(roleCode like "%${param.roleCode}%")
-            if (param.roleName.isNotEmpty()) it.add(roleName like "%${param.roleName}%")
-        }
-    }
-
-    /**
-     * 删除角色（同时删除关联表）
-     */
-    override fun delete(id: String): Int {
-        cacheDelete("role-power", key = id)
-        cacheClear("authority")
-
-        database.delete(RolePowerTable) { it.roleId eq id }
-        database.delete(SysUserMapper.UserRoleTable) { it.roleId eq id }
-        return database.delete(this) { this.id eq id }
     }
 
     /**

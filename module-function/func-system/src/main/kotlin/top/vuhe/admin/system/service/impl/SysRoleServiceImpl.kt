@@ -15,10 +15,9 @@ import top.vuhe.admin.system.service.ISysRoleService
  * @author vuhe
  */
 @Service
-class SysRoleServiceImpl(
-    private val sysRoleMapper: SysRoleMapper,
-    private val sysPowerMapper: SysPowerMapper
-) : CurdService<SysRole>(sysRoleMapper), ISysRoleService {
+class SysRoleServiceImpl : CurdService<SysRole>(SysRoleMapper), ISysRoleService {
+    private val sysRoleMapper = SysRoleMapper
+    private val sysPowerMapper = SysPowerMapper
 
     override fun getRolePower(roleId: String): List<SysPower> {
         // 查询全部权限

@@ -8,57 +8,35 @@ import top.vuhe.admin.spring.database.entity.BaseEntity
  * @author vuhe
  */
 class SysPower : BaseEntity() {
-    override val id: String get() = powerId
+    /** 编号 */
+    var powerId by varchar("power_id").primary()
 
-    /**
-     * 编号
-     */
-    var powerId: String = ""
+    /** 权限名称 */
+    var powerName by varchar("power_name")
 
-    /**
-     * 权限名称
-     */
-    var powerName: String = ""
+    /** 类型 */
+    var powerType by varchar("power_type")
 
-    /**
-     * 类型
-     */
-    var powerType: String = ""
+    /** 标识 */
+    var powerCode by varchar("power_code")
 
-    /**
-     * 标识
-     */
-    var powerCode: String = ""
+    /** 路径 */
+    var powerUrl by varchar("power_url")
 
-    /**
-     * 路径
-     */
-    var powerUrl: String = ""
+    /** 打开方式 */
+    var openType by varchar("open_type")
 
-    /**
-     * 打开方式
-     */
-    var openType: String = ""
+    /** 父级编号 */
+    var parentId by varchar("parent_id")
 
-    /**
-     * 父级编号
-     */
-    var parentId: String = ""
+    /** 图标 */
+    var icon by varchar("icon")
 
-    /**
-     * 图标
-     */
-    var icon: String= ""
+    /** 排序 */
+    var sort by int("sort")
 
-    /**
-     * 排序
-     */
-    var sort: Int? = null
-
-    /**
-     * 开启
-     */
-    var enable: Boolean? = null
+    /** 开启 */
+    var enable by boolean("enable")
 
     /**
      * 计算列 提供给前端组件

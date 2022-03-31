@@ -17,6 +17,11 @@ class KtormConfiguration {
      */
     @Bean
     fun database(dataSource: DataSource): Database {
-        return Database.connectWithSpringSupport(dataSource)
+        database =  Database.connectWithSpringSupport(dataSource)
+        return database
+    }
+
+    companion object {
+        internal lateinit var database: Database
     }
 }
