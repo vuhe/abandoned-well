@@ -6,8 +6,6 @@ import org.aspectj.lang.annotation.AfterThrowing
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
 import org.aspectj.lang.reflect.MethodSignature
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
 import top.vuhe.admin.api.enums.LoggingType
 
 /**
@@ -16,11 +14,7 @@ import top.vuhe.admin.api.enums.LoggingType
  * @author vuhe
  */
 @Aspect
-@Component
-@Suppress("unused")
-class LoggingAspect @Autowired constructor(
-    private val loggingFactory: LoggingFactory
-) {
+class LoggingAspect(private val loggingFactory: LoggingFactory) {
     @Pointcut("@annotation(top.vuhe.admin.api.logging.Logging)")
     fun dsPointCut() = Unit
 

@@ -7,5 +7,4 @@ import org.springframework.security.core.AuthenticationException
  *
  * @author vuhe
  */
-class CaptchaException(val info: String) :
-    AuthenticationException(info)
+class CaptchaException(val info: String) : AuthenticationException(info)

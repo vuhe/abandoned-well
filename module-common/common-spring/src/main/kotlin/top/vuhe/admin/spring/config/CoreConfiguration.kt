@@ -8,6 +8,8 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import top.vuhe.admin.api.logging.LoggingAspect
+import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -48,4 +50,10 @@ class CoreConfiguration {
         filter = XssFilterSupport()
         setName("xssHttpFilter")
     }
+
+    /**
+     * 日志记录
+     */
+    @Bean
+    fun loggingAspect(loggingFactory: LoggingFactory) = LoggingAspect(loggingFactory)
 }

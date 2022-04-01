@@ -4,10 +4,6 @@ dependencies {
     // 系统基础组件
     api(project(":common-api"))
 
-    // 系统缓存组件
-    api("org.springframework.boot:spring-boot-starter-cache")
-    compileOnly("org.springframework.data:spring-data-redis")
-
     // 系统安全组件
     api("org.springframework.boot:spring-boot-starter-security")
     implementation("com.github.whvcse:easy-captcha:1.6.2")
@@ -28,6 +24,6 @@ dependencies {
     implementation("mysql:mysql-connector-java")
 
     // 系统文档组件
-    api("org.springdoc:springdoc-openapi-ui:1.6.4")
-    api("org.springdoc:springdoc-openapi-kotlin:1.6.4")
+    api("org.springdoc:springdoc-openapi-ui:1.6.6")
+    api("org.springdoc:springdoc-openapi-kotlin:1.6.6")
 }

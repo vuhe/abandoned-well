@@ -6,6 +6,4 @@ package top.vuhe.admin.api.exception
  * @param message 异常消息
  * @author vuhe
  */
-class BusinessException(
-    override val message: String
-) : RuntimeException()
+class BusinessException(override val message: String) : RuntimeException()

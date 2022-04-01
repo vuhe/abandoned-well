@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
-import top.vuhe.admin.api.monitor.CpuInfo
+import top.vuhe.admin.api.monitor.MonitorInfo
 
 /**
  * 服务器控制器
@@ -21,6 +21,6 @@ class MonitorController : BaseController() {
     @GetMapping("main")
     @PreAuthorize("hasPermission('/system/monitor/main','sys:monitor:main')")
     fun main() = ModelAndView("system/monitor/main").apply {
-        addObject("cpu", CpuInfo())
+        addObject("info", MonitorInfo)
     }
 }

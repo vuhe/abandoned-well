@@ -17,19 +17,6 @@ private val objectMapper: ObjectMapper by lazy { SpringUtil.getBean(ObjectMapper
  */
 fun requestContext(): ReadOnlyProperty<Any, HttpServletRequest?> = NullableRequestEntrust
 
-/**
- * 此委托字段始终使用 getter 从 Spring 获取
- *
- * @return nullable [HttpServletResponse]
- */
-fun responseContext(): ReadOnlyProperty<Any, HttpServletResponse?> = NullableResponseEntrust
-
-/**
- * 获取未被包装的 [HttpServletRequest]
- */
-val HttpServletRequest.orgRequest: HttpServletRequest
-    get() = if (this is XssHttpServletRequest) request else this
-
 private val HttpServletRequest.xRequestedWith: String
     get() = getHeader("X-Requested-With") ?: ""
 

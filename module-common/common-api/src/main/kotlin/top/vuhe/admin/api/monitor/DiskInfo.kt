@@ -3,18 +3,17 @@ package top.vuhe.admin.api.monitor
 import cn.hutool.core.util.NumberUtil
 import oshi.software.os.OSFileStore
 
-class LocalFileInfo(fs: OSFileStore) {
+/**
+ * ## 磁盘信息
+ *
+ * @author vuhe
+ */
+class DiskInfo(fs: OSFileStore) {
     private val freeNum = fs.usableSpace
     private val totalNum = fs.totalSpace
 
-    /** 盘符路径 */
-    val dirName: String = fs.mount
-
-    /** 盘符类型 */
-    val sysTypeName: String = fs.type
-
-    /** 文件类型 */
-    val typeName: String = fs.name
+    /** 存储器名称 */
+    val name: String = fs.name
 
     /** 总大小 */
     val total: String = convertFileSize(totalNum)
@@ -26,21 +25,15 @@ class LocalFileInfo(fs: OSFileStore) {
     val used: String = convertFileSize(totalNum - freeNum)
 
     /** 资源的使用率 */
-    val usage: String = if (totalNum == 0L) {
-        "0.0 %"
-    } else {
-        NumberUtil.mul(
-            NumberUtil.div(totalNum - freeNum, totalNum, 4), 100f
-        ).toString() + " %"
+    val usage: String = usage()
+
+    private fun usage(): String {
+        if (totalNum == 0L) return "0.0 %"
+        val num = NumberUtil.div(totalNum - freeNum, totalNum, 4)
+        return "${NumberUtil.mul(num, 100f)} %"
     }
 
-    /**
-     * 字节转换
-     *
-     * @param size 字节大小
-     * @return 转换后值
-     */
-    fun convertFileSize(size: Long): String {
+    private fun convertFileSize(size: Long): String {
         val kb: Long = 1024
         val mb = kb * 1024
         val gb = mb * 1024

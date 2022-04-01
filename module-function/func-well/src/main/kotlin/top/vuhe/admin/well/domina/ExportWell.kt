@@ -36,7 +36,7 @@ data class ExportWell(
 ) {
     constructor(well: WellInfo, region: WellRegion) : this(
         id = well.id, name = well.name, originCode = well.originCode,
-        category = well.wellType?.category ?: "", type = well.wellType?.type ?: "",
+        category = well.wellType.category, type = well.wellType.type,
         city = region.city, county = region.county, street = well.street, address = well.address,
         company = well.company, digTime = dateFormatter(well.digTime), contacts = well.contacts,
         phone = well.phone, abandonRemark = well.abandonRemark, abandonTime = dateFormatter(well.abandonTime),
