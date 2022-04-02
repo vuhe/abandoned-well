@@ -12,7 +12,9 @@ import java.time.LocalDateTime
  */
 abstract class BaseEntity {
     @JsonIgnore
-    internal val properties = ArrayList<ColumnProperty<*>>()
+    private val properties = ArrayList<ColumnProperty<*>>()
+
+    internal fun properties(): List<ColumnProperty<*>> = properties
 
     protected fun varchar(column: String) =
         ColumnProperty(column, VarcharSqlType) { "" }.also {

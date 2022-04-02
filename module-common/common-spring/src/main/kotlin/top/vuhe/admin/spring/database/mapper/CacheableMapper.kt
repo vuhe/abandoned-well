@@ -22,9 +22,11 @@ abstract class CacheableMapper<E : BaseEntity>(tableName: String) : BaseTable<E>
     private var cacheEnable: Boolean = false
 
     init {
-        entityClass!!.createInstance().properties.forEach {
-            val column = registerColumn(it.column, it.sqlType)
-            if (it.isPrimary) column.primaryKey()
+        entityClass?.apply {
+            createInstance().properties().forEach {
+                val column = registerColumn(it.column, it.sqlType)
+                if (it.isPrimary) column.primaryKey()
+            }
         }
     }
 
@@ -91,9 +93,8 @@ abstract class CacheableMapper<E : BaseEntity>(tableName: String) : BaseTable<E>
     /*------------------------------------- impl -------------------------------------------*/
 
     override fun doCreateEntity(row: QueryRowSet, withReferences: Boolean): E {
-        // 由于此类中的泛型不会为 Nothing，因此此处不会为 null
-        val entity = entityClass!!.createInstance()
-        entity.properties.forEach { it.rawValue = row[this[it.column]] }
+        val entity = entityClass?.createInstance() ?: error("No entity class configured for table: '$this'")
+        entity.properties().forEach { it.rawValue = row[this[it.column]] }
         return entity
     }
 }

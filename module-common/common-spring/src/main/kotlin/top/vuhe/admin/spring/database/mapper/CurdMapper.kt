@@ -42,7 +42,7 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : CacheableMapper<E
      */
     fun selectList(param: E): List<E> {
         return database.from(this).select().whereWithConditions {
-            param.properties.forEach { p ->
+            param.properties().forEach { p ->
                 if (p.isChanged) it.add(p.sqlOp(this[p.column]))
             }
         }.map { createEntity(it) }
@@ -55,7 +55,7 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : CacheableMapper<E
      */
     fun insert(entity: E): Int {
         val result = database.insert(this) {
-            entity.properties.asSequence()
+            entity.properties().asSequence()
                 .filter { !it.isPrimary }
                 .forEach { set(col(it.column), it.insertValue) }
             set(id, generateId(entity))
@@ -72,12 +72,12 @@ abstract class CurdMapper<E : BaseEntity>(tableName: String) : CacheableMapper<E
      * @param entity 实体
      */
     fun update(entity: E): Int {
-        val idValue = entity.properties.find { it.isPrimary }?.rawValue as String
+        val idValue = entity.properties().find { it.isPrimary }?.rawValue as String
         cacheDelete(idValue)
         cacheDelete("all")
 
         return database.update(this) {
-            entity.properties.forEach {
+            entity.properties().forEach {
                 if (it.isChanged && !it.isPrimary) {
                     set(col(it.column), it.updateValue)
                 }
