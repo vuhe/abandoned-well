@@ -28,7 +28,7 @@ class SysRoleController(
      */
     @GetMapping("main")
     @Operation(summary = "获取角色列表视图")
-    @PreAuthorize("hasPermission('/system/role/main','sys:role:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:main')")
     fun main() = ModelAndView("system/role/main")
 
     /**
@@ -36,7 +36,7 @@ class SysRoleController(
      */
     @GetMapping("add")
     @Operation(summary = "获取角色新增视图")
-    @PreAuthorize("hasPermission('/system/role/add','sys:role:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:add')")
     fun add() = ModelAndView("system/role/add")
 
     /**
@@ -44,7 +44,7 @@ class SysRoleController(
      */
     @GetMapping("power")
     @Operation(summary = "获取分配角色权限视图")
-    @PreAuthorize("hasPermission('/system/role/power','sys:role:power')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:power')")
     fun power(roleId: String) = ModelAndView("system/role/power").apply {
         addObject("roleId", roleId)
     }
@@ -54,7 +54,7 @@ class SysRoleController(
      */
     @GetMapping("edit")
     @Operation(summary = "获取角色修改视图")
-    @PreAuthorize("hasPermission('/system/role/edit','sys:role:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:edit')")
     fun edit(roleId: String) = ModelAndView("system/role/edit").apply {
         addObject("sysRole", sysRoleService.getOneById(roleId))
     }
@@ -66,7 +66,7 @@ class SysRoleController(
      */
     @GetMapping("data")
     @Operation(summary = "获取角色列表数据")
-    @PreAuthorize("hasPermission('/system/role/data','sys:role:data')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:data')")
     fun data(pageDomain: PageDomain, param: SysRole) = pageTable {
         sysRoleService.page(param, pageDomain)
     }
@@ -76,7 +76,7 @@ class SysRoleController(
      */
     @PostMapping("save")
     @Operation(summary = "保存角色数据")
-    @PreAuthorize("hasPermission('/system/role/add','sys:role:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:add')")
     fun save(@RequestBody sysRole: SysRole) = boolResult {
         sysRoleService.add(sysRole)
     }
@@ -86,7 +86,7 @@ class SysRoleController(
      */
     @PutMapping("update")
     @Operation(summary = "修改角色数据")
-    @PreAuthorize("hasPermission('/system/role/edit','sys:role:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:edit')")
     fun update(@RequestBody sysRole: SysRole) = boolResult {
         sysRoleService.modify(sysRole)
     }
@@ -96,7 +96,7 @@ class SysRoleController(
      */
     @PutMapping("saveRolePower")
     @Operation(summary = "保存角色权限数据")
-    @PreAuthorize("hasPermission('/system/role/power','sys:role:power')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:power')")
     fun saveRolePower(roleId: String, powerIds: String) = boolResult {
         sysRoleService.saveRolePower(roleId, powerIds.split(","))
     }
@@ -106,7 +106,7 @@ class SysRoleController(
      */
     @GetMapping("getRolePower")
     @Operation(summary = "获取角色权限数据")
-    @PreAuthorize("hasPermission('/system/role/power','sys:role:power')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:power')")
     fun getRolePower(roleId: String) = dataTree {
         sysRoleService.getRolePower(roleId)
     }
@@ -116,7 +116,7 @@ class SysRoleController(
      */
     @DeleteMapping("remove/{id}")
     @Operation(summary = "删除角色数据")
-    @PreAuthorize("hasPermission('/system/role/remove','sys:role:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:remove')")
     fun remove(@PathVariable id: String) = boolResult {
         sysRoleService.remove(id)
     }
@@ -126,7 +126,7 @@ class SysRoleController(
      */
     @DeleteMapping("batchRemove/{ids}")
     @Operation(summary = "批量删除角色数据")
-    @PreAuthorize("hasPermission('/system/role/remove','sys:role:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:remove')")
     fun batchRemove(@PathVariable ids: String) = boolResult {
         sysRoleService.batchRemove(ids.split(","))
     }

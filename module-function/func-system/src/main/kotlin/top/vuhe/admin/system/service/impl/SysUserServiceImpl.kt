@@ -5,6 +5,7 @@ import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.spring.database.service.impl.CurdService
 import top.vuhe.admin.system.domain.SysRole
 import top.vuhe.admin.system.domain.SysUser
+import top.vuhe.admin.system.mapper.LinkUserRole
 import top.vuhe.admin.system.mapper.SysRoleMapper
 import top.vuhe.admin.system.mapper.SysUserMapper
 import top.vuhe.admin.system.service.ISysUserService
@@ -18,6 +19,7 @@ import java.time.LocalDateTime
 @Service
 class SysUserServiceImpl : CurdService<SysUser>(SysUserMapper), ISysUserService {
     private val sysUserMapper = SysUserMapper
+    private val linkUserRole = LinkUserRole
     private val sysRoleMapper = SysRoleMapper
 
     @Transactional(rollbackFor = [Exception::class])
@@ -32,8 +34,20 @@ class SysUserServiceImpl : CurdService<SysUser>(SysUserMapper), ISysUserService 
     }
 
     @Transactional(rollbackFor = [Exception::class])
+    override fun batchRemove(ids: List<String>): Boolean {
+        // 删除关联表信息
+        linkUserRole.deleteByUser(ids)
+        // 删除用户信息
+        return super.batchRemove(ids)
+    }
+
+    @Transactional(rollbackFor = [Exception::class])
     override fun modifyPassword(userId: String, password: String): Boolean {
-        return sysUserMapper.updatePassword(userId, password) > 0
+        val update = SysUser().apply {
+            this.userId = userId
+            this.password = password
+        }
+        return sysUserMapper.update(update) > 0
     }
 
     /**
@@ -41,14 +55,14 @@ class SysUserServiceImpl : CurdService<SysUser>(SysUserMapper), ISysUserService 
      */
     @Transactional(rollbackFor = [Exception::class])
     override fun saveUserRole(userId: String, roleIds: List<String>): Boolean {
-        return sysUserMapper.batchInsertUserRole(userId, roleIds) > 0
+        return linkUserRole.insert(userId, roleIds) > 0
     }
 
     override fun getUserRole(userId: String): List<SysRole> {
         // 查询全部角色
         val allRole = sysRoleMapper.selectList()
         // 查此用户的角色表
-        val selectRole = sysUserMapper.selectRoleIdByUserId(userId)
+        val selectRole = linkUserRole.selectRoleIdByUserId(userId)
         // 设置角色选中
         allRole.forEach { sysRole: SysRole ->
             if (sysRole.roleId in selectRole) {

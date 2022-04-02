@@ -5,7 +5,7 @@
 </head>
 <body class="pear-container">
 
-<div sec:authorize="hasPermission('/system/log/remove','sys:log:remove')" class="layui-card">
+<div sec:authorize="hasAnyAuthority('ROLE_ADMIN','sys:log:remove')" class="layui-card">
   <div class="layui-card-body">
     <form action="" class="layui-form" lay-filter="remove-log-form">
       <div class="layui-form-item">

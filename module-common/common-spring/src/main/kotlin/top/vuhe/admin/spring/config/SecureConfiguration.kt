@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
+import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.spring.security.SpringSecurityAdapter
 import top.vuhe.admin.spring.security.principal.UserSecurityService
@@ -50,10 +51,6 @@ class SecureConfiguration(
             authorize()
         }
 
-        httpBasic {
-            authenticationEntryPoint = accessDenied
-        }
-
         formLogin {
             // 登录接口
             loginPage = "/login"
@@ -81,10 +78,12 @@ class SecureConfiguration(
 
         rememberMe {
             rememberMeParameter = "remember-me"
-            rememberMeCookieName = "rememberme-token"
+            rememberMeCookieName = "remember-me-token"
             authenticationSuccessHandler = rememberLoginAfterHandler
-            tokenRepository = rememberTokenService
+            tokenRepository = InMemoryTokenRepositoryImpl()
             key = "VUHE_REMEMBER"
+            // 过期时间 6 小时
+            tokenValiditySeconds = 6 * 60 * 60
         }
 
         sessionManagement {

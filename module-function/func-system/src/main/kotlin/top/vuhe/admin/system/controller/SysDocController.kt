@@ -20,6 +20,6 @@ import top.vuhe.admin.spring.web.controller.BaseController
 class SysDocController : BaseController() {
 
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/system/doc/main','sys:doc:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:doc:main')")
     fun main() = ModelAndView("system/doc/main")
 }

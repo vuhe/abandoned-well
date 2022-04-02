@@ -28,14 +28,14 @@ class RegionController(
      * 用于管理区域的页面
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/well/region/main','well:region:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:main')")
     fun main() = ModelAndView("well/region/main")
 
     /**
      * 用于添加区域的页面
      */
     @GetMapping("add")
-    @PreAuthorize("hasPermission('/well/region/add','well:region:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:add')")
     fun add() = ModelAndView("well/region/add").apply {
         addObject("codes", codeService.listWithChecked(""))
     }
@@ -44,7 +44,7 @@ class RegionController(
      * 用于修改区域的页面
      */
     @GetMapping("edit")
-    @PreAuthorize("hasPermission('/well/region/edit','well:region:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:edit')")
     fun edit(id: String) = ModelAndView("well/region/edit").apply {
         val region = regionService.getOneById(id)
         addObject("region", region)
@@ -57,7 +57,7 @@ class RegionController(
      * 分页查询 井区域
      */
     @GetMapping("page")
-    @PreAuthorize("hasPermission('/well/region/page','well:region:page')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:page')")
     fun page(region: WellRegion, pageDomain: PageDomain) = pageTable {
         regionService.page(region, pageDomain)
     }
@@ -66,7 +66,7 @@ class RegionController(
      * 添加 井区域
      */
     @PostMapping("save")
-    @PreAuthorize("hasPermission('/well/region/add','well:region:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:add')")
     fun save(@RequestBody @Valid region: WellRegion) = boolResult {
         regionService.add(region)
     }
@@ -75,7 +75,7 @@ class RegionController(
      * 修改 井区域
      */
     @PutMapping("update")
-    @PreAuthorize("hasPermission('/well/region/edit','well:region:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:edit')")
     fun update(@RequestBody @Valid region: WellRegion) = boolResult {
         regionService.modify(region)
     }
@@ -84,7 +84,7 @@ class RegionController(
      * 删除 井区域
      */
     @DeleteMapping("remove/{id}")
-    @PreAuthorize("hasPermission('/well/region/remove','well:region:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:remove')")
     fun remove(@PathVariable("id") id: String) = boolResult {
         regionService.remove(id)
     }
@@ -93,7 +93,7 @@ class RegionController(
      * 批量删除 井区域
      */
     @DeleteMapping("/batchRemove")
-    @PreAuthorize("hasPermission('/well/region/remove','well:region:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:remove')")
     fun batchRemove(ids: String) = boolResult {
         regionService.batchRemove(ids.split(","))
     }

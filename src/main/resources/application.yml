@@ -1,19 +1,15 @@
-# Tomcat
-server:
-  # 端 口
-  port: 8080
-  # Servlet
-  servlet:
-    # Session
-    session:
-      # 超 时 时 间
-      timeout: 120m
-
 # Spring 配置
 spring:
+  # 缓存配置
+  cache:
+    caffeine:
+      # 最大保存 100 条数据，访问后 10 分钟过期
+      spec: maximumSize=100,expireAfterAccess=10m
+    type: caffeine
+  # session 配置
   session:
-    timeout: 120m
-  # Druid Pool 运行环境
+    # 系统 session 过期时间 30 分钟
+    timeout: 30m
   profiles:
-    # 运 行 环 境
+    # 运行环境
     active: dev

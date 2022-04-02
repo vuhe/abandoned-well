@@ -1,15 +1,13 @@
 package top.vuhe.admin.system.service.impl
 
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import top.vuhe.admin.api.cache.cacheable
 import top.vuhe.admin.spring.security.principal.LoginUser
-import top.vuhe.admin.spring.security.principal.LoginUserAuthority
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.system.domain.SysUser
+import top.vuhe.admin.system.mapper.LinkRolePower
+import top.vuhe.admin.system.mapper.LinkUserRole
 import top.vuhe.admin.system.mapper.SysPowerMapper
-import top.vuhe.admin.system.mapper.SysRoleMapper
 import top.vuhe.admin.system.mapper.SysUserMapper
 import java.time.LocalDateTime
 
@@ -21,7 +19,8 @@ import java.time.LocalDateTime
 @Service
 class LoginUserServiceImpl : UserSecurityService {
     private val sysUserMapper = SysUserMapper
-    private val sysRoleMapper = SysRoleMapper
+    private val linkUserRole = LinkUserRole
+    private val linkRolePower = LinkRolePower
     private val sysPowerMapper = SysPowerMapper
 
     /**
@@ -33,53 +32,44 @@ class LoginUserServiceImpl : UserSecurityService {
     /**
      * 此方法会缓存用户权限列表，出现权限变化时会清空缓存
      */
-    fun getAuthorities(userId: String): Set<GrantedAuthority> =
-        cacheable("authority", key = userId) {
-            // 转换为 roleId
-            val roleIds = sysUserMapper.selectRoleIdByUserId(userId)
+    fun getAuthorities(userId: String): List<String> {
+        // 转换为 roleId
+        val roleIds = linkUserRole.selectRoleIdByUserId(userId)
 
-            // 转换为 powerId
-            val powerIds = roleIds.map {
-                sysRoleMapper.selectPowerIdByRoleId(it)
-            }.flatten()
+        // 转换为 powerId
+        val powerIds = roleIds.map {
+            linkRolePower.selectPowerIdByRoleId(it)
+        }.flatten()
 
-            // 查询 power 权限，加入列表
-            sysPowerMapper.selectListByIds(powerIds).asSequence().map {
-                LoginUserAuthority(it.powerCode)
-            }.toSet()
-        }
+        // 查询 power 权限，加入列表
+        return sysPowerMapper.selectListByIds(powerIds).map { it.powerCode }
+    }
 
     override fun getLoginUserId(username: String): String? {
         return sysUserMapper.selectByUsername(username)?.userId
     }
 
     override fun getLoginUserById(userId: String): LoginUser {
-        return createLoginUser(userId)
+        return SecurityUserProxy(userId, this)
     }
 
     @Transactional(rollbackFor = [Exception::class])
     override fun updateLoginTime(userId: String) {
-        val user = sysUserMapper.selectById(userId) ?: return
-        user.lastTime = LocalDateTime.now()
+        val user = SysUser().apply {
+            this.userId = userId
+            lastTime = LocalDateTime.now()
+        }
         sysUserMapper.update(user)
     }
 
-    private fun createLoginUser(userId: String) = object : LoginUser {
-        private val service = this@LoginUserServiceImpl
+    private class SecurityUserProxy(
+        override val userId: String, private val service: LoginUserServiceImpl
+    ) : LoginUser {
         private val user get() = service.getUserById(userId)
-        private var erased: Boolean = false
-        override val userId: String = userId
-        override val password: String get() = if (erased) "" else user?.password ?: ""
-        override val nickname: String get() = user?.username ?: ""
+        override val password: String get() = user?.password ?: ""
         override val isAdmin: Boolean get() = user?.admin ?: false
-        override val authorities: Set<GrantedAuthority>
-            get() = service.getAuthorities(userId)
+        override val authorities: Collection<String> get() = service.getAuthorities(userId)
         override val isNonLocked: Boolean = user?.unlocked ?: false
-        override val isEnable: Boolean
-            get() = user?.enable ?: false
-
-        override fun eraseCredentials() {
-            erased = true
-        }
+        override val isEnable: Boolean get() = user?.enable ?: false
     }
 }

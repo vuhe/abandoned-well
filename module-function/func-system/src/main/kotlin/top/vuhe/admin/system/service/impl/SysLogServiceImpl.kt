@@ -22,8 +22,8 @@ import java.time.LocalDateTime
  */
 @Service
 class SysLogServiceImpl : ISysLogService {
-    private val sysLogMapper = SysLogMapper
     private val sysUserMapper = SysUserMapper
+    private val sysLogMapper = SysLogMapper
     private val request by requestContext()
 
     @Transactional(rollbackFor = [Exception::class])

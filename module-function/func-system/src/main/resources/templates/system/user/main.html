@@ -50,12 +50,12 @@
 </body>
 
 <script id="user-toolbar" type="text/html">
-  <button sec:authorize="hasPermission('/system/user/add','sys:user:add')"
+  <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','sys:user:add')"
           class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
     <i class="pear-icon pear-icon-add"></i>
     新增
   </button>
-  <button sec:authorize="hasPermission('/system/user/remove','sys:user:remove')" class="pear-btn pear-btn-md"
+  <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','sys:user:remove')" class="pear-btn pear-btn-md"
           lay-event="batchRemove">
     <i class="pear-icon pear-icon-ashbin"></i>
     删除
@@ -67,13 +67,13 @@
 </script>
 
 <script id="user-bar" type="text/html">
-  <button sec:authorize="hasPermission('/system/user/edit','sys:user:edit')"
+  <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','sys:user:edit')"
           class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i class="pear-icon pear-icon-edit"></i>
   </button>
-  <button sec:authorize="hasPermission('/system/user/remove','sys:user:remove')"
+  <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','sys:user:remove')"
           class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i class="pear-icon pear-icon-ashbin"></i>
   </button>
-  <button sec:authorize="hasPermission('/system/user/editpasswordadmin','sys:user:editpasswordadmin')"
+  <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','sys:user:editpasswordadmin')"
           class="pear-btn pear-btn-danger pear-btn-sm" lay-event="editpasswordadmin"><i
     class="layui-icon layui-icon-key"></i>
   </button>

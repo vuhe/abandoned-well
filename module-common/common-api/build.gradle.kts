@@ -11,8 +11,7 @@ dependencies {
     implementation("cn.hutool:hutool-core:5.7.22")
 
     // 缓存工具
-    implementation("cn.hutool:hutool-cache:5.7.22")
-    compileOnly("org.springframework.data:spring-data-redis")
+    implementation("com.github.ben-manes.caffeine:caffeine:3.0.6")
 
     // 网络工具
     implementation("cn.hutool:hutool-http:5.7.22")

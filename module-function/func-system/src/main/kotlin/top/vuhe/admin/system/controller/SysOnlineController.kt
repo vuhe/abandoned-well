@@ -29,7 +29,7 @@ class SysOnlineController(
      * 获取在线用户列表视图
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/system/online/main','sys:online:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:online:main')")
     fun main() = ModelAndView("system/user/online")
 
     /* -------------------------------------------------------------------------- */
@@ -38,7 +38,7 @@ class SysOnlineController(
      * 在线用户列表
      */
     @GetMapping("data")
-    @PreAuthorize("hasPermission('/system/online/data','sys:online:data')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:online:data')")
     fun data(username: String?) = dataTable {
         sessionRegistry.allPrincipals.mapNotNull {
             val user = sysUserService.getOneById(it as String)
@@ -60,7 +60,7 @@ class SysOnlineController(
     fun remove(@PathVariable onlineId: String): ResultObj<*> {
         sysUserService.getOneById(onlineId)?.let {
             // 不允许操作admin用户下线
-            if (it.admin == true) {
+            if (it.admin) {
                 return ResultObj.Fail<Nothing>(message = "不允许操作超级管理员[admin]下线")
             }
             sessionRegistry.deleteSessionByUserId(it.userId)

@@ -27,21 +27,21 @@ class SysDeptController(
      * 获取部门列表视图
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/system/dept/main','sys:dept:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:main')")
     fun main() = ModelAndView("system/dept/main")
 
     /**
      * 获取部门新增视图
      */
     @GetMapping("add")
-    @PreAuthorize("hasPermission('/system/dept/add','sys:dept:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:add')")
     fun add() = ModelAndView("system/dept/add")
 
     /**
      * 获取部门修改视图
      */
     @GetMapping("edit")
-    @PreAuthorize("hasPermission('/system/dept/edit','sys:dept:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun edit(deptId: String) = ModelAndView("system/dept/edit").apply {
         addObject("sysDept", sysDeptService.getOneById(deptId))
     }
@@ -52,7 +52,7 @@ class SysDeptController(
      * 获取部门列表数据
      */
     @GetMapping("data")
-    @PreAuthorize("hasPermission('/system/dept/data','sys:dept:data')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:data')")
     fun data(param: SysDept) = dataTable { sysDeptService.list(param) }
 
     /**
@@ -66,7 +66,7 @@ class SysDeptController(
      */
     @PostMapping("save")
     @Operation(summary = "保存部门数据")
-    @PreAuthorize("hasPermission('/system/dept/add','sys:dept:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:add')")
     fun save(@RequestBody sysDept: SysDept) = boolResult {
         sysDeptService.add(sysDept)
     }
@@ -75,7 +75,7 @@ class SysDeptController(
      * 修改部门信息
      */
     @PutMapping("update")
-    @PreAuthorize("hasPermission('/system/dept/edit','sys:dept:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun update(@RequestBody sysDept: SysDept) = boolResult {
         sysDeptService.modify(sysDept)
     }
@@ -84,7 +84,7 @@ class SysDeptController(
      * 部门删除接口
      */
     @DeleteMapping("remove/{id}")
-    @PreAuthorize("hasPermission('/system/dept/remove','sys:dept:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:remove')")
     fun remove(@PathVariable id: String): ResultObj<*> {
         if (sysDeptService.getByParentId(id).isNotEmpty()) {
             return ResultObj.Fail<Nothing>(message = "请先删除下级部门")
@@ -96,7 +96,7 @@ class SysDeptController(
      * 部门批量删除接口
      */
     @DeleteMapping("batchRemove/{ids}")
-    @PreAuthorize("hasPermission('/system/dept/remove','sys:dept:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:remove')")
     fun batchRemove(@PathVariable ids: String) = boolResult {
         sysDeptService.batchRemove(ids.split(","))
     }
@@ -105,7 +105,7 @@ class SysDeptController(
      * 根据 Id 启用部门
      */
     @PutMapping("enable")
-    @PreAuthorize("hasPermission('/system/dept/edit','sys:dept:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun enable(@RequestBody sysDept: SysDept) = boolResult {
         sysDept.enable = true
         sysDeptService.modify(sysDept)
@@ -115,7 +115,7 @@ class SysDeptController(
      * 根据 Id 禁用部门
      */
     @PutMapping("disable")
-    @PreAuthorize("hasPermission('/system/dept/edit','sys:dept:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun disable(@RequestBody sysDept: SysDept) = boolResult {
         sysDept.enable = false
         sysDeptService.modify(sysDept)

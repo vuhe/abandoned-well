@@ -30,14 +30,14 @@ class WellController(
      * 用于管理的所有数据
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/well/info/main','well:info:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:main')")
     fun main() = ModelAndView("well/info/main")
 
     /**
      * 用于查看单个数据
      */
     @GetMapping("detail")
-    @PreAuthorize("hasPermission('/well/info/detail','well:info:detail')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:detail')")
     fun detail(id: String) = ModelAndView("well/info/detail").apply {
         val well = infoService.getOneById(id)
         addObject("well", well)
@@ -48,7 +48,7 @@ class WellController(
      * 用于添加井信息的页面
      */
     @GetMapping("add")
-    @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:add')")
     fun add() = ModelAndView("well/info/add").apply {
         addObject("regions", regionService.list())
     }
@@ -57,7 +57,7 @@ class WellController(
      * 用于审批的页面
      */
     @GetMapping("approve")
-    @PreAuthorize("hasPermission('/well/info/approve','well:info:approve')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:approve')")
     fun approve(id: String) = ModelAndView("well/info/approve").apply {
         addObject("well", infoService.getOneById(id))
     }
@@ -66,7 +66,7 @@ class WellController(
      * 用于修改井信息的页面
      */
     @GetMapping("edit")
-    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun edit(id: String): ModelAndView {
         val well = infoService.getOneById(id)
         // 通过审核的是动态更新
@@ -89,7 +89,7 @@ class WellController(
      */
     @GetMapping("page")
     @Operation(summary = "分页查询井信息")
-    @PreAuthorize("hasPermission('/well/info/page','well:info:page')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:page')")
     fun page(info: WellInfo, pageDomain: PageDomain) = pageTable {
         infoService.page(info, pageDomain)
     }
@@ -99,7 +99,7 @@ class WellController(
      */
     @PostMapping("save")
     @Operation(summary = "添加井信息")
-    @PreAuthorize("hasPermission('/well/info/add','well:info:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:add')")
     fun save(@RequestBody @Valid info: WellInfo) = boolResult {
         infoService.add(info)
     }
@@ -109,7 +109,7 @@ class WellController(
      */
     @PutMapping("update")
     @Operation(summary = "修改井信息")
-    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun update(@RequestBody @Valid info: WellInfo) = boolResult {
         infoService.modify(info)
     }
@@ -119,7 +119,7 @@ class WellController(
      */
     @PutMapping("report")
     @Operation(summary = "动态更新井信息")
-    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun report(@RequestBody info: WellInfo) = boolResult {
         infoService.modify(info)
     }
@@ -129,7 +129,7 @@ class WellController(
      */
     @PutMapping("approved/{id}")
     @Operation(summary = "通过审核井信息")
-    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun pass(@PathVariable("id") id: String) = boolResult {
         val info = WellInfo().apply {
             this.id = id
@@ -143,7 +143,7 @@ class WellController(
      */
     @PutMapping("not_approved/{id}")
     @Operation(summary = "打回修改井信息")
-    @PreAuthorize("hasPermission('/well/info/edit','well:info:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun notPass(@PathVariable("id") id: String) = boolResult {
         val info = WellInfo().apply {
             this.id = id
@@ -157,7 +157,7 @@ class WellController(
      */
     @DeleteMapping("remove/{id}")
     @Operation(summary = "删除井信息")
-    @PreAuthorize("hasPermission('/well/info/remove','well:info:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:remove')")
     fun remove(@PathVariable("id") id: String) = boolResult {
         infoService.remove(id)
     }
@@ -167,7 +167,7 @@ class WellController(
      */
     @DeleteMapping("/batchRemove")
     @Operation(summary = "批量删除井信息")
-    @PreAuthorize("hasPermission('/well/info/remove','well:info:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:remove')")
     fun batchRemove(ids: String) = boolResult {
         infoService.batchRemove(ids.split(","))
     }

@@ -38,7 +38,7 @@ class SysUserController @Autowired constructor(
      */
     @GetMapping("main")
     @Operation(summary = "获取用户列表视图")
-    @PreAuthorize("hasPermission('/system/user/main','sys:user:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:main')")
     fun main() = ModelAndView("system/user/main")
 
     /**
@@ -46,7 +46,7 @@ class SysUserController @Autowired constructor(
      */
     @GetMapping("add")
     @Operation(summary = "获取用户新增视图")
-    @PreAuthorize("hasPermission('/system/user/add','sys:user:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:add')")
     fun add() = ModelAndView("system/user/add").apply {
         addObject("sysRoles", sysRoleService.list())
     }
@@ -56,7 +56,7 @@ class SysUserController @Autowired constructor(
      */
     @GetMapping("edit")
     @Operation(summary = "获取用户修改视图")
-    @PreAuthorize("hasPermission('/system/user/edit','sys:user:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:edit')")
     fun edit(userId: String) = ModelAndView("system/user/edit").apply {
         addObject("sysRoles", sysUserService.getUserRole(userId))
         addObject("sysUser", sysUserService.getOneById(userId))
@@ -67,7 +67,7 @@ class SysUserController @Autowired constructor(
      */
     @GetMapping("editpasswordadmin")
     @Operation(summary = "获取管理员修改用户密码视图")
-    @PreAuthorize("hasPermission('/system/user/editPasswordAdmin','sys:user:editPasswordAdmin')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:editPasswordAdmin')")
     fun editPasswordAdminView(userId: String) =
         ModelAndView("system/user/editPasswordAdmin").apply {
             addObject("userId", userId)
@@ -99,7 +99,7 @@ class SysUserController @Autowired constructor(
      */
     @GetMapping("data")
     @Operation(summary = "获取用户列表数据")
-    @PreAuthorize("hasPermission('/system/user/data','sys:user:data')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:data')")
     @Logging("查询用户", describe = "查询用户", type = BusinessType.QUERY)
     fun data(pageDomain: PageDomain, param: SysUser) = pageTable {
         sysUserService.page(param, pageDomain)
@@ -111,7 +111,7 @@ class SysUserController @Autowired constructor(
     @RepeatSubmit
     @PostMapping("save")
     @Operation(summary = "保存用户数据")
-    @PreAuthorize("hasPermission('/system/user/add','sys:user:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:add')")
     @Logging("新增用户", describe = "新增用户", type = BusinessType.ADD)
     fun save(@RequestBody sysUser: SysUser) = boolResult {
         sysUserService.saveUserRole(sysUser.userId, sysUser.roleIds.split(","))
@@ -123,7 +123,7 @@ class SysUserController @Autowired constructor(
      */
     @PutMapping("editPasswordAdmin")
     @Operation(summary = "管理员修改用户密码")
-    @PreAuthorize("hasPermission('/system/user/editPasswordAdmin','sys:user:editPasswordAdmin')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:editPasswordAdmin')")
     fun editPasswordAdmin(@RequestBody editPassword: EditPassword) =
         boolResult("修改成功", "修改失败") {
             sysUserService.modifyPassword(
@@ -162,7 +162,7 @@ class SysUserController @Autowired constructor(
      */
     @PutMapping("update")
     @Operation(summary = "修改用户数据")
-    @PreAuthorize("hasPermission('/system/user/edit','sys:user:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:edit')")
     @Logging("修改用户", describe = "修改用户", type = BusinessType.EDIT)
     fun update(@RequestBody sysUser: SysUser) = boolResult {
         sysUserService.saveUserRole(sysUser.userId, sysUser.roleIds.split(","))
@@ -174,7 +174,7 @@ class SysUserController @Autowired constructor(
      */
     @DeleteMapping("batchRemove/{ids}")
     @Operation(summary = "批量删除用户")
-    @PreAuthorize("hasPermission('/system/user/remove','sys:user:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:remove')")
     @Logging("删除用户", describe = "删除用户", type = BusinessType.REMOVE)
     fun batchRemove(@PathVariable ids: String) = boolResult {
         sysUserService.batchRemove(ids.split(","))
@@ -185,7 +185,7 @@ class SysUserController @Autowired constructor(
      */
     @DeleteMapping("remove/{id}")
     @Operation(summary = "删除用户数据")
-    @PreAuthorize("hasPermission('/system/user/remove','sys:user:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:remove')")
     @Logging("删除用户", describe = "删除用户", type = BusinessType.REMOVE)
     fun remove(@PathVariable id: String) = boolResult {
         sysUserService.remove(id)

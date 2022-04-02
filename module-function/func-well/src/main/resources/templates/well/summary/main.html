@@ -20,7 +20,7 @@
     </script>
 
     <script id="well-info-bar" type="text/html">
-      <button sec:authorize="hasPermission('/well/info/detail','well:info:detail')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:detail')"
               class="pear-btn pear-btn-primary pear-btn-sm" lay-event="detail"><i
         class="pear-icon pear-icon-image-text"></i>
       </button>

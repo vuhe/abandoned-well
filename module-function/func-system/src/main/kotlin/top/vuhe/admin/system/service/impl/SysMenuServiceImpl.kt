@@ -2,8 +2,9 @@ package top.vuhe.admin.system.service.impl
 
 import org.springframework.stereotype.Service
 import top.vuhe.admin.system.domain.SysMenu
+import top.vuhe.admin.system.mapper.LinkRolePower
+import top.vuhe.admin.system.mapper.LinkUserRole
 import top.vuhe.admin.system.mapper.SysPowerMapper
-import top.vuhe.admin.system.mapper.SysRoleMapper
 import top.vuhe.admin.system.mapper.SysUserMapper
 import top.vuhe.admin.system.service.ISysMenuService
 
@@ -15,7 +16,8 @@ import top.vuhe.admin.system.service.ISysMenuService
 @Service
 class SysMenuServiceImpl : ISysMenuService {
     private val sysUserMapper = SysUserMapper
-    private val sysRoleMapper = SysRoleMapper
+    private val linkUserRole = LinkUserRole
+    private val linkRolePower = LinkRolePower
     private val sysPowerMapper = SysPowerMapper
 
     override fun getUserMenu(userId: String): List<SysMenu> {
@@ -25,10 +27,10 @@ class SysMenuServiceImpl : ISysMenuService {
             sysPowerMapper.selectListByAdmin()
         } else {
             // 全部角色信息
-            val roleIds = sysUserMapper.selectRoleIdByUserId(userId)
+            val roleIds = linkUserRole.selectRoleIdByUserId(userId)
 
             // 全部菜单信息
-            val powerIds = roleIds.map { sysRoleMapper.selectPowerIdByRoleId(it) }.flatten()
+            val powerIds = roleIds.map { linkRolePower.selectPowerIdByRoleId(it) }.flatten()
 
             sysPowerMapper.selectListByIds(powerIds)
         }

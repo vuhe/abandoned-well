@@ -41,7 +41,7 @@ class SysPower : BaseEntity() {
     /**
      * 计算列 提供给前端组件
      *
-     * default: "0"
+     * 0-未选中，1-选中，2-半选
      */
     var checkArr: String = "0"
 }

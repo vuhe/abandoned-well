@@ -32,7 +32,7 @@ class EntranceController(
     @GetMapping("login")
     fun login(request: HttpServletRequest) = if (isAuthentication) {
         sessionRegistry.refreshLastRequest(request.session.id)
-        ModelAndView("index")
+        ModelAndView("redirect:/index")
     } else ModelAndView("login")
 
     /**
@@ -64,13 +64,6 @@ class EntranceController(
      */
     @GetMapping("error/404")
     fun notFound() = ModelAndView("error/404")
-
-    /**
-     * 找不带页面
-     * @return 返回404页面
-     */
-    @GetMapping("error/not_available")
-    fun notAvailable() = ModelAndView("error/not_available")
 
     /**
      * 异常处理页

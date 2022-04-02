@@ -28,7 +28,7 @@ class SummaryController(
      * 用于汇总导出的页面
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/well/summary/main','well:summary:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:summary:main')")
     fun main() = ModelAndView("well/summary/main")
 
     /* -------------------------------------------------------------------------- */
@@ -37,7 +37,7 @@ class SummaryController(
      * 用于汇总导出 excel
      */
     @GetMapping("excel")
-    @PreAuthorize("hasPermission('/well/summary/export','well:summary:export')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:summary:export')")
     fun excel(response: HttpServletResponse) {
         val list = infoService.exportList()
         OfficeHandler.exportExcel(list, "doc/excel.xls", "${data}信息汇总", response)
@@ -47,7 +47,7 @@ class SummaryController(
      * 用于汇总导出 word
      */
     @GetMapping("word")
-    @PreAuthorize("hasPermission('/well/summary/export','well:summary:export')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:summary:export')")
     fun word(response: HttpServletResponse) {
         val list = infoService.exportList()
         OfficeHandler.exportWord(list, "doc/doc.docx", "${data}详情汇总", response)

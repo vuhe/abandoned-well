@@ -8,10 +8,8 @@ import top.vuhe.admin.spring.security.login.LoginAuthenticationProvider
 import top.vuhe.admin.spring.security.login.LoginDetailsSource
 import top.vuhe.admin.spring.security.logout.SecureLogoutHandler
 import top.vuhe.admin.spring.security.permission.SecureAccessDeniedHandler
-import top.vuhe.admin.spring.security.permission.SecurePermissionSupport
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.security.session.RememberMeLoginAfterHandler
-import top.vuhe.admin.spring.security.session.RememberMeTokenService
 import top.vuhe.admin.spring.security.session.SecuritySessionManager
 
 /**
@@ -28,15 +26,8 @@ abstract class SpringSecurityAdapter(
     protected val loginDetailSource = LoginDetailsSource
     protected val logoutHandler = SecureLogoutHandler
     protected val accessDenied = SecureAccessDeniedHandler
-    protected val rememberTokenService = RememberMeTokenService
     protected val rememberLoginAfterHandler = RememberMeLoginAfterHandler(sysLogService, userDetailsService)
     protected val sessionRegistryCenter = SecuritySessionManager
-
-    /**
-     * 直接提供权限验证器
-     */
-    @Bean
-    fun permissionSupport() = SecurePermissionSupport(userDetailsService)
 
     /**
      * 使 listener 生效

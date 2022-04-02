@@ -1,6 +1,7 @@
 package top.vuhe.admin.spring.web.interceptor
 
 import org.slf4j.LoggerFactory
+import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.BindException
 import org.springframework.web.HttpRequestMethodNotSupportedException
 import org.springframework.web.bind.annotation.ExceptionHandler
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest
 @RestControllerAdvice
 class GlobalExceptionHandler {
     /**
-     * 不 支 持 的 请 求 类 型
+     * 不支持的请求类型
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
     fun handleException(e: HttpRequestMethodNotSupportedException): ResultObj<*> {
@@ -28,16 +29,7 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * 拦 截 未 知 的 运 行 时 异 常
-     */
-    @ExceptionHandler(RuntimeException::class)
-    fun notFount(e: RuntimeException): ResultObj<*> {
-        log.error("运行时异常:", e)
-        return ResultObj.Fail<Nothing>(message = "运行时异常:" + e.message)
-    }
-
-    /**
-     * 拦 截 参 数 验 证 失 败 异 常
+     * 拦截参数验证失败异常
      */
     @ExceptionHandler(BindException::class)
     fun validationFailed(request: HttpServletRequest, e: BindException): ResultObj<*> {
@@ -46,28 +38,17 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * 权 限 异 常 处 理
+     * 权限异常处理
      */
     @ExceptionHandler(AccessDeniedException::class)
     fun access(request: HttpServletRequest, e: AccessDeniedException): Any {
-        e.printStackTrace()
         return if (request.isAjax) {
             ResultObj.Fail<Nothing>(message = "暂无权限")
         } else {
-            val modelAndView = ModelAndView()
-            modelAndView.addObject("errorMessage", e.message)
-            modelAndView.viewName = "error/403"
-            modelAndView
+            ModelAndView("error/403").apply {
+                addObject("errorMessage", e.message)
+            }
         }
-    }
-
-    /**
-     * 系统异常
-     */
-    @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResultObj<*> {
-        log.error(e.message, e)
-        return ResultObj.Fail<Nothing>(message = "服务器错误，请联系管理员")
     }
 
     /**
@@ -79,14 +60,31 @@ class GlobalExceptionHandler {
         return if (request.isAjax) {
             ResultObj.Fail<Nothing>(message = e.message)
         } else {
-            val modelAndView = ModelAndView()
-            modelAndView.addObject("errorMessage", e.message)
-            modelAndView.viewName = "error/500"
-            modelAndView
+            ModelAndView("error/500").apply {
+                addObject("errorMessage", e.message)
+            }
         }
     }
 
+    /**
+     * 运行时异常
+     */
+    @ExceptionHandler(RuntimeException::class)
+    fun notFount(e: RuntimeException): ResultObj<*> {
+        log.error("运行时异常:", e)
+        return ResultObj.Fail<Nothing>(message = "运行时异常:" + e.message)
+    }
+
+    /**
+     * 其他异常
+     */
+    @ExceptionHandler(Exception::class)
+    fun handleException(e: Exception): ResultObj<*> {
+        log.error(e.message, e)
+        return ResultObj.Fail<Nothing>(message = "服务器错误，请联系管理员")
+    }
+
     companion object {
-        private val log = LoggerFactory.getLogger(this::class.java)
+        private val log = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
     }
 }

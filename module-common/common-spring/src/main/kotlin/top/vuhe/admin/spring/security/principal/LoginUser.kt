@@ -1,14 +1,11 @@
 package top.vuhe.admin.spring.security.principal
 
-import org.springframework.security.core.CredentialsContainer
-import org.springframework.security.core.GrantedAuthority
-
 /**
  * 用户登录信息
  *
  * @author vuhe
  */
-interface LoginUser: CredentialsContainer {
+interface LoginUser {
     /**
      * 用户 id
      */
@@ -20,11 +17,6 @@ interface LoginUser: CredentialsContainer {
     val password: String
 
     /**
-     * 前端显示昵称
-     */
-    val nickname: String
-
-    /**
      * 是否为超级管理员
      */
     val isAdmin: Boolean
@@ -32,7 +24,7 @@ interface LoginUser: CredentialsContainer {
     /**
      * 用于鉴权的列表
      */
-    val authorities: Set<GrantedAuthority>
+    val authorities: Collection<String>
 
     /**
      * 用户是否锁定

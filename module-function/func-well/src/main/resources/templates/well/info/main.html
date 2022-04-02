@@ -31,12 +31,12 @@
     <table id="well-info-table" lay-filter="well-info-table"></table>
 
     <script id="well-code-toolbar" type="text/html">
-      <button sec:authorize="hasPermission('/well/info/add','well:info:add')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:add')"
               class="pear-btn pear-btn-primary pear-btn-md" lay-event="add">
         <i class="layui-icon layui-icon-add-1"></i>
         上报
       </button>
-      <button sec:authorize="hasPermission('/well/info/remove','well:info:remove')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:remove')"
               class="pear-btn pear-btn-md" lay-event="batchRemove">
         <i class="layui-icon layui-icon-delete"></i>
         删除
@@ -44,19 +44,19 @@
     </script>
 
     <script id="well-info-bar" type="text/html">
-      <button sec:authorize="hasPermission('/well/info/edit','well:info:edit')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:edit')"
               class="pear-btn pear-btn-primary pear-btn-sm" lay-event="edit"><i
         class="layui-icon layui-icon-edit"></i>
       </button>
-      <button sec:authorize="hasPermission('/well/info/approve','well:info:approve')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:approve')"
               class="pear-btn pear-btn-primary pear-btn-sm" lay-event="approve"><i
         class="pear-icon pear-icon-history"></i>
       </button>
-      <button sec:authorize="hasPermission('/well/info/detail','well:info:detail')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:detail')"
               class="pear-btn pear-btn-primary pear-btn-sm" lay-event="detail"><i
         class="pear-icon pear-icon-image-text"></i>
       </button>
-      <button sec:authorize="hasPermission('/well/info/remove','well:info:remove')"
+      <button sec:authorize="hasAnyAuthority('ROLE_ADMIN','well:info:remove')"
               class="pear-btn pear-btn-danger pear-btn-sm" lay-event="remove"><i
         class="layui-icon layui-icon-delete"></i>
       </button>

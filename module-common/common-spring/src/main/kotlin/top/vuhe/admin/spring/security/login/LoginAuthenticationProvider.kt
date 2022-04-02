@@ -5,6 +5,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import top.vuhe.admin.api.exception.CaptchaException
+import top.vuhe.admin.spring.security.principal.UserAuthenticatedToken
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 
 /**
@@ -40,11 +41,7 @@ class LoginAuthenticationProvider(
         val password = authentication.credentials?.toString() ?: throw BadCredentialsException("")
         if (!passwordEncoder.matches(password, dbUser.password)) throw BadCredentialsException("")
 
-        return UsernamePasswordAuthenticationToken(
-            dbUser.userId, authentication.credentials, emptyList()
-        ).apply {
-            details = authentication.details
-        }
+        return UserAuthenticatedToken(dbUser, authentication.credentials, authentication.details)
     }
 
     override fun supports(authentication: Class<*>): Boolean {

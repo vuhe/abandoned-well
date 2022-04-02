@@ -54,7 +54,15 @@ object SystemInfo {
         get() {
             val start = Instant.ofEpochMilli(startInstant)
             val end = Instant.now()
-            val d = Duration.between(start, end)
-            return "${d.toDaysPart()}天${d.toHoursPart()}小时${d.toMinutesPart()}分钟"
+            return Duration.between(start, end).let {
+                val day = it.toDaysPart()
+                val hour = it.toHoursPart()
+                val minute = it.toMinutesPart()
+                val sb = StringBuilder()
+                if (day > 0) sb.append("$day 天 ")
+                if (hour > 0) sb.append("$hour 小时 ")
+                if (minute > 0) sb.append("$minute 分钟 ")
+                sb.toString()
+            }
         }
 }

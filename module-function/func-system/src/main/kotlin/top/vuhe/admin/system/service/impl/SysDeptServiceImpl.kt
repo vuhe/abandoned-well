@@ -15,8 +15,8 @@ import top.vuhe.admin.system.service.ISysDeptService
  */
 @Service
 class SysDeptServiceImpl : CurdService<SysDept>(SysDeptMapper), ISysDeptService {
-    private val sysDeptMapper = SysDeptMapper
     private val sysUserMapper = SysUserMapper
+    private val sysDeptMapper = SysDeptMapper
 
     @Transactional(rollbackFor = [Exception::class])
     override fun batchRemove(ids: List<String>): Boolean {

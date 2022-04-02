@@ -19,7 +19,7 @@ import top.vuhe.admin.api.monitor.MonitorInfo
 @RequestMapping(API_SYSTEM_PREFIX + "monitor")
 class MonitorController : BaseController() {
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/system/monitor/main','sys:monitor:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:monitor:main')")
     fun main() = ModelAndView("system/monitor/main").apply {
         addObject("info", MonitorInfo)
     }

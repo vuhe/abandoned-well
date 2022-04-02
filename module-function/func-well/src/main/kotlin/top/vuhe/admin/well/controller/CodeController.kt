@@ -25,21 +25,21 @@ class CodeController(
      * 用于管理地质代码的页面
      */
     @GetMapping("main")
-    @PreAuthorize("hasPermission('/well/code/main','well:code:main')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:main')")
     fun main() = ModelAndView("well/code/main")
 
     /**
      * 用于添加地质代码的页面
      */
     @GetMapping("add")
-    @PreAuthorize("hasPermission('/well/code/add','well:code:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:add')")
     fun add() = ModelAndView("well/code/add")
 
     /**
      * 用于修改地质代码的页面
      */
     @GetMapping("edit")
-    @PreAuthorize("hasPermission('/well/code/edit','well:code:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:edit')")
     fun edit(id: String) = ModelAndView("well/code/edit").apply {
         addObject("code", codeService.getOneById(id))
     }
@@ -50,7 +50,7 @@ class CodeController(
      * 分页查询 地质代码
      */
     @GetMapping("page")
-    @PreAuthorize("hasPermission('/well/code/page','well:code:page')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:page')")
     fun page(code: RegionCode, pageDomain: PageDomain) = pageTable {
         codeService.page(code, pageDomain)
     }
@@ -59,7 +59,7 @@ class CodeController(
      * 添加 地质代码
      */
     @PostMapping("save")
-    @PreAuthorize("hasPermission('/well/code/add','well:code:add')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:add')")
     fun save(@RequestBody code: RegionCode) = boolResult {
         codeService.add(code)
     }
@@ -68,7 +68,7 @@ class CodeController(
      * 修改 地质代码
      */
     @PutMapping("update")
-    @PreAuthorize("hasPermission('/well/code/edit','well:code:edit')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:edit')")
     fun update(@RequestBody code: RegionCode) = boolResult {
         codeService.modify(code)
     }
@@ -77,7 +77,7 @@ class CodeController(
      * 删除 地质代码
      */
     @DeleteMapping("remove/{id}")
-    @PreAuthorize("hasPermission('/well/code/remove','well:code:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:remove')")
     fun remove(@PathVariable("id") id: String) = boolResult {
         codeService.remove(id)
     }
@@ -86,7 +86,7 @@ class CodeController(
      * 批量删除 地质代码
      */
     @DeleteMapping("/batchRemove")
-    @PreAuthorize("hasPermission('/well/code/remove','well:code:remove')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:remove')")
     fun batchRemove(ids: String) = boolResult {
         codeService.batchRemove(ids.split(","))
     }

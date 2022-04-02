@@ -29,7 +29,7 @@ class MemoryInfo {
     }
 
     private fun usage(): String {
-        val used = (memory.maxMemory() - memory.totalMemory()).toDouble()
+        val used = memory.totalMemory().toDouble()
         val total = memory.maxMemory().toDouble()
         val num = NumberUtil.mul(NumberUtil.div(used, total, 4), 100f)
         return "$num %"
