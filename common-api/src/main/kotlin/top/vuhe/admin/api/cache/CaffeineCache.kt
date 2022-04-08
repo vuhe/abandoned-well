@@ -5,23 +5,23 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
-object CaffeineCache {
+internal object CaffeineCache : SimpleCache {
     private val caches = HashMap<String, Cache<String, Any>>()
 
-    operator fun <T : Any> get(scope: String, key: String): T? {
+    override fun <T : Any> get(scope: String, key: String): T? {
         @Suppress("UNCHECKED_CAST")
         return getCache(scope).getIfPresent(key) as? T
     }
 
-    operator fun <T : Any> set(scope: String, key: String, value: T) {
+    override fun <T : Any> set(scope: String, key: String, value: T) {
         getCache(scope).put(key, value)
     }
 
-    fun delete(scope: String, key: String) {
+    override fun delete(scope: String, key: String) {
         getCache(scope).invalidate(key)
     }
 
-    fun clear(scope: String) {
+    override fun clear(scope: String) {
         getCache(scope).invalidateAll()
     }
 

@@ -4,7 +4,7 @@ import org.springframework.security.authentication.*
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import top.vuhe.admin.api.exception.CaptchaException
+import top.vuhe.admin.spring.security.exception.CaptchaException
 import top.vuhe.admin.spring.security.principal.UserAuthenticatedToken
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 

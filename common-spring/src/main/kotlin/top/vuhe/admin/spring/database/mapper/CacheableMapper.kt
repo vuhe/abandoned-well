@@ -6,7 +6,7 @@ import org.ktorm.expression.OrderByExpression
 import org.ktorm.schema.BaseTable
 import org.ktorm.schema.Column
 import org.ktorm.schema.ColumnDeclaring
-import top.vuhe.admin.api.cache.CaffeineCache
+import top.vuhe.admin.api.cache.ProjectCache
 import top.vuhe.admin.api.text.UUIDGenerator
 import top.vuhe.admin.spring.config.KtormConfiguration
 import top.vuhe.admin.spring.database.entity.BaseEntity
@@ -72,22 +72,22 @@ abstract class CacheableMapper<E : BaseEntity>(tableName: String) : BaseTable<E>
 
     protected fun <T : Any> cachePut(key: String, value: T) {
         if (!cacheEnable) return
-        CaffeineCache[tableName, key] = value
+        ProjectCache[tableName, key] = value
     }
 
     protected fun <T : Any> cacheGet(key: String): T? {
         if (!cacheEnable) return null
-        return CaffeineCache[tableName, key]
+        return ProjectCache[tableName, key]
     }
 
     protected fun cacheDelete(key: String) {
         if (!cacheEnable) return
-        CaffeineCache.delete(tableName, key)
+        ProjectCache.delete(tableName, key)
     }
 
     protected fun cacheClear() {
         if (!cacheEnable) return
-        CaffeineCache.clear(tableName)
+        ProjectCache.clear(tableName)
     }
 
     /*------------------------------------- impl -------------------------------------------*/

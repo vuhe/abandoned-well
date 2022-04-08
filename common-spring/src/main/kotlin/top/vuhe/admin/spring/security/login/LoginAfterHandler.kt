@@ -11,9 +11,9 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import top.vuhe.admin.api.enums.BusinessType
 import top.vuhe.admin.api.enums.LoggingType
-import top.vuhe.admin.api.exception.CaptchaException
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.network.writeJson
+import top.vuhe.admin.spring.security.exception.CaptchaException
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.web.response.ResultObj
 import javax.servlet.http.HttpServletRequest

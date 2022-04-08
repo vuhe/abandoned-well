@@ -1,9 +1,6 @@
 @file:Suppress("SpellCheckingInspection")
 
 dependencies {
-    // 安全组件 api
-    implementation("org.springframework.security:spring-security-core")
-
     // 切面处理 aop
     implementation("org.springframework.boot:spring-boot-starter-aop")
 

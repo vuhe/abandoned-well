@@ -2,7 +2,7 @@ package top.vuhe.admin.well.service.impl
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import top.vuhe.admin.api.exception.BusinessException
+import top.vuhe.admin.api.exception.businessNotNull
 import top.vuhe.admin.spring.database.service.impl.CurdService
 import top.vuhe.admin.well.domina.ExportWell
 import top.vuhe.admin.well.domina.WellInfo
@@ -35,14 +35,16 @@ class WellServiceImpl : CurdService<WellInfo>(WellMapper), IWellService {
      */
     @Transactional(rollbackFor = [Exception::class])
     override fun add(entity: WellInfo): Boolean {
-        val region = regionMapper.selectById(entity.regionId)
-            ?: throw BusinessException("地区错误，请刷新后重试")
+        val region = businessNotNull(
+            regionMapper.selectById(entity.regionId)
+        ) { "地区错误，请刷新后重试" }
 
         // 地区顺序码 + 1
         region.next = region.next + 1
 
-        val code = regionCodeMapper.selectById(region.regionCodeId)
-            ?: throw BusinessException("水文代码错误，请刷新后重试")
+        val code = businessNotNull(
+            regionCodeMapper.selectById(region.regionCodeId)
+        ) { "水文代码错误，请刷新后重试" }
 
         // 生成井 id
         val wellId = "%s%04d%sW".format(region.districtCode, region.next, code.code)
