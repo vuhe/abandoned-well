@@ -34,5 +34,3 @@
 
 - [x] Update spring boot to 2.6.x
 - [x] Update kotlin to 1.6.x
-- [ ] Update Java to 17.x
-- [ ] Update spring boot to 3.0.x
