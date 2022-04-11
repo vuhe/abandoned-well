@@ -23,18 +23,18 @@ class GlobalExceptionHandler {
      * 不支持的请求类型
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
-    fun handleException(e: HttpRequestMethodNotSupportedException): ResultObj<*> {
+    fun handleException(e: HttpRequestMethodNotSupportedException): ResultObj {
         log.error(e.message, e)
-        return ResultObj.Fail<Nothing>(message = "不支持' " + e.method + "'请求")
+        return ResultObj.Fail(message = "不支持 '${e.method}'请求")
     }
 
     /**
      * 拦截参数验证失败异常
      */
     @ExceptionHandler(BindException::class)
-    fun validationFailed(request: HttpServletRequest, e: BindException): ResultObj<*> {
+    fun validationFailed(request: HttpServletRequest, e: BindException): ResultObj {
         val message = e.bindingResult.allErrors.lastOrNull()?.defaultMessage ?: "参数不符合要求"
-        return ResultObj.Fail<Nothing>(message = message)
+        return ResultObj.Fail(message = message)
     }
 
     /**
@@ -43,7 +43,7 @@ class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException::class)
     fun access(request: HttpServletRequest, e: AccessDeniedException): Any {
         return if (request.isAjax) {
-            ResultObj.Fail<Nothing>(message = "暂无权限")
+            ResultObj.Fail(message = "暂无权限")
         } else {
             ModelAndView("error/403").apply {
                 addObject("errorMessage", e.message)
@@ -52,13 +52,12 @@ class GlobalExceptionHandler {
     }
 
     /**
-     * 业务异常
+     * 业务异常，此异常应为逻辑异常，不需要排查
      */
     @ExceptionHandler(BusinessException::class)
     fun businessException(request: HttpServletRequest, e: BusinessException): Any {
-        log.error(e.message, e)
         return if (request.isAjax) {
-            ResultObj.Fail<Nothing>(message = e.message)
+            ResultObj.Fail(message = e.message)
         } else {
             ModelAndView("error/500").apply {
                 addObject("errorMessage", e.message)
@@ -70,18 +69,18 @@ class GlobalExceptionHandler {
      * 运行时异常
      */
     @ExceptionHandler(RuntimeException::class)
-    fun notFount(e: RuntimeException): ResultObj<*> {
+    fun notFount(e: RuntimeException): ResultObj {
         log.error("运行时异常:", e)
-        return ResultObj.Fail<Nothing>(message = "运行时异常:" + e.message)
+        return ResultObj.Fail(message = "运行时异常: ${e.message}")
     }
 
     /**
      * 其他异常
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResultObj<*> {
+    fun handleException(e: Exception): ResultObj {
         log.error(e.message, e)
-        return ResultObj.Fail<Nothing>(message = "服务器错误，请联系管理员")
+        return ResultObj.Fail(message = "服务器错误，请联系管理员")
     }
 
     companion object {

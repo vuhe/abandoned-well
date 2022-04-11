@@ -4,11 +4,10 @@ import top.vuhe.admin.api.network.XssHttpServletRequest
 import java.util.regex.Pattern
 import javax.servlet.*
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 
 class XssFilterSupport : Filter {
     private var isIncludeRichText = false
-    private var excludes: List<String> = emptyList()
+    private var excludes: List<Pattern> = emptyList()
 
     override fun init(filterConfig: FilterConfig) {
         val isIncludeRichText = filterConfig.getInitParameter("isIncludeRichText") ?: ""
@@ -17,19 +16,17 @@ class XssFilterSupport : Filter {
         }
         val temp = filterConfig.getInitParameter("excludes")
         if (temp != null) {
-            excludes = temp.split(",")
+            excludes = temp.split(",").map { Pattern.compile("^$it") }
         }
     }
 
     override fun doFilter(request: ServletRequest, response: ServletResponse?, filterChain: FilterChain) {
         val req = request as HttpServletRequest
-        val resp = response as HttpServletResponse?
-        if (handleExcludeURL(req)) {
-            filterChain.doFilter(request, resp)
-            return
-        }
-        val xssRequest = XssHttpServletRequest(request, isIncludeRichText)
-        filterChain.doFilter(xssRequest, resp)
+
+        val handledReq = if (handleExcludeURL(req)) req
+        else XssHttpServletRequest(request, isIncludeRichText)
+
+        filterChain.doFilter(handledReq, response)
     }
 
     private fun handleExcludeURL(request: HttpServletRequest): Boolean {
@@ -38,7 +35,7 @@ class XssFilterSupport : Filter {
         }
         val url = request.servletPath
         return excludes.fold(false) { left, it ->
-            left || Pattern.compile("^$it").matcher(url).find()
+            left || it.matcher(url).find()
         }
     }
 }

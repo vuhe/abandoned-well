@@ -1,11 +1,8 @@
 package top.vuhe.admin.api.monitor
 
 import cn.hutool.core.date.DateUtil
-import cn.hutool.core.net.NetUtil
-import java.lang.management.ManagementFactory
-import java.net.InetAddress
-import java.time.Duration
-import java.time.Instant
+import cn.hutool.system.SystemUtil
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * ## 系统信息
@@ -14,35 +11,28 @@ import java.time.Instant
  * @author vuhe
  */
 object SystemInfo {
-    private val props = System.getProperties()
-    private val startInstant = ManagementFactory.getRuntimeMXBean().startTime
+    private val startInstant = SystemUtil.getRuntimeMXBean().startTime
 
     /** 服务器信息 */
-    val server: String
-        get() {
-            val name = runCatching { InetAddress.getLocalHost().hostName }
-                .getOrDefault("未知")
-            val ip = NetUtil.getLocalhostStr() ?: "未知"
-            return "$name ($ip)"
-        }
+    val server: String = "${SystemUtil.getHostInfo().name} (${SystemUtil.getHostInfo().address})"
 
     /** 项目路径 */
-    val userDir: String = props.getProperty("user.dir")
+    val userDir: String = SystemUtil.getUserInfo().currentDir
 
     /** 操作系统 */
-    val osName: String = props.getProperty("os.name")
+    val osName: String = SystemUtil.getOsInfo().name
 
     /** 系统架构 */
-    val osArch: String = props.getProperty("os.arch")
+    val osArch: String = SystemUtil.getOsInfo().arch
 
     /** Jvm 名称 */
-    val jvmName: String = ManagementFactory.getRuntimeMXBean().vmName
+    val jvmName: String = SystemUtil.getJvmInfo().name
 
     /** Jvm 版本 */
-    val jvmVersion = "Java ${props.getProperty("java.version")}"
+    val jvmVersion = "Java ${SystemUtil.getJavaInfo().version}"
 
     /** Java Home 路径 */
-    val javaHome: String = props.getProperty("java.home")
+    val javaHome: String = SystemUtil.getJavaRuntimeInfo().homeDir
 
     /** Jvm 启动时间 */
     val jvmStartTime: String by lazy {
@@ -52,17 +42,15 @@ object SystemInfo {
     /** Jvm 运行时间 */
     val jvmRunTime: String
         get() {
-            val start = Instant.ofEpochMilli(startInstant)
-            val end = Instant.now()
-            return Duration.between(start, end).let {
-                val day = it.toDaysPart()
-                val hour = it.toHoursPart()
-                val minute = it.toMinutesPart()
-                val sb = StringBuilder()
-                if (day > 0) sb.append("$day 天 ")
-                if (hour > 0) sb.append("$hour 小时 ")
-                if (minute > 0) sb.append("$minute 分钟 ")
-                sb.toString()
+            val start = startInstant.milliseconds
+            val end = System.currentTimeMillis().milliseconds
+            return (end - start).toComponents { days, hours, minutes, seconds, _ ->
+                StringBuilder().apply {
+                    if (days > 0) append("$days 天 ")
+                    if (hours > 0) append("$hours 小时 ")
+                    if (minutes > 0) append("$minutes 分钟 ")
+                    append("$seconds 秒")
+                }.toString()
             }
         }
 }

@@ -1,14 +1,9 @@
 package top.vuhe.admin.api.network
 
-import cn.hutool.extra.spring.SpringUtil
 import cn.hutool.http.useragent.UserAgent
 import cn.hutool.http.useragent.UserAgentUtil
-import com.fasterxml.jackson.databind.ObjectMapper
 import javax.servlet.http.HttpServletRequest
-import javax.servlet.http.HttpServletResponse
 import kotlin.properties.ReadOnlyProperty
-
-private val objectMapper: ObjectMapper by lazy { SpringUtil.getBean(ObjectMapper::class.java) }
 
 /**
  * 此委托字段始终使用 getter 从 Spring 获取
@@ -25,17 +20,6 @@ private val HttpServletRequest.xRequestedWith: String
  */
 val HttpServletRequest.isAjax: Boolean
     get() = "XMLHttpRequest" == xRequestedWith
-
-/**
- * 写出 json 对象
- *
- * @param json json 字符串
- */
-fun HttpServletResponse.writeJson(json: Any) {
-    contentType = "application/json;charset=UTF-8"
-    characterEncoding = Charsets.UTF_8.name()
-    writer.write(objectMapper.writeValueAsString(json))
-}
 
 /**
  * 获取查询参数，为空时无参数

@@ -1,6 +1,7 @@
 package top.vuhe.admin.spring.config
 
 import com.fasterxml.jackson.databind.Module
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.ktorm.database.Database
 import org.springframework.boot.web.servlet.FilterRegistrationBean
@@ -21,7 +22,12 @@ import javax.sql.DataSource
  * @author vuhe
  */
 @Configuration(proxyBeanMethods = false)
-class SystemConfiguration {
+class SystemConfiguration(mapper: ObjectMapper) {
+
+    init {
+        objectMapper = mapper
+    }
+
     /**
      * jackson 序列化时间
      */
@@ -48,7 +54,7 @@ class SystemConfiguration {
     fun loggingAspect(loggingFactory: LoggingFactory) = LoggingAspect(loggingFactory)
 
     /**
-     * 注册 database 作为 baen
+     * 注册 database 作为 bean
      */
     @Bean
     fun database(dataSource: DataSource): Database {
@@ -58,5 +64,6 @@ class SystemConfiguration {
 
     companion object {
         internal lateinit var database: Database
+        internal lateinit var objectMapper: ObjectMapper
     }
 }

@@ -9,7 +9,7 @@ import cn.hutool.system.oshi.OshiUtil
  */
 object MonitorInfo {
     val cpu = CpuInfo
-    val memory: MemoryInfo get() = MemoryInfo()
+    val memory = MemoryInfo
     val system = SystemInfo
     val disk: List<DiskInfo> get() = findDiskInfo()
 

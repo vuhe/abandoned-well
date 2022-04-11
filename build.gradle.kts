@@ -1,3 +1,5 @@
+@file:Suppress("SpellCheckingInspection")
+
 plugins {
     id("org.springframework.boot") version "2.6.6"
     kotlin("jvm") version "1.6.20"

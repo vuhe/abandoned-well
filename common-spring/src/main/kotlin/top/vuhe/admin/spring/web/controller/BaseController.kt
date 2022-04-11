@@ -12,23 +12,24 @@ import top.vuhe.admin.spring.web.response.ResultTree
  */
 abstract class BaseController {
 
-    /**
-     * bool 处理结果
-     */
-    protected inline fun boolResult(block: () -> Boolean): ResultObj<*> {
-        return if (block()) {
-            ResultObj.Success<Nothing>()
-        } else ResultObj.Fail<Nothing>()
-    }
+    protected fun success(message: String = "操作成功", data: Any? = null) = ResultObj.Success(message, data)
+
+    protected fun fail(code: Int = 500, message: String = "操作失败") = ResultObj.Fail(code, message)
 
     /**
      * bool 处理结果
      */
-    protected inline fun boolResult(
-        success: String = "修改成功", failure: String = "修改失败", block: () -> Boolean
-    ): ResultObj<*> = if (block()) {
-        ResultObj.Success<Nothing>(message = success)
-    } else ResultObj.Fail<Nothing>(message = failure)
+    protected inline fun boolResult(block: () -> Boolean): ResultObj {
+        return if (block()) success()
+        else fail()
+    }
+
+    /**
+     * 处理并返回信息
+     */
+    protected inline fun messageResult(block: () -> String): ResultObj {
+        return success(message = block())
+    }
 
     /**
      * 返回 Tree 数据

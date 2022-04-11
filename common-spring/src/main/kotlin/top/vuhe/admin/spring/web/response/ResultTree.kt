@@ -8,12 +8,11 @@ import java.io.Serializable
  * @param data 返回数据
  * @author vuhe
  */
-class ResultTree(
-    val data: Any
-) : Serializable {
+class ResultTree(val data: Any) : Serializable {
     /**
      * 状态信息
      */
+    @Suppress("unused")
     val status = object {
         val code = 200
         val message = "默认"

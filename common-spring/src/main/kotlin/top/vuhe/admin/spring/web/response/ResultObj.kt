@@ -11,17 +11,15 @@ import java.io.Serializable
  * @param data 返回数据
  * @author vuhe
  */
-sealed class ResultObj<out T> private constructor(
-    val success: Boolean,
-    val code: Int,
-    val msg: String,
-    val data: T?,
+sealed class ResultObj private constructor(
+    val success: Boolean, val code: Int,
+    val msg: String, val data: Any?,
 ) : Serializable {
 
-    class Success<out T>(code: Int = 200, message: String = "操作成功", data: T? = null) :
-        ResultObj<T>(code = code, msg = message, data = data, success = true)
+    class Success internal constructor(message: String = "操作成功", data: Any? = null) :
+        ResultObj(code = 200, msg = message, data = data, success = true)
 
-    class Fail<out T>(code: Int = 500, message: String = "操作失败", data: T? = null) :
-        ResultObj<T>(code = code, msg = message, data = data, success = false)
+    class Fail internal constructor(code: Int = 500, message: String = "操作失败") :
+        ResultObj(code = code, msg = message, data = null, success = false)
 
 }

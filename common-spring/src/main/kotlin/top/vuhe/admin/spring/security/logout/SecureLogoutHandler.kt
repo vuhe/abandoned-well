@@ -5,8 +5,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
-import top.vuhe.admin.api.network.writeJson
-import top.vuhe.admin.spring.web.response.ResultObj
+import top.vuhe.admin.spring.web.response.success
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -36,7 +35,6 @@ object SecureLogoutHandler : LogoutHandler, LogoutSuccessHandler {
         authentication: Authentication?
     ) {
         SecurityContextHolder.clearContext()
-        val result = ResultObj.Success<Nothing>(code = 200, message = "注销成功")
-        httpServletResponse.writeJson(result)
+        httpServletResponse.success(message = "注销成功")
     }
 }

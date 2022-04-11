@@ -5,8 +5,8 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
+import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.response.ResultObj
 import top.vuhe.admin.system.domain.SysPower
 import top.vuhe.admin.system.service.ISysPowerService
 
@@ -59,11 +59,9 @@ class SysPowerController(
      */
     @PostMapping("save")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:add')")
-    fun save(@RequestBody sysPower: SysPower): ResultObj<*> {
-        if (sysPower.parentId.isBlank()) {
-            return ResultObj.Fail<Nothing>(message = "请选择上级菜单")
-        }
-        return boolResult { sysPowerService.add(sysPower) }
+    fun save(@RequestBody sysPower: SysPower) = boolResult {
+        businessRequire(sysPower.parentId.isNotBlank()) { "请选择上级菜单" }
+        sysPowerService.add(sysPower)
     }
 
     /**
@@ -71,11 +69,9 @@ class SysPowerController(
      */
     @PutMapping("update")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:edit')")
-    fun update(@RequestBody sysPower: SysPower): ResultObj<*> {
-        if (sysPower.parentId.isBlank()) {
-            return ResultObj.Fail<Nothing>(message = "请选择上级菜单")
-        }
-        return boolResult { sysPowerService.modify(sysPower) }
+    fun update(@RequestBody sysPower: SysPower) = boolResult {
+        businessRequire(sysPower.parentId.isNotBlank()) { "请选择上级菜单" }
+        sysPowerService.modify(sysPower)
     }
 
     /**
@@ -83,11 +79,9 @@ class SysPowerController(
      */
     @DeleteMapping("remove/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:remove')")
-    fun remove(@PathVariable id: String): ResultObj<*> {
-        if (sysPowerService.getByParentId(id).isNotEmpty()) {
-            return ResultObj.Fail<Nothing>(message = "请先删除下级权限")
-        }
-        return boolResult { sysPowerService.remove(id) }
+    fun remove(@PathVariable id: String) = boolResult {
+        businessRequire(sysPowerService.getByParentId(id).isEmpty()) { "请先删除下级权限" }
+        sysPowerService.remove(id)
     }
 
     /**

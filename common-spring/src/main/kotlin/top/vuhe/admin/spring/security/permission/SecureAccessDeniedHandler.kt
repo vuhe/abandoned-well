@@ -3,8 +3,7 @@ package top.vuhe.admin.spring.security.permission
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.security.web.access.AccessDeniedHandler
 import top.vuhe.admin.api.network.isAjax
-import top.vuhe.admin.api.network.writeJson
-import top.vuhe.admin.spring.web.response.ResultObj
+import top.vuhe.admin.spring.web.response.fail
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -20,12 +19,8 @@ object SecureAccessDeniedHandler : AccessDeniedHandler {
         httpServletRequest: HttpServletRequest,
         httpServletResponse: HttpServletResponse,
         accessDeniedException: AccessDeniedException?
-    ) {
-        if (httpServletRequest.isAjax) {
-            val result = ResultObj.Fail<Nothing>(code = 403, message = "暂无权限")
-            httpServletResponse.writeJson(result)
-        } else {
-            httpServletResponse.sendRedirect("/error/403")
-        }
+    ) = httpServletResponse.run {
+        if (httpServletRequest.isAjax) fail(code = 403, message = "暂无权限")
+        else sendRedirect("/error/403")
     }
 }

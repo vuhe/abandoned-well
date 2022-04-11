@@ -5,9 +5,9 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
+import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.security.session.SecuritySessionManager
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.response.ResultObj
 import top.vuhe.admin.system.service.ISysUserService
 import java.time.Duration
 import java.time.LocalDateTime
@@ -57,16 +57,13 @@ class SysOnlineController(
      * 踢出用户（下线）
      */
     @DeleteMapping("/remove/{onlineId}")
-    fun remove(@PathVariable onlineId: String): ResultObj<*> {
+    fun remove(@PathVariable onlineId: String) = messageResult {
         sysUserService.getOneById(onlineId)?.let {
             // 不允许操作admin用户下线
-            if (it.admin) {
-                return ResultObj.Fail<Nothing>(message = "不允许操作超级管理员[admin]下线")
-            }
+            businessRequire(!it.admin) { "不允许操作超级管理员[admin]下线" }
             sessionRegistry.deleteSessionByUserId(it.userId)
-            return ResultObj.Success<Nothing>(message = "用户[${it.username}]已下线")
-        }
-        return ResultObj.Fail<Nothing>()
+            "用户[${it.username}]已下线"
+        } ?: "用户信息错误，请刷新重试"
     }
 
     class SysOnlineUser {

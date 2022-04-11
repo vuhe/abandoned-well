@@ -31,17 +31,11 @@ object SecuritySessionManager :
      * 使一个用户的所有 session 失效
      */
     fun deleteSessionByUserId(userId: String) {
-        val sessionList = getAllSessions(userId, false)
+        getAllSessions(userId, false).asSequence()
             .mapNotNull { sessions[it.sessionId] }
-        // 调用 session.invalidate()
-        // 它在使 session 失效后，系统会调用 sessionDestroyed() 清理信息
-        sessionList.forEach {
-            try {
-                it.invalidate()
-            } catch (_: IllegalStateException) {
-                // if it called, skip it
-            }
-        }
+            // 调用 session.invalidate()
+            // 它在使 session 失效后，系统会调用 sessionDestroyed() 清理信息
+            .forEach { kotlin.runCatching { it.invalidate() } }
     }
 
     /**

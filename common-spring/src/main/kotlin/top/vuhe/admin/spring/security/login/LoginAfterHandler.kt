@@ -12,10 +12,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.logging.LoggingType
-import top.vuhe.admin.api.network.writeJson
 import top.vuhe.admin.spring.security.exception.CaptchaException
 import top.vuhe.admin.spring.security.principal.UserSecurityService
-import top.vuhe.admin.spring.web.response.ResultObj
+import top.vuhe.admin.spring.web.response.fail
+import top.vuhe.admin.spring.web.response.success
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -45,8 +45,7 @@ class LoginAfterHandler(
         val userId = authentication.principal as String
         sysUserService.updateLoginTime(userId)
 
-        val result = ResultObj.Success<Nothing>(message = "登录成功")
-        response.writeJson(result)
+        response.success(message = "登录成功")
     }
 
     override fun onAuthenticationFailure(
@@ -63,14 +62,13 @@ class LoginAfterHandler(
             is DisabledException -> "用户未启用"
             else -> "登录失败"
         }
-        val result = ResultObj.Fail<Nothing>(code = 500, message = msg)
         sysLogService.record {
             it.title = "登录"
-            it.description = result.msg
+            it.description = msg
             it.businessType = BusinessType.OTHER
             it.success = false
             it.loggingType = LoggingType.LOGIN
         }
-        httpServletResponse.writeJson(result)
+        httpServletResponse.fail(code = 500, message = msg)
     }
 }

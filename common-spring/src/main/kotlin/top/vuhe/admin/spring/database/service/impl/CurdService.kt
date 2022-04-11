@@ -11,30 +11,18 @@ import top.vuhe.admin.spring.database.service.ICurdService
  * @author vuhe
  */
 abstract class CurdService<E : BaseEntity>(private val mapper: CurdMapper<E>) : ICurdService<E> {
-    override fun list(): List<E> {
-        return mapper.selectList()
-    }
+    override fun list(): List<E> = mapper.selectList()
 
-    override fun list(param: E): List<E> {
-        return mapper.selectList(param)
-    }
+    override fun list(param: E): List<E> = mapper.selectList(param)
 
-    override fun getOneById(id: String): E? {
-        return mapper.selectById(id)
-    }
+    override fun getOneById(id: String): E? = mapper.selectById(id)
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun add(entity: E): Boolean {
-        return mapper.insert(entity) > 0
-    }
+    override fun add(entity: E): Boolean = mapper.insert(entity) > 0
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun modify(entity: E): Boolean {
-        return mapper.update(entity) > 0
-    }
+    override fun modify(entity: E): Boolean = mapper.update(entity) > 0
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun batchRemove(ids: List<String>): Boolean {
-        return mapper.batchDelete(ids) > 0
-    }
+    override fun batchRemove(ids: List<String>): Boolean = mapper.batchDelete(ids) > 0
 }

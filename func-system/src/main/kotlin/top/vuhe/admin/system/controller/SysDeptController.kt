@@ -6,8 +6,8 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
+import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.response.ResultObj
 import top.vuhe.admin.system.domain.SysDept
 import top.vuhe.admin.system.service.ISysDeptService
 
@@ -85,11 +85,9 @@ class SysDeptController(
      */
     @DeleteMapping("remove/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:remove')")
-    fun remove(@PathVariable id: String): ResultObj<*> {
-        if (sysDeptService.getByParentId(id).isNotEmpty()) {
-            return ResultObj.Fail<Nothing>(message = "请先删除下级部门")
-        }
-        return boolResult { sysDeptService.remove(id) }
+    fun remove(@PathVariable id: String) = boolResult {
+        businessRequire(sysDeptService.getByParentId(id).isEmpty()) { "请先删除下级部门" }
+        sysDeptService.remove(id)
     }
 
     /**

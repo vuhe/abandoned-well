@@ -9,17 +9,7 @@ import java.io.Serializable
  * @param count 消息总量
  * @author vuhe
  */
-class ResultTable(
-    val data: List<*>,
-    val count: Long? = null
-) : Serializable {
-    /**
-     * 状态码
-     */
+class ResultTable(val data: List<*>, val count: Long? = null) : Serializable {
     val code: Int = 0
-
-    /**
-     * 提示消息
-     */
-    val msg: String? = null
+    val msg: String = ""
 }

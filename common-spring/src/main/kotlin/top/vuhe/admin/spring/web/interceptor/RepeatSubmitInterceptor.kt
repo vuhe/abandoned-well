@@ -4,11 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
-import top.vuhe.admin.api.network.writeJson
 import top.vuhe.admin.spring.web.annotation.RepeatSubmit
-import top.vuhe.admin.spring.web.response.ResultObj
+import top.vuhe.admin.spring.web.response.fail
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpSession
 
 /**
  * ### 防止重复提交拦截器
@@ -30,10 +30,7 @@ class RepeatSubmitInterceptor(
             val method = handler.method
             val annotation = method.getAnnotation(RepeatSubmit::class.java)
             if (annotation != null && isRepeatSubmit(request)) {
-                val result = ResultObj.Fail<Nothing>(message = "不允许重复提交，请稍后再试")
-                response.setHeader("Content-type", "application/json;charset=UTF-8")
-                response.characterEncoding = "UTF-8"
-                response.writeJson(result)
+                response.fail(message = "不允许重复提交，请稍后再试")
                 false
             } else true
         } else {
@@ -51,20 +48,23 @@ class RepeatSubmitInterceptor(
 
         val session = request.session
 
-        @Suppress("UNCHECKED_CAST")
-        val sessionObj = session.getAttribute(SESSION_REPEAT_KEY) as? HashMap<String, SubmitRepeatFlag>
-            ?: HashMap()
+        val repeatMap = session.repeatData
 
         // 请求地址
         val url = request.requestURI
         // 判断是否为重复提交，判断见类的 equals
-        if (sessionObj[url] == repeatFlag) return true
+        if (repeatMap[url] == repeatFlag) return true
 
         // 非重复提交 保存参数信息
-        sessionObj[url] = repeatFlag
-        session.setAttribute(SESSION_REPEAT_KEY, sessionObj)
+        repeatMap[url] = repeatFlag
+        session.repeatData = repeatMap
         return false
     }
+
+    @Suppress("UNCHECKED_CAST")
+    private var HttpSession.repeatData: HashMap<String, SubmitRepeatFlag>
+        get() = getAttribute("repeatData") as? HashMap<String, SubmitRepeatFlag> ?: HashMap()
+        set(value) = setAttribute("repeatData", value)
 
     /**
      * 用于判断参数是否相同
@@ -78,22 +78,12 @@ class RepeatSubmitInterceptor(
             if (other == null) return false
             return if (other is SubmitRepeatFlag) {
                 // 两次 url、参数一致，且间隔时间小于设定，为一致
+                // 间隔时间 默认10秒
                 repeatParams == other.repeatParams &&
-                        repeatTime - other.repeatTime < intervalTime * 1000L
+                        repeatTime - other.repeatTime < 10 * 1000L
             } else false
         }
 
         override fun hashCode(): Int = repeatParams.hashCode()
-    }
-
-    companion object {
-        /**
-         * 间隔时间，单位:秒 默认10秒
-         *
-         * 两次相同参数的请求，如果间隔时间大于该参数，系统不会认定为重复提交的数据
-         */
-        private var intervalTime = 10
-
-        private const val SESSION_REPEAT_KEY = "repeatData"
     }
 }

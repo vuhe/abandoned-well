@@ -15,7 +15,6 @@ dependencies {
     implementation("org.jsoup:jsoup:1.14.3")
 
     // 系统信息获取
-    implementation("cn.hutool:hutool-extra:5.7.22")
     implementation("cn.hutool:hutool-system:5.7.22")
     implementation("com.github.oshi:oshi-core-java11:6.1.5")
 
