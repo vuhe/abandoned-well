@@ -1,8 +1,8 @@
 package top.vuhe.admin.system.domain
 
-import top.vuhe.admin.api.enums.BusinessType
-import top.vuhe.admin.api.enums.LoggingType
+import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.LogRecord
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.database.entity.BaseEntity
 
 /**

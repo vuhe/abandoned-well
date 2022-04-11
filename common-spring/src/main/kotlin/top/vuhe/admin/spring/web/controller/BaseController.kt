@@ -15,7 +15,7 @@ abstract class BaseController {
     /**
      * bool 处理结果
      */
-    protected fun boolResult(block: () -> Boolean): ResultObj<*> {
+    protected inline fun boolResult(block: () -> Boolean): ResultObj<*> {
         return if (block()) {
             ResultObj.Success<Nothing>()
         } else ResultObj.Fail<Nothing>()
@@ -24,21 +24,21 @@ abstract class BaseController {
     /**
      * bool 处理结果
      */
-    protected fun boolResult(success: String, failure: String, block: () -> Boolean): ResultObj<*> {
-        return if (block()) {
-            ResultObj.Success<Nothing>(message = success)
-        } else ResultObj.Fail<Nothing>(message = failure)
-    }
+    protected inline fun boolResult(
+        success: String = "修改成功", failure: String = "修改失败", block: () -> Boolean
+    ): ResultObj<*> = if (block()) {
+        ResultObj.Success<Nothing>(message = success)
+    } else ResultObj.Fail<Nothing>(message = failure)
 
     /**
      * 返回 Tree 数据
      */
-    protected fun dataTree(block: () -> Any) = ResultTree(block())
+    protected inline fun dataTree(block: () -> Any) = ResultTree(block())
 
     /**
      * 返回数据表格数据 分页
      */
-    protected fun <T : Any> pageTable(block: () -> TablePage<T>): ResultTable {
+    protected inline fun <T : Any> pageTable(block: () -> TablePage<T>): ResultTable {
         val page = block()
         return ResultTable(page.list, page.count.toLong())
     }
@@ -46,10 +46,10 @@ abstract class BaseController {
     /**
      * 返回数据表格数据
      */
-    protected fun dataTable(block: () -> List<*>) = ResultTable(block())
+    protected inline fun dataTable(block: () -> List<*>) = ResultTable(block())
 
     /**
      * 返回树状表格数据 分页
      */
-    protected fun treeTable(block: () -> List<*>) = ResultTable(block())
+    protected inline fun treeTable(block: () -> List<*>) = ResultTable(block())
 }

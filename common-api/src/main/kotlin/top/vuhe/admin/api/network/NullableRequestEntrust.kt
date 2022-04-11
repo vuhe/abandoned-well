@@ -12,12 +12,8 @@ import kotlin.reflect.KProperty
  *
  * @author vuhe
  */
-internal object NullableRequestEntrust : ReadOnlyProperty<Any, HttpServletRequest?> {
-    override fun getValue(thisRef: Any, property: KProperty<*>): HttpServletRequest? {
-        return try {
-            (RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes)?.request
-        } catch (e: Exception) {
-            null
-        }
-    }
+internal object NullableRequestEntrust : ReadOnlyProperty<Any?, HttpServletRequest?> {
+    override fun getValue(thisRef: Any?, property: KProperty<*>): HttpServletRequest? = kotlin.runCatching {
+        (RequestContextHolder.getRequestAttributes() as? ServletRequestAttributes)?.request
+    }.getOrNull()
 }

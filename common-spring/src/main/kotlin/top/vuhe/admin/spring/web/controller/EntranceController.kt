@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.enums.BusinessType
+import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.isAuthentication
 import top.vuhe.admin.spring.security.session.SecuritySessionManager

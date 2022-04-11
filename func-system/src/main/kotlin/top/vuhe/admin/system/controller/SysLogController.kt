@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
-import top.vuhe.admin.api.enums.LoggingType
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.spring.web.response.ResultTable

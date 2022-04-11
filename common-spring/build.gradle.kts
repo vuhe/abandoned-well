@@ -17,7 +17,7 @@ dependencies {
     api("org.thymeleaf.extras:thymeleaf-extras-java8time")
 
     // 系统数据库组件
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
+    api("org.springframework.boot:spring-boot-starter-jdbc")
     api("org.ktorm:ktorm-core:3.4.1")
     implementation("org.ktorm:ktorm-jackson:3.4.1")
     implementation("org.ktorm:ktorm-support-mysql:3.4.1")

@@ -21,19 +21,22 @@ class XssHttpServletRequest(
             && !isIncludeRichText
         ) return super.getParameter(name)
 
-        val name0 = name?.let { clean(it) }
-        return super.getParameter(name0)?.let { clean(it) }
+        return super.getParameter(name.cleanText()).cleanText()
     }
 
     override fun getParameterValues(name: String?): Array<String?>? {
         return super.getParameterValues(name)?.also {
-            it.forEachIndexed { i, str -> it[i] = str?.let { s -> clean(s) } }
+            it.forEachIndexed { i, str -> it[i] = str.cleanText() }
         }
     }
 
     override fun getHeader(name: String?): String? {
-        val name0 = name?.let { clean(it) }
-        return super.getHeader(name0)?.let { clean(it) }
+        return super.getHeader(name.cleanText()).cleanText()
+    }
+
+    private fun String?.cleanText(): String? {
+        return if (isNullOrBlank()) this
+        else Jsoup.clean(this, "", safeList, outputSettings)
     }
 
     companion object {
@@ -42,10 +45,5 @@ class XssHttpServletRequest(
         }
 
         private val outputSettings = Document.OutputSettings().prettyPrint(false)
-
-        private fun clean(content: String): String {
-            return if (content.isBlank()) content
-            else Jsoup.clean(content, "", safeList, outputSettings)
-        }
     }
 }

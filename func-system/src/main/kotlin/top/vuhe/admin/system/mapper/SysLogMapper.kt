@@ -2,7 +2,7 @@ package top.vuhe.admin.system.mapper
 
 import org.ktorm.dsl.*
 import org.ktorm.schema.Column
-import top.vuhe.admin.api.enums.LoggingType
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.database.mapper.CurdMapper
 import top.vuhe.admin.system.domain.SysLog
 import java.time.LocalDateTime

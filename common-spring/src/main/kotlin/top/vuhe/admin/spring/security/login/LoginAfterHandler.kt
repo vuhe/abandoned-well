@@ -9,9 +9,9 @@ import org.springframework.security.core.AuthenticationException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
-import top.vuhe.admin.api.enums.BusinessType
-import top.vuhe.admin.api.enums.LoggingType
+import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.LoggingFactory
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.api.network.writeJson
 import top.vuhe.admin.spring.security.exception.CaptchaException
 import top.vuhe.admin.spring.security.principal.UserSecurityService

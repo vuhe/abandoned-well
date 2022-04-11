@@ -1,7 +1,5 @@
 package top.vuhe.admin.api.logging
 
-import top.vuhe.admin.api.enums.BusinessType
-
 /**
  * ### 系统日志注解
  *

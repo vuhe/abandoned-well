@@ -15,7 +15,7 @@ private val objectMapper: ObjectMapper by lazy { SpringUtil.getBean(ObjectMapper
  *
  * @return nullable [HttpServletRequest]
  */
-fun requestContext(): ReadOnlyProperty<Any, HttpServletRequest?> = NullableRequestEntrust
+fun requestContext(): ReadOnlyProperty<Any?, HttpServletRequest?> = NullableRequestEntrust
 
 private val HttpServletRequest.xRequestedWith: String
     get() = getHeader("X-Requested-With") ?: ""

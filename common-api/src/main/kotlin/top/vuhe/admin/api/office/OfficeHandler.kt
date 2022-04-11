@@ -14,6 +14,11 @@ import javax.servlet.http.HttpServletResponse
  * @author vuhe
  */
 object OfficeHandler {
+    private const val utf8 = "UTF-8"
+    private const val excelType = "application/vnd.ms-excel"
+
+    @Suppress("SpellCheckingInspection")
+    private const val wordType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
 
     /**
      * 通过模版导出 excel
@@ -27,13 +32,10 @@ object OfficeHandler {
         list: List<T>, templateUrl: String,
         outName: String, response: HttpServletResponse
     ) {
-        val workbook = ExcelTemplateExport.templateExport(list, templateUrl)
-        response.contentType = "application/vnd.ms-excel"
-        response.characterEncoding = "utf-8"
-        // 这里URLEncoder.encode可以防止中文乱码
-        val fileName = URLEncoder.encode(outName, "UTF-8").replace("\\+", "%20")
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8''$fileName.xls")
-        ExcelTemplateExport.write(workbook, response.outputStream)
+        response.contentType = excelType
+        response.characterEncoding = utf8
+        response.filename = "${outName.urlCode()}.xls"
+        TemplateExcelExport.templateExport(list, templateUrl).writeTo(response.outputStream)
     }
 
     /**
@@ -48,13 +50,19 @@ object OfficeHandler {
         list: List<T>, templateUrl: String,
         outName: String, response: HttpServletResponse
     ) {
-        val doc = WordTemplateExport.templateWord(list, templateUrl)
-        response.contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        response.characterEncoding = "utf-8"
-        // 这里URLEncoder.encode可以防止中文乱码
-        val fileName = URLEncoder.encode(outName, "UTF-8").replace("\\+", "%20")
-        response.setHeader("Content-disposition", "attachment;filename*=utf-8''$fileName.docx")
-        WordTemplateExport.write(doc, response.outputStream)
+        response.contentType = wordType
+        response.characterEncoding = utf8
+        response.filename = "${outName.urlCode()}.docx"
+        TemplateWordExport.templateWord(list, templateUrl).writeTo(response.outputStream)
     }
+
+    private fun String.urlCode(): String {
+        // 这里URLEncoder.encode可以防止中文乱码
+        return URLEncoder.encode(this, utf8).replace("\\+", "%20")
+    }
+
+    private var HttpServletResponse.filename: String
+        get() = throw UnsupportedOperationException("")
+        set(value) = setHeader("Content-disposition", "attachment;filename*=utf-8''$value")
 
 }

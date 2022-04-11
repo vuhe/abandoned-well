@@ -2,8 +2,8 @@ package top.vuhe.admin.system.service.impl
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import top.vuhe.admin.api.enums.LoggingType
 import top.vuhe.admin.api.logging.LogRecord
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.api.network.browser
 import top.vuhe.admin.api.network.queryParam
 import top.vuhe.admin.api.network.requestContext

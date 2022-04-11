@@ -1,7 +1,7 @@
 package top.vuhe.admin.system.service
 
-import top.vuhe.admin.api.enums.LoggingType
 import top.vuhe.admin.api.logging.LoggingFactory
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.system.domain.SysLog
 import java.time.LocalDateTime
 

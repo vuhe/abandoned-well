@@ -8,7 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
-import top.vuhe.admin.api.enums.BusinessType
+import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
 import top.vuhe.admin.spring.web.annotation.RepeatSubmit
@@ -124,12 +124,11 @@ class SysUserController @Autowired constructor(
     @PutMapping("editPasswordAdmin")
     @Operation(summary = "管理员修改用户密码")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:editPasswordAdmin')")
-    fun editPasswordAdmin(@RequestBody editPassword: EditPassword) =
-        boolResult("修改成功", "修改失败") {
-            sysUserService.modifyPassword(
-                editPassword.userId, editPassword.newPassword
-            )
-        }
+    fun editPasswordAdmin(@RequestBody editPassword: EditPassword) = boolResult {
+        sysUserService.modifyPassword(
+            editPassword.userId, editPassword.newPassword
+        )
+    }
 
     /**
      * 用户密码修改接口
@@ -152,7 +151,7 @@ class SysUserController @Autowired constructor(
         if (newPassword != confirmPassword) {
             return ResultObj.Fail<Nothing>(message = "两次密码输入不一致")
         }
-        return boolResult("修改成功", "修改失败") {
+        return boolResult {
             sysUserService.modifyPassword(sysUser?.userId ?: "", newPassword)
         }
     }
