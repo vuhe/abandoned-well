@@ -18,8 +18,7 @@ import top.vuhe.admin.spring.security.session.SecuritySessionManager
  * @author vuhe
  */
 abstract class SpringSecurityAdapter(
-    sysLogService: LoggingFactory,
-    private val userDetailsService: UserSecurityService,
+    sysLogService: LoggingFactory, userDetailsService: UserSecurityService,
 ) : WebSecurityConfigurerAdapter() {
     protected val loginAfterHandler = LoginAfterHandler(sysLogService, userDetailsService)
     protected val loginAuthenticationProvider = LoginAuthenticationProvider(userDetailsService)

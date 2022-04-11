@@ -2,6 +2,7 @@ package top.vuhe.admin.spring.config
 
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import org.ktorm.database.Database
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -12,6 +13,7 @@ import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import javax.sql.DataSource
 
 /**
  * ### 核心配置
@@ -19,7 +21,7 @@ import java.time.LocalTime
  * @author vuhe
  */
 @Configuration(proxyBeanMethods = false)
-class CoreConfiguration {
+class SystemConfiguration {
     /**
      * jackson 序列化时间
      */
@@ -44,4 +46,17 @@ class CoreConfiguration {
      */
     @Bean
     fun loggingAspect(loggingFactory: LoggingFactory) = LoggingAspect(loggingFactory)
+
+    /**
+     * 注册 database 作为 baen
+     */
+    @Bean
+    fun database(dataSource: DataSource): Database {
+        database = Database.connectWithSpringSupport(dataSource)
+        return database
+    }
+
+    companion object {
+        internal lateinit var database: Database
+    }
 }

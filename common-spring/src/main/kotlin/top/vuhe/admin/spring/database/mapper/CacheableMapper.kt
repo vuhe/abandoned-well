@@ -8,7 +8,7 @@ import org.ktorm.schema.Column
 import org.ktorm.schema.ColumnDeclaring
 import top.vuhe.admin.api.cache.ProjectCache
 import top.vuhe.admin.api.text.UUIDGenerator
-import top.vuhe.admin.spring.config.KtormConfiguration
+import top.vuhe.admin.spring.config.SystemConfiguration
 import top.vuhe.admin.spring.database.entity.BaseEntity
 import kotlin.reflect.full.createInstance
 
@@ -18,7 +18,7 @@ import kotlin.reflect.full.createInstance
  * @author vuhe
  */
 abstract class CacheableMapper<E : BaseEntity>(tableName: String) : BaseTable<E>(tableName) {
-    protected val database: Database get() = KtormConfiguration.database
+    protected val database: Database get() = SystemConfiguration.database
     private var cacheEnable: Boolean = false
 
     init {

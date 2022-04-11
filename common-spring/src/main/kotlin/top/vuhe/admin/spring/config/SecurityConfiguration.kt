@@ -22,9 +22,8 @@ import top.vuhe.admin.spring.security.principal.UserSecurityService
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecureConfiguration(
-    sysLogService: LoggingFactory,
-    userDetailsService: UserSecurityService
+class SecurityConfiguration(
+    sysLogService: LoggingFactory, userDetailsService: UserSecurityService
 ) : SpringSecurityAdapter(sysLogService, userDetailsService) {
     /**
      * 身份认证接口

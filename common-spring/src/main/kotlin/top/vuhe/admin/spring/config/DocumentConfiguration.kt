@@ -17,7 +17,7 @@ import javax.annotation.PostConstruct
  */
 @Configuration
 @ConditionalOnClass(GroupedOpenApi::class)
-class SwaggerConfiguration {
+class DocumentConfiguration {
     @PostConstruct
     @Suppress("SpellCheckingInspection")
     fun setProperties() {
@@ -27,18 +27,19 @@ class SwaggerConfiguration {
     @Bean
     fun apiInfo() = OpenAPI().apply {
         info = Info().apply {
-            title("井管理系统 API")
-            description("废弃井管理系统")
-            version("Release 1.0.0")
-            termsOfService("https://github.com/vuhe")
-            contact(Contact().apply {
+            title = "井管理系统 API"
+            description = "废弃井管理系统"
+            version = "Release 1.0.0"
+            termsOfService = "https://gitee.com/vuhe"
+            contact = Contact().apply {
                 name = "vuhe"
-                url = "https://github.com/vuhe"
+                url = "https://gitee.com/vuhe"
                 email = "zhuhe202@qq.com"
-            })
-            license = License()
-                .name("MIT")
-                .url("https://github.com/vuhe/AdminTemplate/blob/main/LICENSE")
+            }
+            license = License().apply {
+                name = "MIT"
+                url = "https://github.com/vuhe/AdminTemplate/blob/main/LICENSE"
+            }
         }
     }
 }
