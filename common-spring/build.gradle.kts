@@ -3,6 +3,10 @@
 dependencies {
     // 系统基础组件
     api(project(":common-api"))
+    api("org.springframework.boot:spring-boot-starter-web")
+
+    // 系统切面组件
+    implementation("org.springframework.boot:spring-boot-starter-aop")
 
     // 系统安全组件
     api("org.springframework.boot:spring-boot-starter-security")

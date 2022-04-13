@@ -27,9 +27,7 @@ allprojects {
     }
 
     dependencies {
-        implementation(kotlin("reflect"))
         implementation(platform(org.springframework.boot.gradle.plugin.SpringBootPlugin.BOM_COORDINATES))
-        implementation("org.springframework.boot:spring-boot-starter-web")
     }
 
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {

@@ -4,12 +4,14 @@ import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.ktorm.database.Database
+import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import top.vuhe.admin.api.jackson.addSerializer
 import top.vuhe.admin.api.logging.LoggingAspect
 import top.vuhe.admin.api.logging.LoggingFactory
+import top.vuhe.admin.api.monitor.MonitorInfo
 import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -61,6 +63,12 @@ class SystemConfiguration(mapper: ObjectMapper) {
         database = Database.connectWithSpringSupport(dataSource)
         return database
     }
+
+    /**
+     * 硬件信息刷新任务
+     */
+    @Bean
+    fun hardwareRefresher() = CommandLineRunner { MonitorInfo.refresh() }
 
     companion object {
         internal lateinit var database: Database

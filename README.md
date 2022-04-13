@@ -16,8 +16,8 @@
 ### 语言及环境
 
 - Java: target:11.x, dependency: 17.x
-- Kotlin: 1.6.x
-- spring boot: 2.6.x
+- Kotlin: 1.6.20
+- spring boot: 2.6.6
 - ktorm(database dependency): 3.4.x
 - springdoc-openapi(system doc): 1.6.x
 
