@@ -13,6 +13,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">省辖市：</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="city" placeholder="请输入城市" th:field="*{city}"
                  type="text"/>
         </div>
@@ -20,6 +21,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">区/县：</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="county" placeholder="请输入区县" th:field="*{county}"
                  type="text"/>
         </div>
@@ -27,6 +29,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">行政代码：</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="districtCode" placeholder="请输入行政区划代码"
                  th:field="*{districtCode}"
                  type="text"/>
@@ -35,6 +38,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">水文代码：</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input lay-skin="primary" name="regionCodeId"
                  th:checked="${code.checked}" th:each="code:${codes}" th:title="${code.code}"
                  th:value="${code.id}" type="radio">
@@ -43,6 +47,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">排序码：</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="sort" placeholder="请输入排序码" th:field="*{sort}"
                  type="text"/>
         </div>

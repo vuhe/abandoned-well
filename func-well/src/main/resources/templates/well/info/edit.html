@@ -14,6 +14,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">井名称</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="name" placeholder="请输入名称"
                  type="text" th:field="*{name}"/>
         </div>
@@ -21,6 +22,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">原始编号</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="originCode" placeholder="请输入原编号"
                  type="text" th:field="*{originCode}"/>
         </div>
@@ -56,6 +58,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">井区域</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <select name="regionId" lay-verify="required">
             <option value=""></option>
             <option th:each="region:${regions}" th:value="${region.id}"
@@ -68,6 +71,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">乡镇(街道办)</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="street" placeholder="请输入乡镇"
                  type="text" th:field="*{street}"/>
         </div>
@@ -75,6 +79,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">村(街)</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="address" placeholder="请输入村(街)"
                  type="text" th:field="*{address}"/>
         </div>
@@ -82,6 +87,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">所属单位</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="company" placeholder="请输入所属单位"
                  type="text" th:field="*{company}"/>
         </div>
@@ -89,6 +95,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">建井时间</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input id="digTime" class="layui-input" lay-verify="required" name="digTime"
                  th:value="${#temporals.format(well.digTime, 'yyyy-MM-dd')}"
                  placeholder="请输入时间" type="text"/>
@@ -97,6 +104,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">联系人</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="contacts" placeholder="请输入联系人"
                  type="text" th:field="*{contacts}"/>
         </div>
@@ -104,6 +112,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">联系电话</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="phone" placeholder="请输入联系电话"
                  type="text" th:field="*{phone}"/>
         </div>
@@ -111,6 +120,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">废弃原因</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="abandonRemark" placeholder="请输入废弃原因"
                  type="text" th:field="*{abandonRemark}"/>
         </div>
@@ -118,6 +128,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">废弃时间</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input id="abandonTime" class="layui-input" lay-verify="required" name="abandonTime"
                  th:value="${#temporals.format(well.abandonTime, 'yyyy-MM-dd')}"
                  placeholder="请输入时间" type="text"/>
@@ -127,16 +138,19 @@
         <div class="layui-inline">
           <label class="layui-form-label">经度</label>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lng1" placeholder="度" autocomplete="off"
                    th:field="*{lng1}" class="layui-input">
           </div>
           <div class="layui-form-mid">°</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lng2" placeholder="分" autocomplete="off"
                    th:field="*{lng2}" class="layui-input">
           </div>
           <div class="layui-form-mid">'</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lng3" placeholder="秒" autocomplete="off"
                    th:field="*{lng3}" class="layui-input">
           </div>
@@ -147,16 +161,19 @@
         <div class="layui-inline">
           <label class="layui-form-label">纬度</label>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lat1" placeholder="度" autocomplete="off"
                    th:field="*{lat1}" class="layui-input">
           </div>
           <div class="layui-form-mid">°</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lat2" placeholder="分" autocomplete="off"
                    th:field="*{lat2}" class="layui-input">
           </div>
           <div class="layui-form-mid">'</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lat3" placeholder="秒" autocomplete="off"
                    th:field="*{lat3}" class="layui-input">
           </div>
@@ -166,6 +183,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">填表人</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="informer" placeholder="请输入填表人"
                  type="text" th:field="*{informer}"/>
         </div>
@@ -173,6 +191,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">排查人</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input class="layui-input" lay-verify="required" name="investigator" placeholder="请输入排查人"
                  type="text" th:field="*{investigator}"/>
         </div>
@@ -180,6 +199,7 @@
       <div class="layui-form-item">
         <label class="layui-form-label">填表时间</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input id="informTime" class="layui-input" lay-verify="required" name="informTime"
                  th:value="${#temporals.format(well.informTime, 'yyyy-MM-dd')}"
                  placeholder="请输入时间" type="text"/>

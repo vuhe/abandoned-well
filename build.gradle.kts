@@ -18,7 +18,7 @@ allprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = "top.vuhe"
-    version = "0.2.0-SNAPSHOT"
+    version = "0.3.0"
     java.sourceCompatibility = JavaVersion.VERSION_11
 
     repositories {

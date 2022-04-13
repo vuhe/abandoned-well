@@ -11,37 +11,37 @@
     <div class="main-container">
       <div class="main-container">
         <div class="layui-form-item layui-hide">
-          <label class="layui-form-label">编号</label>
+          <label for="userId" class="layui-form-label">编号</label>
           <div class="layui-input-block">
-            <input autocomplete="off" class="layui-input" lay-verify="required" name="userId"
+            <input id="userId" autocomplete="off" class="layui-input" lay-verify="required" name="userId"
                    placeholder="请输入标题" th:value="${sysUser.userId}" type="text">
           </div>
         </div>
         <div class="layui-form-item">
-          <label class="layui-form-label">账号</label>
+          <label for="username" class="layui-form-label">账号</label>
           <div class="layui-input-block">
-            <input autocomplete="off" class="layui-input" lay-verify="required" name="username"
+            <input id="username" autocomplete="off" class="layui-input" lay-verify="required" name="username"
                    placeholder="请输入标题" th:value="${sysUser.username}" type="text">
           </div>
         </div>
         <div class="layui-form-item">
-          <label class="layui-form-label">姓名</label>
+          <label for="realName" class="layui-form-label">姓名</label>
           <div class="layui-input-block">
-            <input autocomplete="off" class="layui-input" lay-verify="required" name="realName"
+            <input id="realName" autocomplete="off" class="layui-input" lay-verify="required" name="realName"
                    placeholder="请输入标题" th:value="${sysUser.realName}" type="text">
           </div>
         </div>
         <div class="layui-form-item">
-          <label class="layui-form-label">邮箱</label>
+          <label for="email" class="layui-form-label">邮箱</label>
           <div class="layui-input-block">
-            <input autocomplete="off" class="layui-input" name="email"
+            <input id="email" autocomplete="off" class="layui-input" name="email"
                    placeholder="请输入标题" th:value="${sysUser.email}" type="text">
           </div>
         </div>
         <div class="layui-form-item">
-          <label class="layui-form-label">电话</label>
+          <label for="phone" class="layui-form-label">电话</label>
           <div class="layui-input-block">
-            <input autocomplete="off" class="layui-input" name="phone"
+            <input id="phone" autocomplete="off" class="layui-input" name="phone"
                    placeholder="请输入标题" th:value="${sysUser.phone}" type="text">
           </div>
         </div>
@@ -61,6 +61,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label">角色</label>
           <div class="layui-input-block">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input lay-skin="primary" name="roleIds"
                    th:checked="${sysRole.checked}" th:each="sysRole:${sysRoles}" th:title="${sysRole.roleName}"
                    th:value="${sysRole.roleId}" type="checkbox">
@@ -88,9 +89,9 @@
   layui.use(['form', 'jquery', 'dtree'], function () {
     let form = layui.form;
     let $ = layui.jquery;
-    let dtree = layui.dtree;
+    let dTree = layui.dtree;
 
-    dtree.renderSelect({
+    dTree.renderSelect({
       elem: "#selectParent",
       url: "/system/dept/tree",
       method: 'get',
