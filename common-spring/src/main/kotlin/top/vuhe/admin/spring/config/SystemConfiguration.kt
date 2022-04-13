@@ -1,7 +1,6 @@
 package top.vuhe.admin.spring.config
 
 import com.fasterxml.jackson.databind.Module
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.ktorm.database.Database
 import org.springframework.boot.CommandLineRunner
@@ -24,11 +23,7 @@ import javax.sql.DataSource
  * @author vuhe
  */
 @Configuration(proxyBeanMethods = false)
-class SystemConfiguration(mapper: ObjectMapper) {
-
-    init {
-        objectMapper = mapper
-    }
+class SystemConfiguration {
 
     /**
      * jackson 序列化时间
@@ -60,8 +55,7 @@ class SystemConfiguration(mapper: ObjectMapper) {
      */
     @Bean
     fun database(dataSource: DataSource): Database {
-        database = Database.connectWithSpringSupport(dataSource)
-        return database
+        return Database.connectWithSpringSupport(dataSource)
     }
 
     /**
@@ -69,9 +63,4 @@ class SystemConfiguration(mapper: ObjectMapper) {
      */
     @Bean
     fun hardwareRefresher() = CommandLineRunner { MonitorInfo.refresh() }
-
-    companion object {
-        internal lateinit var database: Database
-        internal lateinit var objectMapper: ObjectMapper
-    }
 }

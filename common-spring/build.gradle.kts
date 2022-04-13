@@ -6,10 +6,10 @@ dependencies {
     api("org.springframework.boot:spring-boot-starter-web")
 
     // 系统切面组件
-    implementation("org.springframework.boot:spring-boot-starter-aop")
+    implementation("org.springframework.boot:spring-boot-starter-aop:2.6.6")
 
     // 系统安全组件
-    api("org.springframework.boot:spring-boot-starter-security")
+    api("org.springframework.boot:spring-boot-starter-security:2.6.6")
     implementation("com.github.whvcse:easy-captcha:1.6.2")
 
     // 系统校验组件
@@ -28,6 +28,6 @@ dependencies {
     implementation("mysql:mysql-connector-java")
 
     // 系统文档组件
-    api("org.springdoc:springdoc-openapi-ui:1.6.6")
-    api("org.springdoc:springdoc-openapi-kotlin:1.6.6")
+    api("org.springdoc:springdoc-openapi-ui:1.6.7")
+    api("org.springdoc:springdoc-openapi-kotlin:1.6.7")
 }

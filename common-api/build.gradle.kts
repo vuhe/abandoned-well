@@ -6,6 +6,7 @@ dependencies {
 
     // hutool 工具包
     implementation("cn.hutool:hutool-core:5.7.22")
+    implementation("cn.hutool:hutool-extra:5.7.22")
 
     // jackson 工具
     compileOnly("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")

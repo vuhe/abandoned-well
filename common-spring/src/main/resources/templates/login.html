@@ -5,14 +5,9 @@
   <th:block th:include="include :: header"/>
   <link rel="stylesheet" th:href="@{/admin/css/other/login.css}"/>
   <title>登录</title>
-  <style>
-    body {
-      background: url(/admin/images/login.svg);
-    }
-  </style>
 </head>
 <!-- 代 码 结 构 -->
-<body>
+<body background="/admin/images/login.svg">
 <form action="javascript:void(0);" class="layui-form">
   <div class="layui-form-item">
     <img class="logo" src="/admin/images/logo.png" alt="logo"/>
@@ -86,25 +81,17 @@
     setInterval(function () {
       document.getElementById("captchaImage").src = captchaPath + "?" + Math.random();
     }, 30 * 1000);
-    validateKickout();
+    validateInvalid();
   })
 </script>
 <script>
-  if (window != top) {
+  if (window !== top) {
     top.location.href = location.href;
   }
 
-  function validateKickout() {
-    if (getParam("abnormalout") == 1) {
-      layer.alert("<span style='color: red'>您已在别处登录，请您修改密码或重新登录</span>", {
-          icon: 0,
-          title: "系统提示"
-        },
-        function (index) {
-          layer.close(index);
-        });
-    } else if (getParam("sessionout") == 1) {
-      layer.alert("<span style='color: red'>登录已过期，请重新登录</span>", {
+  function validateInvalid() {
+    if (getFail() === "invalid") {
+      layer.alert("<span style='color: red'>登录已失效，请重新登录</span>", {
           icon: 0,
           title: "系统提示"
         },
@@ -114,8 +101,8 @@
     }
   }
 
-  function getParam(paramName) {
-    let reg = new RegExp("(^|&)" + paramName + "=([^&]*)(&|$)");
+  function getFail() {
+    let reg = new RegExp("(^|&)fail=([^&]*)(&|$)");
     let r = window.location.search.substring(1).match(reg);
     if (r != null) return decodeURI(r[2]);
     return null;

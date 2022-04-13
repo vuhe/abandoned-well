@@ -82,6 +82,6 @@ object SecuritySessionManager :
      * session 过期后的跳转
      */
     override fun onExpiredSessionDetected(event: SessionInformationExpiredEvent) {
-        redirectStrategy.sendRedirect(event.request, event.response, "/login?abnormalout=1")
+        redirectStrategy.sendRedirect(event.request, event.response, "/login?fail=invalid")
     }
 }
