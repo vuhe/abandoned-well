@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('新增辖区')"/>
+  <th:block th:include="include :: header"/>
+  <title>新增辖区</title>
 </head>
 <body>
 <form action="javascript:void(0);" class="layui-form">
@@ -9,39 +11,40 @@
     <div class="main-container">
 
       <div class="layui-form-item">
-        <label class="layui-form-label">省辖市：</label>
+        <label for="city" class="layui-form-label">省辖市：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="city" placeholder="请输入城市"
-                 type="text"/>
+          <input id="city" class="layui-input" lay-verify="required" name="city"
+                 placeholder="请输入城市" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">区/县：</label>
+        <label for="county" class="layui-form-label">区/县：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="county" placeholder="请输入区县"
-                 type="text"/>
+          <input id="county" class="layui-input" lay-verify="required" name="county"
+                 placeholder="请输入区县" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">行政代码：</label>
+        <label for="districtCode" class="layui-form-label">行政代码：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="districtCode" placeholder="请输入行政区划代码"
-                 type="text"/>
+          <input id="districtCode" class="layui-input" lay-verify="required"
+                 name="districtCode" placeholder="请输入行政区划代码" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
         <label class="layui-form-label">水文代码：</label>
         <div class="layui-input-block">
+          <!--suppress HtmlFormInputWithoutLabel -->
           <input lay-skin="primary" name="regionCodeId"
                  th:checked="${code.checked}" th:each="code:${codes}" th:title="${code.code}"
                  th:value="${code.id}" type="radio">
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">排序码：</label>
+        <label for="sort" class="layui-form-label">排序码：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="sort" placeholder="请输入排序码"
-                 type="text"/>
+          <input id="sort" class="layui-input" lay-verify="required" name="sort"
+                 placeholder="请输入排序码" type="text"/>
         </div>
       </div>
     </div>
@@ -66,7 +69,6 @@
   layui.use(['form', 'jquery', 'dictionary', 'popup'], function () {
     let form = layui.form;
     let $ = layui.jquery;
-    let popup = layui.popup;
 
     let prefix = "/well/region/";
 

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('部门列表')"/>
+  <th:block th:include="include :: header"/>
+  <title>部门列表</title>
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -49,6 +51,7 @@
 </script>
 
 <script id="dept-status" type="text/html">
+  <!--suppress ALL -->
   <input type="checkbox" name="enable" value="{{d.deptId}}" lay-skin="switch" lay-text="启用|禁用"
          lay-filter="dept-enable" {{ d.enable ? 'checked' : '' }}>
 </script>
@@ -62,12 +65,12 @@
     let table = layui.table;
     let form = layui.form;
     let $ = layui.jquery;
-    let treetable = layui.treetable;
+    let treeTable = layui.treetable;
     let popup = layui.popup;
 
     let MODULE_PATH = "/system/dept/";
 
-    treetable.render({
+    treeTable.render({
       treeColIndex: 1,
       treeSpid: 0,
       treeIdName: 'deptId',
@@ -100,29 +103,30 @@
     });
 
     form.on('submit(dept-query)', function (data) {
-      var keyword = data.field.deptName;
-      var $tds = $('#dept-table').next('.treeTable').find('.layui-table-body tbody tr td');
+      let keyword = data.field.deptName;
+      let $tds = $('#dept-table').next('.treeTable').find('.layui-table-body tbody tr td');
       if (!keyword) {
         $tds.css('background-color', 'transparent');
         layer.msg("请输入关键字", {icon: 5});
         return;
       }
-      var searchCount = 0;
+      let searchCount = 0;
       $tds.each(function () {
         $(this).css('background-color', 'transparent');
         if ($(this).text().indexOf(keyword) >= 0) {
           $(this).css('background-color', 'rgba(250,230,160,0.5)');
-          if (searchCount == 0) {
-            $('body,html').stop(true);
-            $('body,html').animate({scrollTop: $(this).offset().top - 150}, 500);
+          if (searchCount === 0) {
+            let bodyHtml = $('body,html')
+            bodyHtml.stop(true);
+            bodyHtml.animate({scrollTop: $(this).offset().top - 150}, 500);
           }
           searchCount++;
         }
       });
-      if (searchCount == 0) {
+      if (searchCount === 0) {
         layer.msg("没有匹配结果", {icon: 5});
       } else {
-        treetable.expandAll('#dept-table');
+        treeTable.expandAll('#dept-table');
       }
       return false;
     });
@@ -211,7 +215,7 @@
     }
 
     window.refresh = function () {
-      treetable.reload('#dept-table');
+      treeTable.reload('#dept-table');
     }
   })
 </script>

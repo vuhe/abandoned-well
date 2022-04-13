@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('修改井信息')"/>
+  <th:block th:include="include :: header"/>
+  <title>修改井信息</title>
 </head>
 <body>
 <form action="javascript:void(0);" class="layui-form" th:object="${well}">
@@ -24,9 +26,9 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">井类型</label>
+        <label for="wellType" class="layui-form-label">井类型</label>
         <div class="layui-input-block">
-          <select name="wellType" lay-verify="required">
+          <select id="wellType" name="wellType" lay-verify="required">
             <option value=""></option>
             <option value="KU" th:selected="${well.wellType.name() eq 'KU'}">矿井-竖井</option>
             <option value="KX" th:selected="${well.wellType.name() eq 'KX'}">矿井-斜井</option>
@@ -205,22 +207,22 @@
 
   layui.use(['form', 'jquery', 'dictionary', 'laydate'], function () {
     let form = layui.form;
-    let laydate = layui.laydate;
+    let layDate = layui.laydate;
     let $ = layui.jquery;
 
     let prefix = "/well/info/";
 
-    laydate.render({
+    layDate.render({
       elem: '#digTime',
       format: 'yyyy-MM-dd'
     });
 
-    laydate.render({
+    layDate.render({
       elem: '#abandonTime',
       format: 'yyyy-MM-dd'
     });
 
-    laydate.render({
+    layDate.render({
       elem: '#informTime',
       format: 'yyyy-MM-dd'
     });

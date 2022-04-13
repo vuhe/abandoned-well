@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('新增水文代码')"/>
+  <th:block th:include="include :: header"/>
+  <title>新增水文代码</title>
 </head>
 <body>
 <form action="javascript:void(0);" class="layui-form">
@@ -9,17 +11,17 @@
     <div class="main-container">
 
       <div class="layui-form-item">
-        <label class="layui-form-label">代码：</label>
+        <label for="code" class="layui-form-label">代码：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="code" placeholder="请输入代码"
-                 type="text"/>
+          <input id="code" class="layui-input" lay-verify="required" name="code"
+                 placeholder="请输入代码" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">注释：</label>
+        <label for="remark" class="layui-form-label">注释：</label>
         <div class="layui-input-block">
-                    <textarea class="layui-textarea" lay-verify="required" name="remark" placeholder="请输入注释"
-                              type="text"></textarea>
+          <textarea id="remark" class="layui-textarea" lay-verify="required" name="remark"
+                    placeholder="请输入注释" type="text"></textarea>
         </div>
       </div>
     </div>
@@ -44,7 +46,6 @@
   layui.use(['form', 'jquery', 'dictionary', 'popup'], function () {
     let form = layui.form;
     let $ = layui.jquery;
-    let popup = layui.popup;
 
     let prefix = "/well/code/";
 

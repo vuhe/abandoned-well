@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('井列表汇总导出')"/>
+  <th:block th:include="include :: header"/>
+  <title>井列表汇总导出</title>
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -32,8 +34,6 @@
 <script>
   layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
     let table = layui.table;
-    let form = layui.form;
-    let $ = layui.jquery;
 
     let prefix = "/well/info/";
 

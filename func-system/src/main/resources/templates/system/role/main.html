@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('角色列表')"/>
+  <th:block th:include="include :: header"/>
+  <title>角色列表</title>
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -62,6 +64,7 @@
 </script>
 
 <script id="role-enable" type="text/html">
+  <!--suppress ALL -->
   <input type="checkbox" name="enable" value="{{d.roleId}}" lay-skin="switch" lay-text="启用|禁用"
          lay-filter="role-enable" {{d.enable ? 'checked' : '' }} >
 </script>

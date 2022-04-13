@@ -1,12 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('403')"/>
+  <th:block th:include="include :: header"/>
   <link rel="stylesheet" th:href="@{/admin/css/other/error.css}"/>
+  <title>403</title>
 </head>
 <body>
 <div class="content">
-  <img alt="" src="../../admin/images/500.svg">
+  <img alt="403 image" th:src="@{/admin/images/500.svg}">
   <div class="content-r">
     <h1>500</h1>
     <p>抱歉，服务器出错了</p>

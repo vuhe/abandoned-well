@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('井信息动态更新')"/>
+  <th:block th:include="include :: header"/>
+  <title>井信息动态更新</title>
 </head>
 <body>
 <form class="layui-form">
@@ -9,7 +11,7 @@
     <div class="main-container">
       <input name="id" th:value="${well.id}" type="hidden">
       <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 90px">回填开始时间</label>
+        <label for="fillStartTime" class="layui-form-label" style="width: 90px">回填开始时间</label>
         <div class="layui-input-block" style="margin-left: 120px">
           <input id="fillStartTime" class="layui-input" lay-verify="required" name="fillStartTime"
                  placeholder="请输入时间" type="text"
@@ -17,7 +19,7 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 90px">回填结束时间</label>
+        <label for="fillEndTime" class="layui-form-label" style="width: 90px">回填结束时间</label>
         <div class="layui-input-block" style="margin-left: 120px">
           <input id="fillEndTime" class="layui-input" lay-verify="required"
                  name="fillEndTime" placeholder="请输入时间" type="text"
@@ -25,9 +27,9 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label" style="width: 90px">注释</label>
+        <label for="remark" class="layui-form-label" style="width: 90px">注释</label>
         <div class="layui-input-block" style="margin-left: 120px">
-          <textarea class="layui-textarea" name="remark" placeholder="请输入注释"
+          <textarea id="remark" class="layui-textarea" name="remark" placeholder="请输入注释"
                     th:value="${well.remark}" type="text"></textarea>
         </div>
       </div>
@@ -56,17 +58,17 @@
 <script th:inline="javascript">
   layui.use(['form', 'jquery', 'laydate'], function () {
     let form = layui.form;
-    let laydate = layui.laydate;
+    let layDate = layui.laydate;
     let $ = layui.jquery;
 
     let prefix = "/well/info/";
 
-    laydate.render({
+    layDate.render({
       elem: '#fillStartTime',
       format: 'yyyy-MM-dd'
     });
 
-    laydate.render({
+    layDate.render({
       elem: '#fillEndTime',
       format: 'yyyy-MM-dd'
     });

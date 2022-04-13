@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('用户新增')"/>
+  <th:block th:include="include :: header"/>
+  <title>用户新增</title>
 </head>
 <body>
 <form class="layui-form">
@@ -102,7 +104,7 @@
       $('input[type=checkbox]:checked').each(function () {
         roleIds += $(this).val() + ",";
       });
-      roleIds = roleIds.substr(0, roleIds.length - 1);
+      roleIds = roleIds.substring(0, roleIds.length - 1);
       data.field.roleIds = roleIds;
 
       $.ajax({

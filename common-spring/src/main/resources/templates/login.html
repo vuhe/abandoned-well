@@ -1,14 +1,16 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('登录')"/>
+  <th:block th:include="include :: header"/>
   <link rel="stylesheet" th:href="@{/admin/css/other/login.css}"/>
+  <title>登录</title>
 </head>
 <!-- 代 码 结 构 -->
 <body background="admin/images/login.svg">
 <form action="javascript:void(0);" class="layui-form">
   <div class="layui-form-item">
-    <img class="logo" src="admin/images/logo.png"/>
+    <img class="logo" th:src="@{/admin/images/logo.png}" alt="logo"/>
     <div class="title">废弃井库系统</div>
     <div class="desc">
       废 弃 井 名 录 库 上 报 管 理 系 统
@@ -22,7 +24,7 @@
   </div>
   <div class="layui-form-item">
     <input class="code layui-input layui-input-inline" hover name="captcha" placeholder="验证码 : "/>
-    <img class="codeImage" id="captchaImage" src="/system/captcha/generate"/>
+    <img class="codeImage" id="captchaImage" th:src="@{/system/captcha/generate}" alt="captcha image"/>
   </div>
   <div class="layui-form-item">
     <input lay-skin="primary" name="remember-me" title="记住密码" type="checkbox">
@@ -104,8 +106,8 @@
   }
 
   function getParam(paramName) {
-    var reg = new RegExp("(^|&)" + paramName + "=([^&]*)(&|$)");
-    var r = window.location.search.substr(1).match(reg);
+    let reg = new RegExp("(^|&)" + paramName + "=([^&]*)(&|$)");
+    let r = window.location.search.substr(1).match(reg);
     if (r != null) return decodeURI(r[2]);
     return null;
   }

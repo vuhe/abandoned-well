@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('上报井信息')"/>
+  <th:block th:include="include :: header"/>
+  <title>上报井信息</title>
 </head>
 <body>
 <form action="javascript:void(0);" class="layui-form">
@@ -9,23 +11,23 @@
     <div class="main-container">
 
       <div class="layui-form-item">
-        <label class="layui-form-label">井名称</label>
+        <label for="name" class="layui-form-label">井名称</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="name" placeholder="请输入名称"
-                 type="text"/>
+          <input id="name" class="layui-input" lay-verify="required" name="name"
+                 placeholder="请输入名称" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">原始编号</label>
+        <label for="originCode" class="layui-form-label">原始编号</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="originCode" placeholder="请输入原编号"
-                 type="text"/>
+          <input id="originCode" class="layui-input" lay-verify="required" name="originCode"
+                 placeholder="请输入原编号" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">井类型</label>
+        <label for="wellType" class="layui-form-label">井类型</label>
         <div class="layui-input-block">
-          <select name="wellType" lay-verify="required">
+          <select id="wellType" name="wellType" lay-verify="required">
             <option value=""></option>
             <option value="KU">矿井-竖井</option>
             <option value="KX">矿井-斜井</option>
@@ -51,9 +53,9 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">井区域</label>
+        <label for="regionId" class="layui-form-label">井区域</label>
         <div class="layui-input-block">
-          <select name="regionId" lay-verify="required">
+          <select id="regionId" name="regionId" lay-verify="required">
             <option value=""></option>
             <option th:each="region:${regions}" th:value="${region.id}"
                     th:text="${region.city} + '-' + ${region.county}">城市-区域
@@ -62,56 +64,56 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">乡镇(街道办)</label>
+        <label for="street" class="layui-form-label">乡镇(街道办)</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="street" placeholder="请输入乡镇"
-                 type="text"/>
+          <input id="street" class="layui-input" lay-verify="required" name="street"
+                 placeholder="请输入乡镇" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">村(街)</label>
+        <label for="address" class="layui-form-label">村(街)</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="address" placeholder="请输入村(街)"
-                 type="text"/>
+          <input id="address" class="layui-input" lay-verify="required" name="address"
+                 placeholder="请输入村(街)" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">所属单位</label>
+        <label for="company" class="layui-form-label">所属单位</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="company" placeholder="请输入所属单位"
-                 type="text"/>
+          <input id="company" class="layui-input" lay-verify="required" name="company"
+                 placeholder="请输入所属单位" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">建井时间</label>
+        <label for="digTime" class="layui-form-label">建井时间</label>
         <div class="layui-input-block">
           <input id="digTime" class="layui-input" lay-verify="required" name="digTime"
                  placeholder="请输入时间" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">联系人</label>
+        <label for="contacts" class="layui-form-label">联系人</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="contacts" placeholder="请输入联系人"
-                 type="text"/>
+          <input id="contacts" class="layui-input" lay-verify="required" name="contacts"
+                 placeholder="请输入联系人" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">联系电话</label>
+        <label for="phone" class="layui-form-label">联系电话</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="phone" placeholder="请输入联系电话"
-                 type="text"/>
+          <input id="phone" class="layui-input" lay-verify="required" name="phone"
+                 placeholder="请输入联系电话" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">废弃原因</label>
+        <label for="abandonRemark" class="layui-form-label">废弃原因</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="abandonRemark" placeholder="请输入废弃原因"
-                 type="text"/>
+          <input id="abandonRemark" class="layui-input" lay-verify="required" name="abandonRemark"
+                 placeholder="请输入废弃原因" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">废弃时间</label>
+        <label for="abandonTime" class="layui-form-label">废弃时间</label>
         <div class="layui-input-block">
           <input id="abandonTime" class="layui-input" lay-verify="required" name="abandonTime"
                  placeholder="请输入时间" type="text"/>
@@ -119,16 +121,18 @@
       </div>
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label">经度</label>
+          <label for="lng" class="layui-form-label">经度</label>
           <div class="layui-input-inline" style="width: 100px;">
-            <input type="text" name="lng1" placeholder="度" autocomplete="off" class="layui-input">
+            <input id="lng" type="text" name="lng1" placeholder="度" autocomplete="off" class="layui-input">
           </div>
           <div class="layui-form-mid">°</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lng2" placeholder="分" autocomplete="off" class="layui-input">
           </div>
           <div class="layui-form-mid">'</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lng3" placeholder="秒" autocomplete="off" class="layui-input">
           </div>
           <div class="layui-form-mid">"</div>
@@ -136,37 +140,39 @@
       </div>
       <div class="layui-form-item">
         <div class="layui-inline">
-          <label class="layui-form-label">纬度</label>
+          <label for="lat" class="layui-form-label">纬度</label>
           <div class="layui-input-inline" style="width: 100px;">
-            <input type="text" name="lat1" placeholder="度" autocomplete="off" class="layui-input">
+            <input id="lat" type="text" name="lat1" placeholder="度" autocomplete="off" class="layui-input">
           </div>
           <div class="layui-form-mid">°</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lat2" placeholder="分" autocomplete="off" class="layui-input">
           </div>
           <div class="layui-form-mid">'</div>
           <div class="layui-input-inline" style="width: 100px;">
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input type="text" name="lat3" placeholder="秒" autocomplete="off" class="layui-input">
           </div>
           <div class="layui-form-mid">"</div>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">填表人</label>
+        <label for="informer" class="layui-form-label">填表人</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="informer" placeholder="请输入填表人"
-                 type="text"/>
+          <input id="informer" class="layui-input" lay-verify="required" name="informer"
+                 placeholder="请输入填表人" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">排查人</label>
+        <label for="investigator" class="layui-form-label">排查人</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="investigator" placeholder="请输入排查人"
-                 type="text"/>
+          <input id="investigator" class="layui-input" lay-verify="required" name="investigator"
+                 placeholder="请输入排查人" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">填表时间</label>
+        <label for="informTime" class="layui-form-label">填表时间</label>
         <div class="layui-input-block">
           <input id="informTime" class="layui-input" lay-verify="required" name="informTime"
                  placeholder="请输入时间" type="text"/>
@@ -194,22 +200,22 @@
 
   layui.use(['form', 'jquery', 'dictionary', 'laydate'], function () {
     let form = layui.form;
-    let laydate = layui.laydate;
+    let layDate = layui.laydate;
     let $ = layui.jquery;
 
     let prefix = "/well/info/";
 
-    laydate.render({
+    layDate.render({
       elem: '#digTime',
       format: 'yyyy-MM-dd'
     });
 
-    laydate.render({
+    layDate.render({
       elem: '#abandonTime',
       format: 'yyyy-MM-dd'
     });
 
-    laydate.render({
+    layDate.render({
       elem: '#informTime',
       format: 'yyyy-MM-dd'
     });

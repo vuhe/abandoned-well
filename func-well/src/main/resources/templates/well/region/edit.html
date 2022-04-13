@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('修改辖区')"/>
+  <th:block th:include="include :: header"/>
+  <title>修改辖区</title>
 </head>
 <body>
 <form class="layui-form" th:object="${region}">
@@ -25,7 +27,8 @@
       <div class="layui-form-item">
         <label class="layui-form-label">行政代码：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="districtCode" placeholder="请输入行政区划代码" th:field="*{districtCode}"
+          <input class="layui-input" lay-verify="required" name="districtCode" placeholder="请输入行政区划代码"
+                 th:field="*{districtCode}"
                  type="text"/>
         </div>
       </div>

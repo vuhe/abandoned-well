@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('辖区列表')"/>
+  <th:block th:include="include :: header"/>
+  <title>辖区列表</title>
 </head>
 <body class="pear-container">
 
@@ -9,13 +11,13 @@
   <div class="layui-card-body">
     <form action="" class="layui-form">
       <div class="layui-form-item">
-        <label class="layui-form-label">省辖市</label>
+        <label for="city" class="layui-form-label">省辖市</label>
         <div class="layui-input-inline">
-          <input class="layui-input" name="city" placeholder="" type="text">
+          <input id="city" class="layui-input" name="city" placeholder="" type="text">
         </div>
-        <label class="layui-form-label">区/县</label>
+        <label for="county" class="layui-form-label">区/县</label>
         <div class="layui-input-inline">
-          <input class="layui-input" name="county" placeholder="" type="text">
+          <input id="county" class="layui-input" name="county" placeholder="" type="text">
         </div>
         <button class="pear-btn pear-btn-md pear-btn-primary" lay-filter="region-query" lay-submit>
           <i class="layui-icon layui-icon-search"></i>
@@ -169,7 +171,7 @@
       for (let i = 0; i < data.length; i++) {
         ids += data[i].id + ",";
       }
-      ids = ids.substr(0, ids.length - 1);
+      ids = ids.substring(0, ids.length - 1);
       layer.confirm('确定要删除这些辖区，此操作会影响正在上报的信息！', {icon: 3, title: '提示'}, function (index) {
         layer.close(index);
         let loading = layer.load();

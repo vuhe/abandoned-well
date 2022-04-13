@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('个人中心')"/>
-  <link href="../../admin/css/other/center.css" rel="stylesheet"/>
+  <th:block th:include="include :: header"/>
+  <link th:href="@{/admin/css/other/center.css}" rel="stylesheet"/>
+  <title>个人中心</title>
   <style>
     .layui-form-item {
       margin-top: 17px !important;
@@ -85,8 +87,8 @@
                 <div class="layui-form-item layui-form-text">
                   <label class="layui-form-label">描述</label>
                   <div class="layui-input-block">
-                                        <textarea class="layui-textarea" name="details" placeholder="请输入描述"
-                                                  th:text="${userInfo.remark}"></textarea>
+                    <textarea class="layui-textarea" name="details" placeholder="请输入描述"
+                              th:text="${userInfo.remark}"></textarea>
                   </div>
                 </div>
                 <div class="layui-form-item">
@@ -111,7 +113,6 @@
     let $ = layui.jquery;
     let layer = layui.layer;
     let form = layui.form;
-    let convert = layui.convert;
 
     $(".edit-password").click(function () {
       layer.open({

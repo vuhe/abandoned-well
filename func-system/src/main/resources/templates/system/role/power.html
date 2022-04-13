@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('角色授权')"/>
+  <th:block th:include="include :: header"/>
+  <title>角色授权</title>
 </head>
 <body>
 <form action="" class="layui-form">
@@ -51,7 +53,7 @@
         let id = param[i].nodeId;
         ids += id + ',';
       }
-      ids = ids.substr(0, ids.length - 1);
+      ids = ids.substring(0, ids.length - 1);
       data.field.roleId = [[${roleId}]];
       data.field.powerIds = ids;
 

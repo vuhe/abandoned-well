@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('notice列表')"/>
+  <th:block th:include="include :: header"/>
+  <title>水文代码列表</title>
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -38,7 +40,6 @@
 <script>
   layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
     let table = layui.table;
-    let form = layui.form;
     let $ = layui.jquery;
 
     let prefix = "/well/code/";
@@ -136,7 +137,7 @@
       for (let i = 0; i < data.length; i++) {
         ids += data[i].id + ",";
       }
-      ids = ids.substr(0, ids.length - 1);
+      ids = ids.substring(0, ids.length - 1);
       layer.confirm('确定要删除这些代码，此操作会影响正在上报的信息！', {icon: 3, title: '提示'}, function (index) {
         layer.close(index);
         let loading = layer.load();

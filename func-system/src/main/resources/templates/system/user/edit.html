@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('用户修改')"/>
+  <th:block th:include="include :: header"/>
+  <title>用户修改</title>
 </head>
 <body>
 <form action="" class="layui-form">
@@ -104,7 +106,7 @@
       $('input[type=checkbox]:checked').each(function () {
         roleIds += $(this).val() + ",";
       });
-      roleIds = roleIds.substr(0, roleIds.length - 1);
+      roleIds = roleIds.substring(0, roleIds.length - 1);
       data.field.roleIds = roleIds;
       $.ajax({
         url: '/system/user/update',

@@ -1,7 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('修改水文代码')"/>
+  <th:block th:include="include :: header"/>
+  <title>修改水文代码</title>
 </head>
 <body>
 <form class="layui-form" th:object="${code}">
@@ -9,17 +11,17 @@
     <div class="main-container">
       <input name="id" th:field="*{id}" type="hidden">
       <div class="layui-form-item">
-        <label class="layui-form-label">代码：</label>
+        <label for="code" class="layui-form-label">代码：</label>
         <div class="layui-input-block">
-          <input class="layui-input" lay-verify="required" name="code" placeholder="请输入代码" th:field="*{code}"
-                 type="text"/>
+          <input id="code" class="layui-input" lay-verify="required" name="code"
+                 placeholder="请输入代码" th:field="*{code}" type="text"/>
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">注释：</label>
+        <label for="remark" class="layui-form-label">注释：</label>
         <div class="layui-input-block">
-                    <textarea class="layui-textarea" lay-verify="required" name="remark" placeholder="请输入注释"
-                              th:field="*{remark}" type="text"></textarea>
+          <textarea id="remark" class="layui-textarea" lay-verify="required" name="remark"
+                    placeholder="请输入注释" th:field="*{remark}" type="text"></textarea>
         </div>
       </div>
     </div>

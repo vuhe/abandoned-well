@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('废弃井管理平台')"/>
-  <link href="admin/css/loader.css" rel="stylesheet"/>
-  <link href="admin/css/admin.css" rel="stylesheet"/>
+  <th:block th:include="include :: header"/>
+  <link th:href="@{/admin/css/loader.css}" rel="stylesheet"/>
+  <link th:href="@{/admin/css/admin.css}" rel="stylesheet"/>
+  <title>废弃井管理平台</title>
 </head>
 <!-- 结 构 代 码 -->
 <body class="layui-layout-body pear-admin">
@@ -14,14 +15,18 @@
     <!-- 菜 单 顶 部 -->
     <div class="layui-logo">
       <!-- 图 标 -->
-      <img class="logo"></img>
+      <!--suppress HtmlRequiredAltAttribute, RequiredAttributes -->
+      <img class="logo">
       <!-- 标 题 -->
       <span class="title"></span>
     </div>
     <!-- 顶 部 左 侧 功 能 -->
     <ul class="layui-nav layui-layout-left">
       <li class="collaspe layui-nav-item"><a class="layui-icon layui-icon-shrink-right" href="#"></a></li>
-      <li class="refresh layui-nav-item"><a class="layui-icon layui-icon-refresh-1" href="#" loading=600></a></li>
+      <li class="refresh layui-nav-item">
+        <!--suppress HtmlUnknownAttribute -->
+        <a class="layui-icon layui-icon-refresh-1" href="#" loading=600></a>
+      </li>
     </ul>
     <!-- 多 系 统 菜 单 -->
     <div class="layui-layout-control" id="control"></div>
@@ -32,10 +37,11 @@
       <li class="layui-nav-item layui-hide-xs message"></li>
       <li class="layui-nav-item user">
         <!-- 头 像 -->
-        <a class="layui-icon layui-icon-username" href="javascript:;"></a>
+        <a class="layui-icon layui-icon-username" href="javascript:void(0);"></a>
         <!-- 功 能 菜 单 -->
         <dl class="layui-nav-child">
-          <dd><a user-menu-id="5555" user-menu-title="基本资料" user-menu-url="/system/user/center">基本资料</a></dd>
+          <dd><!--suppress HtmlUnknownAttribute -->
+            <a user-menu-id="5555" user-menu-title="基本资料" user-menu-url="/system/user/center">基本资料</a></dd>
           <dd><a class="logout" href="javascript:void(0);">注销登录</a></dd>
         </dl>
       </li>
@@ -48,7 +54,8 @@
     <!-- 菜 单 顶 部 -->
     <div class="layui-logo">
       <!-- 图 标 -->
-      <img class="logo"></img>
+      <!--suppress HtmlRequiredAltAttribute, RequiredAttributes -->
+      <img class="logo">
       <!-- 标 题 -->
       <span class="title"></span>
     </div>

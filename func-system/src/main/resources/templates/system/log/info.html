@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="zh-Hans-CN" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
   <title>日志详情</title>
-  <th:block th:include="include :: header('日志详情')"/>
+  <th:block th:include="include :: header"/>
 </head>
 <body>
 <div>
@@ -15,6 +14,7 @@
 </div>
 </body>
 <th:block th:include="include :: footer"/>
+<!--suppress JSUnusedGlobalSymbols -->
 <script>
   function show(info) {
     layui.use(['json'], function () {

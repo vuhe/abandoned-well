@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
+<!--suppress HtmlUnknownAttribute -->
+<html lang="zh-Hans-CN" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <th:block th:include="include :: header('用户列表')"/>
+  <th:block th:include="include :: header"/>
   <link rel="stylesheet" th:href="@{/admin/css/other/user.css}"/>
+  <title>用户列表</title>
 </head>
 <body class="pear-container">
 <div class="layui-card">
@@ -80,6 +82,7 @@
 </script>
 
 <script id="user-enable" type="text/html">
+  <!--suppress ALL -->
   <input type="checkbox" name="enable" value="{{d.userId}}" lay-skin="switch" lay-text="启用|禁用"
          lay-filter="user-enable" {{ d.enable== true ? 'checked' : '' }} />
 </script>
@@ -194,7 +197,7 @@
         window.refresh();
       } else if (obj.event === 'batchRemove') {
         window.batchRemove(obj);
-      } else if (obj.event == 'collasped') {
+      } else if (obj.event === 'collasped') {
         $(".user-left").toggleClass("user-collasped");
         $(".user-main").toggleClass("user-collasped");
         table.resize();
