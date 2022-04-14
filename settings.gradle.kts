@@ -1,4 +1,4 @@
-rootProject.name = "WellManagement"
+rootProject.name = "well-management"
 
 include(":common-api")
 include(":common-spring")
