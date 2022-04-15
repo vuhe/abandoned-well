@@ -1,6 +1,7 @@
 package top.vuhe.admin.system.controller
 
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.ktorm.entity.Entity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
@@ -8,6 +9,7 @@ import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysPower
+import top.vuhe.admin.system.param.SysPowerParam
 import top.vuhe.admin.system.service.ISysPowerService
 
 /**
@@ -52,7 +54,7 @@ class SysPowerController(
      */
     @GetMapping("data")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:data')")
-    fun data(sysPower: SysPower) = treeTable { sysPowerService.list(sysPower) }
+    fun data(param: SysPowerParam) = treeTable { sysPowerService.list(param) }
 
     /**
      * 保存权限信息
@@ -88,8 +90,14 @@ class SysPowerController(
      * 获取父级权限选择数据
      */
     @GetMapping("selectParent")
-    fun selectParent(sysPower: SysPower) = dataTree {
-        sysPowerService.list(sysPower)
+    fun selectParent() = dataTree {
+        sysPowerService.list().toMutableList().apply {
+            add(Entity.create<SysPower>().apply {
+                set("powerName", "顶级权限")
+                set("powerId", "0")
+                set("parentId", "-1")
+            })
+        }
     }
 
     /**

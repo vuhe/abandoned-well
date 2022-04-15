@@ -10,10 +10,8 @@ import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.request.PageDomain
-import top.vuhe.admin.spring.web.response.ResultTable
+import top.vuhe.admin.system.param.SysLogParam
 import top.vuhe.admin.system.service.ISysLogService
-import java.time.LocalDateTime
 
 /**
  * 日志控制器
@@ -48,12 +46,8 @@ class SysLogController(
      */
     @GetMapping("operateLog")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:log:operateLog')")
-    fun operateLog(pageDomain: PageDomain, startTime: LocalDateTime?, endTime: LocalDateTime?): ResultTable {
-        val list = sysLogService.data(LoggingType.OPERATE, startTime, endTime)
-        val count = list.size
-        val page = list.asSequence()
-            .drop(pageDomain.offset).take(pageDomain.limit).toList()
-        return ResultTable(page, count.toLong())
+    fun operateLog(param: SysLogParam) = pageTable {
+        sysLogService.data(LoggingType.OPERATE, param)
     }
 
     /**
@@ -61,12 +55,8 @@ class SysLogController(
      */
     @GetMapping("loginLog")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:log:loginLog')")
-    fun loginLog(pageDomain: PageDomain, startTime: LocalDateTime?, endTime: LocalDateTime?): ResultTable {
-        val list = sysLogService.data(LoggingType.LOGIN, startTime, endTime)
-        val count = list.size
-        val page = list.asSequence()
-            .drop(pageDomain.offset).take(pageDomain.limit).toList()
-        return ResultTable(page, count.toLong())
+    fun loginLog(param: SysLogParam) = pageTable {
+        sysLogService.data(LoggingType.LOGIN, param)
     }
 
     /**

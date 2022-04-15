@@ -2,13 +2,14 @@ package top.vuhe.admin.well.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.ktorm.entity.Entity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
+import top.vuhe.admin.well.param.WellParam
 import top.vuhe.admin.well.service.IRegionService
 import top.vuhe.admin.well.service.IWellService
 import javax.validation.Valid
@@ -90,8 +91,8 @@ class WellController(
     @GetMapping("page")
     @Operation(summary = "分页查询井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:page')")
-    fun page(info: WellInfo, pageDomain: PageDomain) = pageTable {
-        infoService.page(info, pageDomain)
+    fun page(param: WellParam) = pageTable {
+        infoService.page(param)
     }
 
     /**
@@ -101,6 +102,7 @@ class WellController(
     @Operation(summary = "添加井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:add')")
     fun save(@RequestBody @Valid info: WellInfo) = boolResult {
+        info.status = WellStatus.Approved
         infoService.add(info)
     }
 
@@ -131,7 +133,7 @@ class WellController(
     @Operation(summary = "通过审核井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun pass(@PathVariable("id") id: String) = boolResult {
-        val info = WellInfo().apply {
+        val info = Entity.create<WellInfo>().apply {
             this.id = id
             status = WellStatus.Approved
         }
@@ -145,7 +147,7 @@ class WellController(
     @Operation(summary = "打回修改井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
     fun notPass(@PathVariable("id") id: String) = boolResult {
-        val info = WellInfo().apply {
+        val info = Entity.create<WellInfo>().apply {
             this.id = id
             status = WellStatus.NotAccepted
         }

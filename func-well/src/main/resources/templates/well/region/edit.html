@@ -40,7 +40,7 @@
         <div class="layui-input-block">
           <!--suppress HtmlFormInputWithoutLabel -->
           <input lay-skin="primary" name="regionCodeId"
-                 th:checked="${code.checked}" th:each="code:${codes}" th:title="${code.code}"
+                 th:checked="${code.get('checked')}" th:each="code:${codes}" th:title="${code.code}"
                  th:value="${code.id}" type="radio">
         </div>
       </div>

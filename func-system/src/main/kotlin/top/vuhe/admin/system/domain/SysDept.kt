@@ -1,37 +1,37 @@
 package top.vuhe.admin.system.domain
 
-import top.vuhe.admin.spring.database.entity.BaseEntity
+import org.ktorm.entity.Entity
 
 /**
  * 字典值领域模型
  *
  * @author vuhe
  */
-class SysDept : BaseEntity() {
+interface SysDept : Entity<SysDept> {
     /** 部门编号 */
-    var deptId by varchar("dept_id").primary()
+    var deptId: String
 
     /** 部门名称 */
-    var deptName by varchar("dept_name")
+    val deptName: String
 
     /** 部门地址 */
-    var address by varchar("address")
+    val address: String
 
     /** 父级编号 */
-    var parentId by varchar("parent_id")
+    val parentId: String
 
     /** 负责人 */
-    var leader by varchar("leader")
+    val leader: String
 
     /** 手机号 */
-    var phone by varchar("phone")
+    val phone: String
 
     /** 邮箱 */
-    var email by varchar("email")
+    val email: String
 
     /** 状态 */
-    var enable by boolean("status")
+    var enable: Boolean
 
     /** 排序 */
-    var sort by int("sort")
+    val sort: Int
 }

@@ -2,10 +2,10 @@ package top.vuhe.admin.system.service.impl
 
 import org.springframework.stereotype.Service
 import top.vuhe.admin.system.domain.SysMenu
-import top.vuhe.admin.system.mapper.LinkRolePower
-import top.vuhe.admin.system.mapper.LinkUserRole
-import top.vuhe.admin.system.mapper.SysPowerMapper
-import top.vuhe.admin.system.mapper.SysUserMapper
+import top.vuhe.admin.system.repository.LinkRolePower
+import top.vuhe.admin.system.repository.LinkUserRole
+import top.vuhe.admin.system.repository.SysPowerRepository
+import top.vuhe.admin.system.repository.SysUserRepository
 import top.vuhe.admin.system.service.ISysMenuService
 
 /**
@@ -14,17 +14,18 @@ import top.vuhe.admin.system.service.ISysMenuService
  * @author vuhe
  */
 @Service
-class SysMenuServiceImpl : ISysMenuService {
-    private val sysUserMapper = SysUserMapper
-    private val linkUserRole = LinkUserRole
-    private val linkRolePower = LinkRolePower
-    private val sysPowerMapper = SysPowerMapper
+class SysMenuServiceImpl(
+    private val sysUserRepository: SysUserRepository,
+    private val linkUserRole: LinkUserRole,
+    private val linkRolePower: LinkRolePower,
+    private val sysPowerRepository: SysPowerRepository
+) : ISysMenuService {
 
     override fun getUserMenu(userId: String): List<SysMenu> {
-        val user = sysUserMapper.selectById(userId)
+        val user = sysUserRepository.selectById(userId)
 
         val list = if (user?.admin == true) {
-            sysPowerMapper.selectListByAdmin()
+            sysPowerRepository.selectListByAdmin()
         } else {
             // 全部角色信息
             val roleIds = linkUserRole.selectRoleIdByUserId(userId)
@@ -32,7 +33,7 @@ class SysMenuServiceImpl : ISysMenuService {
             // 全部菜单信息
             val powerIds = roleIds.map { linkRolePower.selectPowerIdByRoleId(it) }.flatten()
 
-            sysPowerMapper.selectListByIds(powerIds)
+            sysPowerRepository.selectListByIds(powerIds)
         }
 
         // 转换为 menu

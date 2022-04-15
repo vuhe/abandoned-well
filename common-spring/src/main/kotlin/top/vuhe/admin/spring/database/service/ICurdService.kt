@@ -1,7 +1,8 @@
 package top.vuhe.admin.spring.database.service
 
-import top.vuhe.admin.spring.database.entity.BaseEntity
-import top.vuhe.admin.spring.web.request.PageDomain
+import org.ktorm.entity.Entity
+import top.vuhe.admin.spring.database.table.TablePage
+import top.vuhe.admin.spring.web.request.PageParam
 
 /**
  * 包含基本增删改查的服务接口
@@ -10,7 +11,7 @@ import top.vuhe.admin.spring.web.request.PageDomain
  *
  * @author vuhe
  */
-interface ICurdService<E : BaseEntity> {
+interface ICurdService<E : Entity<E>> {
     /**
      * 查询全部列表数据
      */
@@ -19,14 +20,12 @@ interface ICurdService<E : BaseEntity> {
     /**
      * 根据条件查询列表数据
      */
-    fun list(param: E): List<E>
+    fun list(param: PageParam): List<E>
 
     /**
      * 根据条件查询分页数据
      */
-    fun page(param: E, pageDomain: PageDomain): TablePage<E> {
-        return TablePage(list(param), pageDomain)
-    }
+    fun page(param: PageParam): TablePage<E>
 
     /**
      * 根据 id 获取一个实体

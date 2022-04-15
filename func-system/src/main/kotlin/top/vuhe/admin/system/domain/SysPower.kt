@@ -1,47 +1,40 @@
 package top.vuhe.admin.system.domain
 
-import top.vuhe.admin.spring.database.entity.BaseEntity
+import org.ktorm.entity.Entity
 
 /**
  * ### 权限领域模型
  *
  * @author vuhe
  */
-class SysPower : BaseEntity() {
+interface SysPower : Entity<SysPower> {
     /** 编号 */
-    var powerId by varchar("power_id").primary()
+    var powerId: String
 
     /** 权限名称 */
-    var powerName by varchar("power_name")
+    val powerName: String
 
     /** 类型 */
-    var powerType by varchar("power_type")
+    val powerType: String
 
     /** 标识 */
-    var powerCode by varchar("power_code")
+    val powerCode: String
 
     /** 路径 */
-    var powerUrl by varchar("power_url")
+    val powerUrl: String
 
     /** 打开方式 */
-    var openType by varchar("open_type")
+    val openType: String
 
     /** 父级编号 */
-    var parentId by varchar("parent_id")
+    val parentId: String
 
     /** 图标 */
-    var icon by varchar("icon")
+    val icon: String
 
     /** 排序 */
-    var sort by int("sort")
+    val sort: Int
 
     /** 开启 */
-    var enable by boolean("enable")
-
-    /**
-     * 计算列 提供给前端组件
-     *
-     * 0-未选中，1-选中，2-半选
-     */
-    var checkArr: String = "0"
+    var enable: Boolean
 }

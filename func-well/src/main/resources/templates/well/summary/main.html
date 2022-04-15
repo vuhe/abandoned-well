@@ -30,6 +30,16 @@
   </div>
 </div>
 
+<script id="well-status" type="text/html">
+  {{#if (d.status == 'NotAccepted') { }}
+  <span>审核不通过（打回修改）</span>
+  {{# }else if(d.status == 'Approved'){ }}
+  <span>审核通过</span>
+  {{# }else{ }}
+  <span>已上报（审核中）</span>
+  {{# } }}
+</script>
+
 <th:block th:include="include :: footer"/>
 <script>
   layui.use(['table', 'form', 'jquery', 'dictionary'], function () {
@@ -43,9 +53,9 @@
         {field: 'id', title: '废弃井编号'},
         {field: 'name', title: '废弃井名称'},
         {field: 'originCode', title: '原始编号'},
-        {field: 'type', title: '废弃井类型'},
+        {field: 'digTime', title: '建井时间'},
         {field: 'company', title: '井所属单位'},
-        {field: 'statusStr', title: '上报状态'},
+        {field: 'status', title: '上报状态', templet: '#well-status'},
         {title: '操作', toolbar: '#well-info-bar', align: 'center', width: 160}
       ]
     ]

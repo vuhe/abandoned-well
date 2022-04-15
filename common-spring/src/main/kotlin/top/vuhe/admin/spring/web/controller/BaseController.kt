@@ -1,6 +1,6 @@
 package top.vuhe.admin.spring.web.controller
 
-import top.vuhe.admin.spring.database.service.TablePage
+import top.vuhe.admin.spring.database.table.TablePage
 import top.vuhe.admin.spring.web.response.ResultObj
 import top.vuhe.admin.spring.web.response.ResultTable
 import top.vuhe.admin.spring.web.response.ResultTree

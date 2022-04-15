@@ -3,6 +3,7 @@ package top.vuhe.admin.spring.config
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.ktorm.database.Database
+import org.ktorm.jackson.KtormModule
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
@@ -34,6 +35,12 @@ class SystemConfiguration {
         addSerializer<LocalDate>("yyyy-MM-dd")
         addSerializer<LocalTime>("HH:mm:ss")
     }
+
+    /**
+     * ktorm entity 序列化
+     */
+    @Bean
+    fun ktormModule(): Module = KtormModule()
 
     /**
      * xss 过滤

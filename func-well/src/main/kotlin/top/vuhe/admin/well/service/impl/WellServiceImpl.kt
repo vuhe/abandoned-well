@@ -3,12 +3,12 @@ package top.vuhe.admin.well.service.impl
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.exception.businessNotNull
-import top.vuhe.admin.spring.database.service.impl.CurdService
+import top.vuhe.admin.spring.database.service.CurdService
 import top.vuhe.admin.well.domina.ExportWell
 import top.vuhe.admin.well.domina.WellInfo
-import top.vuhe.admin.well.mapper.CodeMapper
-import top.vuhe.admin.well.mapper.RegionMapper
-import top.vuhe.admin.well.mapper.WellMapper
+import top.vuhe.admin.well.repository.CodeRepository
+import top.vuhe.admin.well.repository.RegionRepository
+import top.vuhe.admin.well.repository.WellRepository
 import top.vuhe.admin.well.service.IWellService
 
 /**
@@ -17,14 +17,15 @@ import top.vuhe.admin.well.service.IWellService
  * @author vuhe
  */
 @Service
-class WellServiceImpl : CurdService<WellInfo>(WellMapper), IWellService {
-    private val infoMapper = WellMapper
-    private val regionMapper = RegionMapper
-    private val regionCodeMapper = CodeMapper
+class WellServiceImpl(
+    private val infoRepository: WellRepository,
+    private val regionRepository: RegionRepository,
+    private val regionCodeRepository: CodeRepository
+) : CurdService<WellInfo>(infoRepository), IWellService {
 
     override fun exportList(): List<ExportWell> {
         return list().mapNotNull {
-            val region = regionMapper.selectById(it.regionId)
+            val region = regionRepository.selectById(it.regionId)
             if (region != null) ExportWell(it, region)
             else null
         }
@@ -36,14 +37,14 @@ class WellServiceImpl : CurdService<WellInfo>(WellMapper), IWellService {
     @Transactional(rollbackFor = [Exception::class])
     override fun add(entity: WellInfo): Boolean {
         val region = businessNotNull(
-            regionMapper.selectById(entity.regionId)
+            regionRepository.selectById(entity.regionId)
         ) { "地区错误，请刷新后重试" }
 
         // 地区顺序码 + 1
         region.next = region.next + 1
 
         val code = businessNotNull(
-            regionCodeMapper.selectById(region.regionCodeId)
+            regionCodeRepository.selectById(region.regionCodeId)
         ) { "水文代码错误，请刷新后重试" }
 
         // 生成井 id
@@ -51,8 +52,8 @@ class WellServiceImpl : CurdService<WellInfo>(WellMapper), IWellService {
         entity.id = wellId
 
         // 插入成功后，将顺序码更改写入数据库
-        return if (infoMapper.insert(entity) > 0) {
-            regionMapper.update(region)
+        return if (infoRepository.insert(entity) > 0) {
+            regionRepository.update(region)
             true
         } else false
     }

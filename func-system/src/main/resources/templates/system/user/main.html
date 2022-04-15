@@ -95,14 +95,6 @@
   {{# } }}
 </script>
 
-<script id="user-login" type="text/html">
-  {{#if (d.login == 0) { }}
-  <span>在线</span>
-  {{# }else if(d.sex == 1){ }}
-  <span>离线</span>
-  {{# } }}
-</script>
-
 <th:block th:include="include :: footer"/>
 <script>
   layui.use(['table', 'dtree', 'form', 'jquery', 'popup', 'common'], function () {

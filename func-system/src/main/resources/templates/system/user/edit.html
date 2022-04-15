@@ -63,7 +63,7 @@
           <div class="layui-input-block">
             <!--suppress HtmlFormInputWithoutLabel -->
             <input lay-skin="primary" name="roleIds"
-                   th:checked="${sysRole.checked}" th:each="sysRole:${sysRoles}" th:title="${sysRole.roleName}"
+                   th:checked="${sysRole.get('checked')}" th:each="sysRole:${sysRoles}" th:title="${sysRole.roleName}"
                    th:value="${sysRole.roleId}" type="checkbox">
           </div>
         </div>

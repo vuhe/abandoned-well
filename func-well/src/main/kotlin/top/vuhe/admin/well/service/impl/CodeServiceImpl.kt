@@ -1,9 +1,9 @@
 package top.vuhe.admin.well.service.impl
 
 import org.springframework.stereotype.Service
-import top.vuhe.admin.spring.database.service.impl.CurdService
+import top.vuhe.admin.spring.database.service.CurdService
 import top.vuhe.admin.well.domina.RegionCode
-import top.vuhe.admin.well.mapper.CodeMapper
+import top.vuhe.admin.well.repository.CodeRepository
 import top.vuhe.admin.well.service.ICodeService
 
 /**
@@ -12,12 +12,13 @@ import top.vuhe.admin.well.service.ICodeService
  * @author vuhe
  */
 @Service
-class CodeServiceImpl : CurdService<RegionCode>(CodeMapper), ICodeService {
+class CodeServiceImpl(
+    codeRepository: CodeRepository
+) : CurdService<RegionCode>(codeRepository), ICodeService {
     override fun listWithChecked(codeId: String): List<RegionCode> {
-        val list = list()
-        val code = list.find { it.id == codeId }
-            ?: return list
-        code.checked = true
-        return list
+        return list().onEach {
+            // 是否选中，用于前端显示
+            it["checked"] = it.id == codeId
+        }
     }
 }

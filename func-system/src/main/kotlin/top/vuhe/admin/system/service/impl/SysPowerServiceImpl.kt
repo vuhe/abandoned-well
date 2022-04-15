@@ -2,10 +2,11 @@ package top.vuhe.admin.system.service.impl
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import top.vuhe.admin.spring.database.service.impl.CurdService
+import top.vuhe.admin.spring.database.service.CurdService
+import top.vuhe.admin.spring.web.request.PageParam
 import top.vuhe.admin.system.domain.SysPower
-import top.vuhe.admin.system.mapper.LinkRolePower
-import top.vuhe.admin.system.mapper.SysPowerMapper
+import top.vuhe.admin.system.repository.LinkRolePower
+import top.vuhe.admin.system.repository.SysPowerRepository
 import top.vuhe.admin.system.service.ISysPowerService
 
 /**
@@ -14,11 +15,12 @@ import top.vuhe.admin.system.service.ISysPowerService
  * @author vuhe
  */
 @Service
-class SysPowerServiceImpl : CurdService<SysPower>(SysPowerMapper), ISysPowerService {
-    private val linkRolePower = LinkRolePower
-    private val sysPowerMapper = SysPowerMapper
+class SysPowerServiceImpl(
+    private val linkRolePower: LinkRolePower,
+    private val sysPowerRepository: SysPowerRepository
+) : CurdService<SysPower>(sysPowerRepository), ISysPowerService {
 
-    override fun list(param: SysPower): List<SysPower> {
+    override fun list(param: PageParam): List<SysPower> {
         return super.list(param).sortedBy { it.sort }
     }
 
@@ -30,6 +32,6 @@ class SysPowerServiceImpl : CurdService<SysPower>(SysPowerMapper), ISysPowerServ
     }
 
     override fun getByParentId(parentId: String): List<SysPower> {
-        return sysPowerMapper.selectByParentId(parentId)
+        return sysPowerRepository.selectByParentId(parentId)
     }
 }

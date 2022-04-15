@@ -5,8 +5,8 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.well.domina.WellRegion
+import top.vuhe.admin.well.param.RegionParam
 import top.vuhe.admin.well.service.ICodeService
 import top.vuhe.admin.well.service.IRegionService
 import javax.validation.Valid
@@ -58,8 +58,8 @@ class RegionController(
      */
     @GetMapping("page")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:page')")
-    fun page(region: WellRegion, pageDomain: PageDomain) = pageTable {
-        regionService.page(region, pageDomain)
+    fun page(param: RegionParam) = pageTable {
+        regionService.page(param)
     }
 
     /**

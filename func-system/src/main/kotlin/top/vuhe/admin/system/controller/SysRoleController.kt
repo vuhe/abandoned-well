@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.system.domain.SysRole
+import top.vuhe.admin.system.param.SysRoleParam
 import top.vuhe.admin.system.service.ISysRoleService
 
 /**
@@ -67,8 +67,8 @@ class SysRoleController(
     @GetMapping("data")
     @Operation(summary = "获取角色列表数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:data')")
-    fun data(pageDomain: PageDomain, param: SysRole) = pageTable {
-        sysRoleService.page(param, pageDomain)
+    fun data(param: SysRoleParam) = pageTable {
+        sysRoleService.page(param)
     }
 
     /**

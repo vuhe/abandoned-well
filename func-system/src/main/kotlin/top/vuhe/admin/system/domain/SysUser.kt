@@ -1,60 +1,57 @@
 package top.vuhe.admin.system.domain
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import top.vuhe.admin.spring.database.entity.BaseEntity
+import org.ktorm.entity.Entity
+import java.time.LocalDateTime
 
 /**
  * ### 用户领域模型
  *
  * @author vuhe
  */
-class SysUser : BaseEntity() {
+interface SysUser : Entity<SysUser> {
     /** 编号 */
-    var userId by varchar("user_id").primary()
+    var userId: String
 
     /** 账户 */
-    var username by varchar("username")
+    val username: String
 
     /** 密码 */
-    var password by varchar("password").insertBefore {
-        BCryptPasswordEncoder().encode(it)
-    }
+    var password: String
 
     /** 姓名 */
-    var realName by varchar("real_name")
+    val realName: String
 
     /** 邮箱 */
-    var email by varchar("email")
+    val email: String
 
     /** 性别 */
-    var sex by varchar("sex")
+    val sex: String
 
     /** 电话 */
-    var phone by varchar("phone")
+    val phone: String
 
     /** 所属部门 */
-    var deptId by varchar("dept_id")
+    val deptId: String
 
     /** 是否锁定 */
-    var unlocked by boolean("status")
+    val unlocked: Boolean
 
     /** 是否启用 */
-    var enable by boolean("enable")
+    var enable: Boolean
 
     /** 是否为管理员 */
-    val admin by boolean("admin")
+    val admin: Boolean
 
     /** 最后一次登录时间 */
-    var lastTime by datetime("last_time").nullable()
+    var lastTime: LocalDateTime?
 
     /** 注册时间 */
-    var createTime by datetime("create_time")
+    var createTime: LocalDateTime
 
     /** 备注 */
-    var remark by varchar("remark")
+    val remark: String
 
-    /**
-     * 角色 ids，用于修改
-     */
-    var roleIds: String = ""
+    /** 角色 ids，用于修改 */
+    val roles: List<String>
+        get() = get("roleIds")?.toString()?.split(",") ?: emptyList()
 }

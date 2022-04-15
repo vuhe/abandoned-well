@@ -1,9 +1,9 @@
 package top.vuhe.admin.well.service.impl
 
 import org.springframework.stereotype.Service
-import top.vuhe.admin.spring.database.service.impl.CurdService
+import top.vuhe.admin.spring.database.service.CurdService
 import top.vuhe.admin.well.domina.WellRegion
-import top.vuhe.admin.well.mapper.RegionMapper
+import top.vuhe.admin.well.repository.RegionRepository
 import top.vuhe.admin.well.service.IRegionService
 
 /**
@@ -12,4 +12,6 @@ import top.vuhe.admin.well.service.IRegionService
  * @author vuhe
  */
 @Service
-class RegionServiceImpl : CurdService<WellRegion>(RegionMapper), IRegionService
+class RegionServiceImpl(
+    regionRepository: RegionRepository
+) : CurdService<WellRegion>(regionRepository), IRegionService

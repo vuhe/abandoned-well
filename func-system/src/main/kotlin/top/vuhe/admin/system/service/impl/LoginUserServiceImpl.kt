@@ -1,14 +1,15 @@
 package top.vuhe.admin.system.service.impl
 
+import org.ktorm.entity.Entity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.spring.security.principal.LoginUser
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.system.domain.SysUser
-import top.vuhe.admin.system.mapper.LinkRolePower
-import top.vuhe.admin.system.mapper.LinkUserRole
-import top.vuhe.admin.system.mapper.SysPowerMapper
-import top.vuhe.admin.system.mapper.SysUserMapper
+import top.vuhe.admin.system.repository.LinkRolePower
+import top.vuhe.admin.system.repository.LinkUserRole
+import top.vuhe.admin.system.repository.SysPowerRepository
+import top.vuhe.admin.system.repository.SysUserRepository
 import java.time.LocalDateTime
 
 /**
@@ -17,17 +18,18 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Service
-class LoginUserServiceImpl : UserSecurityService {
-    private val sysUserMapper = SysUserMapper
-    private val linkUserRole = LinkUserRole
-    private val linkRolePower = LinkRolePower
-    private val sysPowerMapper = SysPowerMapper
+class LoginUserServiceImpl(
+    private val sysUserRepository: SysUserRepository,
+    private val linkUserRole: LinkUserRole,
+    private val linkRolePower: LinkRolePower,
+    private val sysPowerRepository: SysPowerRepository
+) : UserSecurityService {
 
     /**
      * 为减少数据库访问，此方法会缓存数据，在数据库发生数据更改时，
      * 会删除数据，此时会在此缓存
      */
-    fun getUserById(id: String): SysUser? = sysUserMapper.selectById(id)
+    fun getUserById(id: String): SysUser? = sysUserRepository.selectById(id)
 
     /**
      * 此方法会缓存用户权限列表，出现权限变化时会清空缓存
@@ -42,11 +44,11 @@ class LoginUserServiceImpl : UserSecurityService {
         }.flatten()
 
         // 查询 power 权限，加入列表
-        return sysPowerMapper.selectListByIds(powerIds).map { it.powerCode }
+        return sysPowerRepository.selectListByIds(powerIds).map { it.powerCode }
     }
 
     override fun getLoginUserId(username: String): String? {
-        return sysUserMapper.selectByUsername(username)?.userId
+        return sysUserRepository.selectByUsername(username)?.userId
     }
 
     override fun getLoginUserById(userId: String): LoginUser {
@@ -55,11 +57,11 @@ class LoginUserServiceImpl : UserSecurityService {
 
     @Transactional(rollbackFor = [Exception::class])
     override fun updateLoginTime(userId: String) {
-        val user = SysUser().apply {
+        val user = Entity.create<SysUser>().apply {
             this.userId = userId
             lastTime = LocalDateTime.now()
         }
-        sysUserMapper.update(user)
+        sysUserRepository.update(user)
     }
 
     private class SecurityUserProxy(

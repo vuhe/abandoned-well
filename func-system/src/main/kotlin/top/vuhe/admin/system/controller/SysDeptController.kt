@@ -9,6 +9,7 @@ import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysDept
+import top.vuhe.admin.system.param.SysDeptParam
 import top.vuhe.admin.system.service.ISysDeptService
 
 /**
@@ -53,13 +54,13 @@ class SysDeptController(
      */
     @GetMapping("data")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:data')")
-    fun data(param: SysDept) = dataTable { sysDeptService.list(param) }
+    fun data(param: SysDeptParam) = dataTable { sysDeptService.list(param) }
 
     /**
      * 获取部门树状数据结构
      */
     @GetMapping("tree")
-    fun tree(param: SysDept) = dataTree { sysDeptService.list(param) }
+    fun tree() = dataTree { sysDeptService.list() }
 
     /**
      * 保存部门信息

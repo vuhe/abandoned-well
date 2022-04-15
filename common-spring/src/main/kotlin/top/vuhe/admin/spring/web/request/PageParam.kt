@@ -5,7 +5,7 @@ package top.vuhe.admin.spring.web.request
  *
  * @author vuhe
  */
-class PageDomain {
+abstract class PageParam {
     /**
      * 当前页
      */
@@ -17,22 +17,7 @@ class PageDomain {
     var limit: Int = 0
 
     /**
-     * 总数量
-     */
-    var count: Int = 0
-
-    /**
-     * 查询结果
-     */
-    var list: List<*> = emptyList<Nothing>()
-
-    /**
      * 获取开始的数据行
      */
     val offset: Int get() = (page - 1) * limit
-
-    /**
-     * 获取结束的数据行
-     */
-    val end: Int get() = page * limit
 }

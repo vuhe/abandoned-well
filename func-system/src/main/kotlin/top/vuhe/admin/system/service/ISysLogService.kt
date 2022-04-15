@@ -2,8 +2,9 @@ package top.vuhe.admin.system.service
 
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.logging.LoggingType
+import top.vuhe.admin.spring.database.table.TablePage
 import top.vuhe.admin.system.domain.SysLog
-import java.time.LocalDateTime
+import top.vuhe.admin.system.param.SysLogParam
 
 /**
  * 日志服务接口
@@ -14,7 +15,7 @@ interface ISysLogService : LoggingFactory {
     /**
      * 执行查询操作
      */
-    fun data(loggingType: LoggingType, startTime: LocalDateTime?, endTime: LocalDateTime?): List<SysLog>
+    fun data(loggingType: LoggingType, param: SysLogParam): TablePage<SysLog>
 
     /**
      * 根据 id 查询日志

@@ -2,7 +2,6 @@ package top.vuhe.admin.system.controller
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
@@ -14,8 +13,8 @@ import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
 import top.vuhe.admin.spring.web.annotation.RepeatSubmit
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.spring.web.request.PageDomain
 import top.vuhe.admin.system.domain.SysUser
+import top.vuhe.admin.system.param.SysUserParam
 import top.vuhe.admin.system.service.ISysLogService
 import top.vuhe.admin.system.service.ISysRoleService
 import top.vuhe.admin.system.service.ISysUserService
@@ -28,7 +27,7 @@ import top.vuhe.admin.system.service.ISysUserService
 @RestController
 @Tag(name = "用户管理")
 @RequestMapping(API_SYSTEM_PREFIX + "user")
-class SysUserController @Autowired constructor(
+class SysUserController(
     private val sysUserService: ISysUserService,
     private val sysRoleService: ISysRoleService,
     private val sysLogService: ISysLogService
@@ -101,8 +100,8 @@ class SysUserController @Autowired constructor(
     @Operation(summary = "获取用户列表数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:data')")
     @Logging("查询用户", describe = "查询用户", type = BusinessType.QUERY)
-    fun data(pageDomain: PageDomain, param: SysUser) = pageTable {
-        sysUserService.page(param, pageDomain)
+    fun data(param: SysUserParam) = pageTable {
+        sysUserService.page(param)
     }
 
     /**
@@ -114,7 +113,7 @@ class SysUserController @Autowired constructor(
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:add')")
     @Logging("新增用户", describe = "新增用户", type = BusinessType.ADD)
     fun save(@RequestBody sysUser: SysUser) = boolResult {
-        sysUserService.saveUserRole(sysUser.userId, sysUser.roleIds.split(","))
+        sysUserService.saveUserRole(sysUser.userId, sysUser.roles)
         sysUserService.add(sysUser)
     }
 
@@ -161,7 +160,10 @@ class SysUserController @Autowired constructor(
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:edit')")
     @Logging("修改用户", describe = "修改用户", type = BusinessType.EDIT)
     fun update(@RequestBody sysUser: SysUser) = boolResult {
-        sysUserService.saveUserRole(sysUser.userId, sysUser.roleIds.split(","))
+        businessRequire(sysUser.password.isEmpty()) { "修改用户信息禁止修改密码" }
+        if (sysUser.roles.isNotEmpty()) {
+            sysUserService.saveUserRole(sysUser.userId, sysUser.roles)
+        }
         sysUserService.modify(sysUser)
     }
 
