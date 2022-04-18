@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.transaction.annotation.EnableTransactionManagement
 import top.vuhe.admin.api.jackson.addSerializer
 import top.vuhe.admin.api.logging.LoggingAspect
 import top.vuhe.admin.api.logging.LoggingFactory
@@ -23,6 +24,7 @@ import javax.sql.DataSource
  *
  * @author vuhe
  */
+@EnableTransactionManagement
 @Configuration(proxyBeanMethods = false)
 class SystemConfiguration {
 

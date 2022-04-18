@@ -6,14 +6,16 @@ dependencies {
 
     // hutool 工具包
     implementation("cn.hutool:hutool-core:5.7.22")
+
+    // spring 工具
     implementation("cn.hutool:hutool-extra:5.7.22")
+    compileOnly("org.springframework:spring-context")
 
     // jackson 工具
     compileOnly("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 
     // logging 工具
     compileOnly("org.aspectj:aspectjweaver")
-    compileOnly("org.springframework:spring-context")
 
     // 缓存工具
     implementation("com.github.ben-manes.caffeine:caffeine:3.0.6")

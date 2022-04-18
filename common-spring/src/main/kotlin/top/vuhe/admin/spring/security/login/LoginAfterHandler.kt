@@ -1,18 +1,12 @@
 package top.vuhe.admin.spring.security.login
 
-import org.springframework.security.authentication.AccountExpiredException
-import org.springframework.security.authentication.BadCredentialsException
-import org.springframework.security.authentication.DisabledException
-import org.springframework.security.authentication.LockedException
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
-import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.logging.LoggingType
-import top.vuhe.admin.spring.security.exception.CaptchaException
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.spring.web.response.fail
 import top.vuhe.admin.spring.web.response.success
@@ -53,15 +47,7 @@ class LoginAfterHandler(
         httpServletResponse: HttpServletResponse,
         e: AuthenticationException
     ) {
-        val msg = when (e) {
-            is CaptchaException -> e.info
-            is UsernameNotFoundException -> "用户名不存在"
-            is LockedException -> "用户冻结"
-            is AccountExpiredException -> "用户过期"
-            is BadCredentialsException -> "账户密码不正确"
-            is DisabledException -> "用户未启用"
-            else -> "登录失败"
-        }
+        val msg = e.message ?: "登录失败"
         sysLogService.record {
             it.title = "登录"
             it.description = msg

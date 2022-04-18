@@ -1,4 +1,4 @@
-package top.vuhe.admin.api.text
+package top.vuhe.admin.api.extra
 
 import java.util.*
 

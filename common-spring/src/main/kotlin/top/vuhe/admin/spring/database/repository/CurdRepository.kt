@@ -25,7 +25,7 @@ abstract class CurdRepository<T, E>(cacheable: Boolean = false) :
 
     fun count(): Int = cacheable("count") {
         entities.count()
-    }!!
+    }
 
     fun selectById(queryId: String): E? = cacheable(queryId) {
         entities.find { it.id eq queryId }
@@ -33,7 +33,7 @@ abstract class CurdRepository<T, E>(cacheable: Boolean = false) :
 
     fun selectList(): List<E> = cacheable("all") {
         entities.toList()
-    }!!
+    }
 
     fun selectList(params: PageParam): List<E> {
         val declaring = find(params)

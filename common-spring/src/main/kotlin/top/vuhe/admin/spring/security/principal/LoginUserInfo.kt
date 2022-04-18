@@ -19,12 +19,7 @@ object LoginUserInfo {
     /**
      * 验证当前用户是否登录
      */
-    val isAuthentication: Boolean
-        get() {
-            // if security session eq s-id is not null to index
-            val auth = SecurityContextHolder.getContext().authentication
-            return auth !is AnonymousAuthenticationToken
-        }
+    val isAuthentication: Boolean get() = authentication != null
 
     /**
      * 获取当前登录用户的信息

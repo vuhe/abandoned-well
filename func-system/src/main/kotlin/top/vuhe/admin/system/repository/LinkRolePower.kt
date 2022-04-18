@@ -25,7 +25,7 @@ class LinkRolePower : BaseRepository(cacheable = true) {
             .where { RolePower.roleId eq roleId }
             .mapNotNull { it[RolePower.powerId] }
             .toSet()
-    }!!
+    }
 
     /**
      * 插入 role - power 关联

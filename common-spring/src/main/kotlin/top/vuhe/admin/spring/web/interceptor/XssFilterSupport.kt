@@ -21,10 +21,10 @@ class XssFilterSupport : Filter {
     }
 
     override fun doFilter(request: ServletRequest, response: ServletResponse?, filterChain: FilterChain) {
-        val req = request as HttpServletRequest
-
-        val handledReq = if (handleExcludeURL(req)) req
-        else XssHttpServletRequest(request, isIncludeRichText)
+        val handledReq = if (request is HttpServletRequest) {
+            if (handleExcludeURL(request)) request
+            else XssHttpServletRequest(request, isIncludeRichText)
+        } else request
 
         filterChain.doFilter(handledReq, response)
     }

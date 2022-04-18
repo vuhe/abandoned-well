@@ -14,6 +14,8 @@ import org.aspectj.lang.reflect.MethodSignature
  */
 @Aspect
 class LoggingAspect(private val loggingFactory: LoggingFactory) {
+
+    @Suppress("unused")
     @Pointcut("@annotation(top.vuhe.admin.api.logging.Logging)")
     fun dsPointCut() = Unit
 

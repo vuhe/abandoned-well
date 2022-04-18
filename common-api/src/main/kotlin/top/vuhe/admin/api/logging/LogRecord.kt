@@ -6,33 +6,21 @@ package top.vuhe.admin.api.logging
  * @author vuhe
  */
 interface LogRecord {
-    /**
-     * 标题
-     */
+    /** 标题 */
     var title: String
 
-    /**
-     * 描述
-     */
+    /** 描述 */
     var description: String
 
-    /**
-     * 业务类型
-     */
+    /** 业务类型 */
     var businessType: BusinessType
 
-    /**
-     * 接 口 执 行 状 态
-     */
+    /** 接口执行状态 */
     var success: Boolean
 
-    /**
-     * 日 志 类 型
-     */
+    /** 日志类型 */
     var loggingType: LoggingType
 
-    /**
-     * 异 常 信 息
-     */
+    /** 异常信息 */
     var errorMsg: String
 }

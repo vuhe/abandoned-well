@@ -25,7 +25,7 @@ class LinkUserRole : BaseRepository(cacheable = true) {
             .where { UserRole.userId eq userId }
             .mapNotNull { it[UserRole.roleId] }
             .toSet()
-    }!!
+    }
 
     /**
      * 插入 user - role 关联

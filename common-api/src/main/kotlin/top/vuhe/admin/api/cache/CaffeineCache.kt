@@ -5,6 +5,11 @@ import com.github.benmanes.caffeine.cache.Caffeine
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.toJavaDuration
 
+/**
+ * ## 缓存的 Caffeine 实现
+ *
+ * 此缓存对象使用 Caffeine 实现
+ */
 internal object CaffeineCache : SimpleCache {
     private val caches = HashMap<String, Cache<String, Any>>()
 

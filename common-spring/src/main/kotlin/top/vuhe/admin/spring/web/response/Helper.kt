@@ -2,6 +2,8 @@ package top.vuhe.admin.spring.web.response
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import top.vuhe.admin.api.constant.spring
+import top.vuhe.admin.api.network.ContentType
+import top.vuhe.admin.api.network.setContent
 import javax.servlet.http.HttpServletResponse
 
 private val objectMapper: ObjectMapper by spring()
@@ -12,8 +14,7 @@ private val objectMapper: ObjectMapper by spring()
  * @param json json 字符串
  */
 private fun HttpServletResponse.writeJson(json: Any) {
-    contentType = "application/json;charset=UTF-8"
-    characterEncoding = "UTF-8"
+    setContent(ContentType.TEXT_JSON)
     writer.write(objectMapper.writeValueAsString(json))
 }
 

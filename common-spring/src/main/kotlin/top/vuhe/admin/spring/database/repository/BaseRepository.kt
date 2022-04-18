@@ -3,7 +3,7 @@ package top.vuhe.admin.spring.database.repository
 import org.ktorm.database.Database
 import org.springframework.beans.factory.annotation.Autowired
 import top.vuhe.admin.api.cache.ProjectCache
-import top.vuhe.admin.api.text.UUIDGenerator
+import top.vuhe.admin.api.extra.nanoId
 
 abstract class BaseRepository(private val cacheable: Boolean) {
     // this is must be open, because kotlin-spring will skip this
@@ -13,9 +13,9 @@ abstract class BaseRepository(private val cacheable: Boolean) {
 
     protected abstract val cacheName: String
 
-    protected fun defaultId(): String = UUIDGenerator.create(15)
+    protected fun defaultId(): String = nanoId(15)
 
-    protected inline fun <E : Any> cacheable(key: String, block: () -> E?): E? {
+    protected inline fun <E> cacheable(key: String, block: () -> E): E {
         val cache = cacheGet<E>(key)
         if (cache != null) return cache
 
@@ -29,7 +29,7 @@ abstract class BaseRepository(private val cacheable: Boolean) {
         ProjectCache[cacheName, key] = value
     }
 
-    protected fun <T : Any> cacheGet(key: String): T? {
+    protected fun <T> cacheGet(key: String): T? {
         if (!cacheable) return null
         return ProjectCache[cacheName, key]
     }
