@@ -1,7 +1,12 @@
 package top.vuhe.admin.system.repository
 
-import org.ktorm.dsl.*
-import org.ktorm.entity.*
+import org.ktorm.dsl.and
+import org.ktorm.dsl.desc
+import org.ktorm.dsl.eq
+import org.ktorm.entity.filter
+import org.ktorm.entity.sortedBy
+import org.ktorm.entity.take
+import org.ktorm.entity.toList
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.database.repository.CurdRepository
@@ -26,14 +31,9 @@ class SysLogRepository : CurdRepository<SysLogTable, SysLog>() {
      * 条件查询日志
      */
     fun logData(param: SysLogParam): TablePage<SysLog> {
-        val list = entities.filter {
-            (it.loggingType eq param.loggingType).let { d ->
-                param.startTime?.let { start -> d and (it.createTime greaterEq start) } ?: d
-            }.let { d ->
-                param.endTime?.let { end -> d and (it.createTime lessEq end) } ?: d
-            }
-        }.sortedBy { it.createTime.desc() }.drop(param.offset).take(param.limit).toList()
-        return TablePage(count(), list)
+        return entities.filter { param.query() }
+            .sortedBy { it.createTime.desc() }
+            .toPage(param)
     }
 
     /**

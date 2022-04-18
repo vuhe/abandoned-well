@@ -8,7 +8,6 @@ import top.vuhe.admin.spring.database.table.IdTable
 
 @Repository
 class LinkUserRole : BaseRepository(cacheable = true) {
-    override val cacheName: String = UserRole.tableName
 
     private object UserRole : IdTable<Nothing>("sys_user_role") {
         override val id = varchar("id").primaryKey()
@@ -31,7 +30,7 @@ class LinkUserRole : BaseRepository(cacheable = true) {
      * 插入 user - role 关联
      */
     fun insert(userId: String, roleIds: Collection<String>): Int {
-        cacheDelete(userId)
+        cache.delete(userId)
         database.delete(UserRole) { UserRole.userId eq userId }
         // 新建映射
         val result = database.batchInsert(UserRole) {
@@ -52,7 +51,7 @@ class LinkUserRole : BaseRepository(cacheable = true) {
     fun deleteByUser(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
 
-        cacheClear()
+        cache.clear()
         return database.delete(UserRole) { UserRole.userId inList ids }
     }
 
@@ -62,7 +61,7 @@ class LinkUserRole : BaseRepository(cacheable = true) {
     fun deleteByRole(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
 
-        cacheClear()
+        cache.clear()
         return database.delete(UserRole) { UserRole.roleId inList ids }
     }
 }

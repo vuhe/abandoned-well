@@ -8,7 +8,6 @@ import top.vuhe.admin.spring.database.table.IdTable
 
 @Repository
 class LinkRolePower : BaseRepository(cacheable = true) {
-    final override val cacheName: String = RolePower.tableName
 
     private object RolePower : IdTable<Nothing>("sys_role_power") {
         override val id = varchar("id").primaryKey()
@@ -31,7 +30,7 @@ class LinkRolePower : BaseRepository(cacheable = true) {
      * 插入 role - power 关联
      */
     fun insert(roleId: String, powerIds: Collection<String>): Int {
-        cacheDelete(roleId)
+        cache.delete(roleId)
         database.delete(RolePower) { RolePower.roleId eq roleId }
         // 新建映射
         val result = database.batchInsert(RolePower) {
@@ -52,7 +51,7 @@ class LinkRolePower : BaseRepository(cacheable = true) {
     fun deleteByRole(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
 
-        cacheClear()
+        cache.clear()
         return database.delete(RolePower) { RolePower.roleId inList ids }
     }
 
@@ -62,7 +61,7 @@ class LinkRolePower : BaseRepository(cacheable = true) {
     fun deleteByPower(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
 
-        cacheClear()
+        cache.clear()
         return database.delete(RolePower) { RolePower.powerId inList ids }
     }
 }

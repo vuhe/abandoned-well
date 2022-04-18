@@ -50,10 +50,11 @@ class LoginAfterHandler(
         val msg = e.message ?: "登录失败"
         sysLogService.record {
             it.title = "登录"
-            it.description = msg
+            it.description = "登录失败"
             it.businessType = BusinessType.OTHER
             it.success = false
             it.loggingType = LoggingType.LOGIN
+            it.errorMsg = msg
         }
         httpServletResponse.fail(code = 500, message = msg)
     }

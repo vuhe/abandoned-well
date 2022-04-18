@@ -50,6 +50,15 @@ class SysPowerController(
     /* -------------------------------------------------------------------------- */
 
     /**
+     * 用于 [selectParent] 方法构建列表
+     */
+    private val topPower = listOf(Entity.create<SysPower>().apply {
+        set("powerName", "顶级权限")
+        set("powerId", "0")
+        set("parentId", "-1")
+    })
+
+    /**
      * 获取权限列表数据
      */
     @GetMapping("data")
@@ -82,23 +91,15 @@ class SysPowerController(
     @DeleteMapping("remove/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:remove')")
     fun remove(@PathVariable id: String) = boolResult {
-        businessRequire(sysPowerService.getByParentId(id).isEmpty()) { "请先删除下级权限" }
+        businessRequire(sysPowerService.hasNoChildNodes(id)) { "请先删除下级权限" }
         sysPowerService.remove(id)
     }
 
     /**
-     * 获取父级权限选择数据
+     * 获取父级权限选择数据，构建数据附加 [topPower]
      */
     @GetMapping("selectParent")
-    fun selectParent() = dataTree {
-        sysPowerService.list().toMutableList().apply {
-            add(Entity.create<SysPower>().apply {
-                set("powerName", "顶级权限")
-                set("powerId", "0")
-                set("parentId", "-1")
-            })
-        }
-    }
+    fun selectParent() = dataTree { sysPowerService.list() + topPower }
 
     /**
      * 根据 Id 开启用户

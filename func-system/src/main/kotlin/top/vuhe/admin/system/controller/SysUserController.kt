@@ -6,12 +6,12 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import top.vuhe.admin.api.annotation.RepeatSubmit
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
-import top.vuhe.admin.spring.web.annotation.RepeatSubmit
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.param.SysUserParam

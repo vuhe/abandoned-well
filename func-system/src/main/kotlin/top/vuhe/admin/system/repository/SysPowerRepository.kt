@@ -1,14 +1,11 @@
 package top.vuhe.admin.system.repository
 
 import org.ktorm.dsl.eq
-import org.ktorm.dsl.like
+import org.ktorm.entity.count
 import org.ktorm.entity.filter
-import org.ktorm.entity.toList
 import org.springframework.stereotype.Repository
 import top.vuhe.admin.spring.database.repository.CurdRepository
-import top.vuhe.admin.spring.web.request.PageParam
 import top.vuhe.admin.system.domain.SysPower
-import top.vuhe.admin.system.param.SysPowerParam
 import top.vuhe.admin.system.table.SysPowerTable
 
 /**
@@ -23,16 +20,11 @@ class SysPowerRepository : CurdRepository<SysPowerTable, SysPower>(cacheable = t
 
     override var SysPower.entityId: String by SysPower::powerId
 
-    override fun find(params: PageParam) = buildList {
-        params as SysPowerParam
-        if (params.powerName.isNotBlank()) add(table.powerName like "%${params.powerName}%")
-    }
-
     /**
-     * 通过 parentId 列表查询
+     * 计算子节点个数
      */
-    fun selectByParentId(parentId: String): List<SysPower> {
-        return entities.filter { it.parentId eq parentId }.toList()
+    fun countChildren(id: String): Int {
+        return entities.filter { it.parentId eq id }.count()
     }
 
     /**

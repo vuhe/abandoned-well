@@ -31,7 +31,7 @@ class SysPowerServiceImpl(
         return super.batchRemove(ids)
     }
 
-    override fun getByParentId(parentId: String): List<SysPower> {
-        return sysPowerRepository.selectByParentId(parentId)
+    override fun hasNoChildNodes(id: String): Boolean {
+        return sysPowerRepository.countChildren(id) == 0
     }
 }

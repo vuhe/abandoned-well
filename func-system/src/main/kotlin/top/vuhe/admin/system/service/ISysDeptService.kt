@@ -10,7 +10,7 @@ import top.vuhe.admin.system.domain.SysDept
  */
 interface ISysDeptService : ICurdService<SysDept> {
     /**
-     * 根据 parentId 查询部门数据
+     * 部门是否有子节点，无返回 true
      */
-    fun getByParentId(parentId: String): List<SysDept>
+    fun hasNoChildNodes(id: String): Boolean
 }

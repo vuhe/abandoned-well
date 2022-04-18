@@ -5,4 +5,4 @@ package top.vuhe.admin.spring.database.table
  *
  * @author vuhe
  */
-data class TablePage<T : Any>(val count: Int, val list: List<T>)
+data class TablePage<T : Any> internal constructor(val count: Int, val list: List<T>)

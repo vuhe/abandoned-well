@@ -14,8 +14,7 @@ import top.vuhe.admin.spring.web.request.PageParam
 abstract class CurdService<E : Entity<E>>(private val mapper: CurdRepository<*, E>) : ICurdService<E> {
     override fun list(): List<E> = mapper.selectList()
 
-    override fun page(param: PageParam): TablePage<E> =
-        mapper.selectPage(param)
+    override fun page(param: PageParam): TablePage<E> = mapper.selectPage(param)
 
     override fun list(param: PageParam): List<E> = mapper.selectList(param)
 

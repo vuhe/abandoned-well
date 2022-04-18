@@ -9,9 +9,6 @@ import java.io.Serializable
  * @author vuhe
  */
 class ResultTree(val data: Any) : Serializable {
-    /**
-     * 状态信息
-     */
     @Suppress("unused")
     val status = object {
         val code = 200

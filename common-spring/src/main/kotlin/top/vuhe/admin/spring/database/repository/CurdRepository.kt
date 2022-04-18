@@ -1,31 +1,28 @@
 package top.vuhe.admin.spring.database.repository
 
-import org.ktorm.dsl.and
 import org.ktorm.dsl.eq
 import org.ktorm.dsl.inList
 import org.ktorm.entity.*
-import org.ktorm.schema.ColumnDeclaring
 import top.vuhe.admin.spring.database.table.IdTable
 import top.vuhe.admin.spring.database.table.TablePage
 import top.vuhe.admin.spring.web.request.PageParam
 
 abstract class CurdRepository<T, E>(cacheable: Boolean = false) :
     BaseRepository(cacheable) where E : Entity<E>, T : IdTable<E> {
-    final override val cacheName: String get() = table.tableName
 
     protected abstract val table: T
 
-    protected val entities get() = database.sequenceOf(table)
-
     protected abstract var E.entityId: String
 
-    protected open fun find(params: PageParam): List<ColumnDeclaring<Boolean>> = emptyList()
+    protected val entities get() = database.sequenceOf(table)
 
-    /*---------------------------------------- open api ----------------------------------------*/
-
-    fun count(): Int = cacheable("count") {
-        entities.count()
+    protected fun EntitySequence<E, *>.toPage(params: PageParam): TablePage<E> {
+        val count = cacheable("count") { entities.count() }
+        val list = drop(params.offset).take(params.limit).toList()
+        return TablePage(count, list)
     }
+
+    /*---------------------------------------- CURD api ----------------------------------------*/
 
     fun selectById(queryId: String): E? = cacheable(queryId) {
         entities.find { it.id eq queryId }
@@ -36,28 +33,26 @@ abstract class CurdRepository<T, E>(cacheable: Boolean = false) :
     }
 
     fun selectList(params: PageParam): List<E> {
-        val declaring = find(params)
+        val declaring = params.query()
 
-        val filtered = if (declaring.isEmpty()) entities
-        else entities.filter { declaring.reduce { a, b -> a and b } }
+        val filtered = if (declaring == null) entities
+        else entities.filter { declaring }
 
         return filtered.toList()
     }
 
     fun selectPage(params: PageParam): TablePage<E> {
-        val declaring = find(params)
+        val declaring = params.query()
 
-        val filtered = if (declaring.isEmpty()) entities
-        else entities.filter { declaring.reduce { a, b -> a and b } }
+        val filtered = if (declaring == null) entities
+        else entities.filter { declaring }
 
-        val list = filtered.drop(params.offset).take(params.limit).toList()
-
-        return TablePage(count(), list)
+        return filtered.toPage(params)
     }
 
     fun insert(entity: E): Int {
-        cacheDelete("count")
-        cacheDelete("all")
+        cache.delete("count")
+        cache.delete("all")
 
         if (entity.entityId.isBlank()) {
             entity.entityId = defaultId()
@@ -67,15 +62,15 @@ abstract class CurdRepository<T, E>(cacheable: Boolean = false) :
     }
 
     fun update(entity: E): Int {
-        cacheDelete(entity.entityId)
-        cacheDelete("all")
+        cache.delete(entity.entityId)
+        cache.delete("all")
         return entities.update(entity)
     }
 
     fun delete(ids: Collection<String>): Int {
         if (ids.isEmpty()) return 0
-        ids.forEach { cacheDelete(it) }
-        cacheDelete("all")
+        ids.forEach { cache.delete(it) }
+        cache.delete("all")
         return entities.removeIf { it.id inList ids }
     }
 

@@ -10,7 +10,7 @@ import top.vuhe.admin.system.domain.SysPower
  */
 interface ISysPowerService : ICurdService<SysPower> {
     /**
-     * 根据 parentId 查询权限
+     * 权限是否有子节点，无返回 true
      */
-    fun getByParentId(parentId: String): List<SysPower>
+    fun hasNoChildNodes(id: String): Boolean
 }

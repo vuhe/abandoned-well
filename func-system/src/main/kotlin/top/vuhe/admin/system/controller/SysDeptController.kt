@@ -87,7 +87,7 @@ class SysDeptController(
     @DeleteMapping("remove/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:remove')")
     fun remove(@PathVariable id: String) = boolResult {
-        businessRequire(sysDeptService.getByParentId(id).isEmpty()) { "请先删除下级部门" }
+        businessRequire(sysDeptService.hasNoChildNodes(id)) { "请先删除下级部门" }
         sysDeptService.remove(id)
     }
 

@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
-import top.vuhe.admin.spring.web.annotation.RepeatSubmit
+import top.vuhe.admin.api.annotation.RepeatSubmit
 import top.vuhe.admin.spring.web.response.fail
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse

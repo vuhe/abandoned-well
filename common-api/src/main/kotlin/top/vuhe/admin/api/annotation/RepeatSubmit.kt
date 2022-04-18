@@ -1,4 +1,4 @@
-package top.vuhe.admin.spring.web.annotation
+package top.vuhe.admin.api.annotation
 
 /**
  * ### 表单重复提交注解

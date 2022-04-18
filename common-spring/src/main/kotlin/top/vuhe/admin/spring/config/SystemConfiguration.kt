@@ -1,18 +1,17 @@
 package top.vuhe.admin.spring.config
 
 import com.fasterxml.jackson.databind.Module
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import org.ktorm.database.Database
 import org.ktorm.jackson.KtormModule
 import org.springframework.boot.CommandLineRunner
-import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.transaction.annotation.EnableTransactionManagement
-import top.vuhe.admin.api.jackson.addSerializer
 import top.vuhe.admin.api.logging.LoggingAspect
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.monitor.MonitorInfo
+import top.vuhe.admin.spring.dsl.javaTimeModule
+import top.vuhe.admin.spring.dsl.registrationFilter
 import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -32,10 +31,10 @@ class SystemConfiguration {
      * jackson 序列化时间
      */
     @Bean
-    fun dateTime(): Module = JavaTimeModule().apply {
-        addSerializer<LocalDateTime>("yyyy-MM-dd HH:mm:ss")
-        addSerializer<LocalDate>("yyyy-MM-dd")
-        addSerializer<LocalTime>("HH:mm:ss")
+    fun dateTime(): Module = javaTimeModule {
+        LocalDateTime::class byPattern "yyyy-MM-dd HH:mm:ss"
+        LocalDate::class byPattern "yyyy-MM-dd"
+        LocalTime::class byPattern "HH:mm:ss"
     }
 
     /**
@@ -48,10 +47,7 @@ class SystemConfiguration {
      * xss 过滤
      */
     @Bean
-    fun xssFilterRegistrationBean() = FilterRegistrationBean<XssFilterSupport>().apply {
-        filter = XssFilterSupport()
-        setName("xssHttpFilter")
-    }
+    fun xssFilterRegistrationBean() = registrationFilter("xssHttpFilter", XssFilterSupport())
 
     /**
      * 日志记录

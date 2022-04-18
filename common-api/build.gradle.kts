@@ -11,9 +11,6 @@ dependencies {
     implementation("cn.hutool:hutool-extra:5.7.22")
     compileOnly("org.springframework:spring-context")
 
-    // jackson 工具
-    compileOnly("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-
     // logging 工具
     compileOnly("org.aspectj:aspectjweaver")
 

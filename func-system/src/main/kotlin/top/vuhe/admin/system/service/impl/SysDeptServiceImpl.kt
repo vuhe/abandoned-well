@@ -28,7 +28,7 @@ class SysDeptServiceImpl(
         return true
     }
 
-    override fun getByParentId(parentId: String): List<SysDept> {
-        return sysDeptRepository.selectListByParentId(parentId)
+    override fun hasNoChildNodes(id: String): Boolean {
+        return sysDeptRepository.countChildren(id) == 0
     }
 }
