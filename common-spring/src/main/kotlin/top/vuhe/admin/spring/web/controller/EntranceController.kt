@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.Logging
-import top.vuhe.admin.spring.security.principal.LoginUserInfo.isAuthentication
-import top.vuhe.admin.spring.security.session.SecuritySessionManager
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -22,25 +20,20 @@ import javax.servlet.http.HttpServletResponse
 @RestController
 @RequestMapping
 @Tag(name = "项目入口")
-class EntranceController(
-    private val sessionRegistry: SecuritySessionManager
-) : BaseController() {
+class EntranceController : BaseController() {
     /**
      *  获取登录视图
      * @return  登录视图
      */
     @GetMapping("login")
-    fun login(request: HttpServletRequest) = if (isAuthentication) {
-        sessionRegistry.refreshLastRequest(request.session.id)
-        ModelAndView("redirect:/index")
-    } else ModelAndView("login")
+    fun login(request: HttpServletRequest) = ModelAndView("login")
 
     /**
      * 获取主页视图
      * @return  登录视图
      */
     @GetMapping("index")
-    @Logging("主页", describe = "返回 Index 主页视图", type = BusinessType.ADD)
+    @Logging("主页", describe = "返回 Index 主页视图", type = BusinessType.QUERY)
     fun index() = ModelAndView("index")
 
     /**

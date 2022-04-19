@@ -7,12 +7,11 @@ dependencies {
     // hutool 工具包
     implementation("cn.hutool:hutool-core:5.7.22")
 
-    // spring 工具
-//    implementation("cn.hutool:hutool-extra:5.7.22")
-//    compileOnly("org.springframework:spring-context")
-
     // logging 工具
     compileOnly("org.aspectj:aspectjweaver")
+
+    // jackson 工具
+    compileOnly("com.fasterxml.jackson.core:jackson-annotations")
 
     // 缓存工具
     implementation("com.github.ben-manes.caffeine:caffeine:3.0.6")

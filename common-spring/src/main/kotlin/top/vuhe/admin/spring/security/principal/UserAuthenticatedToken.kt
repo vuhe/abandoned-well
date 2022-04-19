@@ -19,14 +19,9 @@ class UserAuthenticatedToken(
      * 此函数会被鉴权系统调用
      */
     override fun getAuthorities(): Collection<GrantedAuthority> {
-        val set = user.authorities.asSequence()
-            .distinct()
-            .map { AuthorityCode(it) }
-            .toMutableSet()
-        if (user.isAdmin) {
-            set.add(AuthorityCode("ROLE_ADMIN"))
-        }
-        return set
+        val list = user.authorities.map { AuthorityCode(it) }
+        return if (user.isAdmin) list + admin
+        else list
     }
 
     /**
@@ -34,5 +29,9 @@ class UserAuthenticatedToken(
      */
     data class AuthorityCode(private val code: String) : GrantedAuthority {
         override fun getAuthority(): String = code
+    }
+
+    companion object {
+        private val admin = listOf(AuthorityCode("ROLE_ADMIN"))
     }
 }

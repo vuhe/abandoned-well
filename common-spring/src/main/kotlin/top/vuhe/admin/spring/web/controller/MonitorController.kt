@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.monitor.MonitorInfo
 
 /**
@@ -16,7 +15,7 @@ import top.vuhe.admin.api.monitor.MonitorInfo
  */
 @RestController
 @Tag(name = "服务监控")
-@RequestMapping(API_SYSTEM_PREFIX + "monitor")
+@RequestMapping("/system/monitor")
 class MonitorController : BaseController() {
     @GetMapping("main")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:monitor:main')")

@@ -1,27 +1,31 @@
 package top.vuhe.admin.api.network
 
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import kotlin.properties.ReadOnlyProperty
+
+private const val charset = "UTF-8"
 
 /**
  * 此委托字段始终使用 getter 从 Spring 获取
  *
- * @return nullable [HttpServletRequest]
+ * @return [HttpServletRequest]
  */
 fun requestContext(): ReadOnlyProperty<Any?, HttpServletRequest> = ThreadServletRequest
-
-private operator fun HttpServletRequest.get(head: HttpHeader): String {
-    return getHeader(head.tag) ?: ""
-}
 
 /**
  * 判断是否为 Ajax 请求
  */
 val HttpServletRequest.isAjax: Boolean
-    get() = "XMLHttpRequest" == get(HttpHeader.XRequestedWith)
+    get() = "XMLHttpRequest" == getHeader("X-Requested-With")
 
 /**
  * 获取 UserAgent
  */
 val HttpServletRequest.userAgent: HttpUserAgent
-    get() = HttpUserAgent(get(HttpHeader.UserAgent))
+    get() = HttpUserAgent(getHeader("User-Agent"))
+
+fun HttpServletResponse.setContent(type: ContentType) {
+    contentType = type.value
+    characterEncoding = charset
+}

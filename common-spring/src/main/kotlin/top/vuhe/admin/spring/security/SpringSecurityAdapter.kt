@@ -3,14 +3,10 @@ package top.vuhe.admin.spring.security
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import top.vuhe.admin.spring.security.login.LoginAfterHandler
+import top.vuhe.admin.spring.security.hepler.SecurityHandler
+import top.vuhe.admin.spring.security.hepler.SecuritySessionManager
 import top.vuhe.admin.spring.security.login.LoginPreCaptchaChecker
 import top.vuhe.admin.spring.security.login.LoginUserCheckProvider
-import top.vuhe.admin.spring.security.logout.SecureLogoutHandler
-import top.vuhe.admin.spring.security.permission.SecureAccessDeniedHandler
-import top.vuhe.admin.spring.security.principal.UserSecurityService
-import top.vuhe.admin.spring.security.session.RememberMeLoginAfterHandler
-import top.vuhe.admin.spring.security.session.SecuritySessionManager
 
 /**
  * 安全组件的自动注册
@@ -18,14 +14,23 @@ import top.vuhe.admin.spring.security.session.SecuritySessionManager
  * @author vuhe
  */
 abstract class SpringSecurityAdapter(
-    objectMapper: ObjectMapper, userDetailsService: UserSecurityService,
+    objectMapper: ObjectMapper, userDetailsService: SpringSecurityService,
 ) : WebSecurityConfigurerAdapter() {
-    protected val loginAfterHandler = LoginAfterHandler(objectMapper, userDetailsService)
-    protected val loginAuthenticationProvider = LoginUserCheckProvider(userDetailsService)
-    protected val loginDetailSource = LoginPreCaptchaChecker
-    protected val logoutHandler = SecureLogoutHandler(objectMapper)
-    protected val accessDenied = SecureAccessDeniedHandler(objectMapper)
-    protected val rememberLoginAfterHandler = RememberMeLoginAfterHandler(userDetailsService)
+    private val handler = SecurityHandler(objectMapper, userDetailsService)
+
+    protected val loginSuccessHandle = handler.loginSuccess
+    protected val loginFailHandle = handler.loginFail
+
+    protected val logoutHandle = handler.logout
+    protected val logoutSuccessHandle = handler.logoutSuccess
+
+    protected val accessDeniedHandle = handler.accessDenied
+
+    protected val rememberMeHandle = handler.rememberMe
+
+    protected val loginCaptchaCheck = LoginPreCaptchaChecker
+    protected val loginUserCheck = LoginUserCheckProvider(userDetailsService)
+
     protected val sessionRegistryCenter = SecuritySessionManager
 
     /**
@@ -38,5 +43,5 @@ abstract class SpringSecurityAdapter(
      * 禁止其他自动注入
      */
     @Bean
-    open fun loginAuthenticationProvider() = loginAuthenticationProvider
+    open fun loginAuthenticationProvider() = loginUserCheck
 }

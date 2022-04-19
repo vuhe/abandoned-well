@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.spring.web.controller.BaseController
 
 /**
@@ -16,7 +15,7 @@ import top.vuhe.admin.spring.web.controller.BaseController
  */
 @RestController
 @Tag(name = "接口文档")
-@RequestMapping(API_SYSTEM_PREFIX + "doc")
+@RequestMapping("/system/doc")
 class SysDocController : BaseController() {
 
     @GetMapping("main")

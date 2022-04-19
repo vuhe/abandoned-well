@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.param.SysLogParam
@@ -20,7 +19,7 @@ import top.vuhe.admin.system.service.SysLogService
  */
 @RestController
 @Tag(name = "系统日志")
-@RequestMapping(API_SYSTEM_PREFIX + "log")
+@RequestMapping("/system/log")
 class SysLogController(
     private val sysLogService: SysLogService
 ) : BaseController() {

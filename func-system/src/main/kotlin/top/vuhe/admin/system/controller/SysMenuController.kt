@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
 import top.vuhe.admin.system.domain.SysMenu
 import top.vuhe.admin.system.service.SysMenuService
@@ -17,7 +16,7 @@ import top.vuhe.admin.system.service.SysMenuService
  */
 @Tag(name = "菜单管理")
 @RestController
-@RequestMapping(API_SYSTEM_PREFIX + "menu/")
+@RequestMapping("/system/menu/")
 class SysMenuController(private val sysMenuService: SysMenuService) {
 
     /**

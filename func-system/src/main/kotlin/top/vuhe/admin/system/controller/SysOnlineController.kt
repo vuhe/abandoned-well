@@ -4,9 +4,8 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
-import top.vuhe.admin.spring.security.session.SecuritySessionManager
+import top.vuhe.admin.spring.security.hepler.SecuritySessionManager
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.service.SysUserService
 import java.time.Duration
@@ -19,7 +18,7 @@ import java.time.LocalDateTime
  */
 @RestController
 @Tag(name = "在线用户")
-@RequestMapping(API_SYSTEM_PREFIX + "online")
+@RequestMapping("/system/online")
 class SysOnlineController(
     private val sessionRegistry: SecuritySessionManager,
     private val sysUserService: SysUserService

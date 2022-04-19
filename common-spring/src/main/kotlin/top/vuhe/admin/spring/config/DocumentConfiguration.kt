@@ -18,7 +18,7 @@ class DocumentConfiguration {
     @PostConstruct
     @Suppress("SpellCheckingInspection")
     fun setProperties() {
-        System.setProperty("springdoc.packages-to-scan", "top.vuhe")
+        System.setProperty("springdoc.packages-to-scan", "top.vuhe.admin")
     }
 
     @Bean

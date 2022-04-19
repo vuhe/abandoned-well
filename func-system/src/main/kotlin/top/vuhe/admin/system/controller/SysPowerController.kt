@@ -5,7 +5,6 @@ import org.ktorm.entity.Entity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysPower
@@ -19,7 +18,7 @@ import top.vuhe.admin.system.service.SysPowerService
  */
 @RestController
 @Tag(name = "系统权限")
-@RequestMapping(API_SYSTEM_PREFIX + "power")
+@RequestMapping("/system/power")
 class SysPowerController(private val sysPowerService: SysPowerService) : BaseController() {
 
     /**

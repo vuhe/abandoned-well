@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.logging.LoggingType
+import top.vuhe.admin.spring.security.SpringSecurityService
 import top.vuhe.admin.spring.security.principal.LoginUser
-import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.repository.LinkRolePower
 import top.vuhe.admin.system.repository.LinkUserRole
@@ -21,13 +21,13 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Service
-class ProjectSecurityService(
+class SecurityService(
     private val logging: LoggingFactory,
     private val users: SysUserRepository,
     private val userRole: LinkUserRole,
     private val rolePower: LinkRolePower,
     private val powers: SysPowerRepository
-) : UserSecurityService {
+) : SpringSecurityService {
 
     fun getUserById(id: String): SysUser? = users.selectById(id)
 
@@ -48,12 +48,9 @@ class ProjectSecurityService(
         return codes.toList()
     }
 
-    override fun getLoginUserId(username: String): String? {
-        return users.selectByUsername(username)?.userId
-    }
-
-    override fun getLoginUserById(userId: String): LoginUser {
-        return SecurityUserProxy(userId, this)
+    override fun buildLoginUser(username: String): LoginUser? {
+        val userId = users.selectByUsername(username)?.userId
+        return userId?.let { id -> SecurityUserProxy(id, this) }
     }
 
     @Transactional(rollbackFor = [Exception::class])
@@ -74,11 +71,13 @@ class ProjectSecurityService(
             it.loggingType = LoggingType.LOGIN
             it.errorMsg = errorMsg
         }
-        updateLoginTime(userId)
+        if (success) {
+            updateLoginTime(userId)
+        }
     }
 
     private class SecurityUserProxy(
-        override val userId: String, private val service: ProjectSecurityService
+        override val userId: String, private val service: SecurityService
     ) : LoginUser {
         private val user get() = service.getUserById(userId)
         override val password: String get() = user?.password ?: ""

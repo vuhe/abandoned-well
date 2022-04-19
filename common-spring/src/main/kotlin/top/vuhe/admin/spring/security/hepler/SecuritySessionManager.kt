@@ -1,14 +1,12 @@
-package top.vuhe.admin.spring.security.session
+package top.vuhe.admin.spring.security.hepler
 
 import org.springframework.security.core.session.SessionRegistry
 import org.springframework.security.core.session.SessionRegistryImpl
 import org.springframework.security.web.DefaultRedirectStrategy
-import org.springframework.security.web.RedirectStrategy
 import org.springframework.security.web.session.HttpSessionEventPublisher
 import org.springframework.security.web.session.SessionInformationExpiredEvent
 import org.springframework.security.web.session.SessionInformationExpiredStrategy
 import java.util.concurrent.ConcurrentHashMap
-import javax.servlet.annotation.WebListener
 import javax.servlet.http.HttpSession
 import javax.servlet.http.HttpSessionEvent
 import javax.servlet.http.HttpSessionIdListener
@@ -19,11 +17,10 @@ import javax.servlet.http.HttpSessionListener
  *
  * @author vuhe
  */
-@WebListener
 object SecuritySessionManager :
     SessionRegistry by SessionRegistryImpl(), HttpSessionListener, HttpSessionIdListener,
     SessionInformationExpiredStrategy {
-    private val redirectStrategy: RedirectStrategy = DefaultRedirectStrategy()
+    private val redirectStrategy = DefaultRedirectStrategy()
     private val eventPublisher = HttpSessionEventPublisher()
     private val sessions = ConcurrentHashMap<String, HttpSession>()
 
@@ -42,7 +39,6 @@ object SecuritySessionManager :
      * session 创建回调；
      * 此方法会缓存目前有效的 session
      */
-    @Synchronized
     override fun sessionCreated(event: HttpSessionEvent) {
         eventPublisher.sessionCreated(event)
         // 在接收到 session 创建信息后，创建 sessions 缓存映射
@@ -57,7 +53,6 @@ object SecuritySessionManager :
      *
      * 回调后，会清理 session 缓存和 SessionRegistry 缓存
      */
-    @Synchronized
     override fun sessionDestroyed(event: HttpSessionEvent) {
         eventPublisher.sessionDestroyed(event)
         // 在接收到 session 注销信息后，清理 SessionRegistry 信息
@@ -70,7 +65,6 @@ object SecuritySessionManager :
      * session id 变更回调；
      * 此方法会更新 session 缓存
      */
-    @Synchronized
     override fun sessionIdChanged(se: HttpSessionEvent, oldSessionId: String) {
         eventPublisher.sessionIdChanged(se, oldSessionId)
         // 在接收到 session 变更信息后，更新 sessions 缓存映射

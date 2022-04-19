@@ -7,7 +7,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.annotation.RepeatSubmit
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.Logging
@@ -26,7 +25,7 @@ import top.vuhe.admin.system.service.SysUserService
  */
 @RestController
 @Tag(name = "用户管理")
-@RequestMapping(API_SYSTEM_PREFIX + "user")
+@RequestMapping("/system/user")
 class SysUserController(
     private val sysUserService: SysUserService,
     private val sysRoleService: SysRoleService,
@@ -64,6 +63,7 @@ class SysUserController(
     /**
      * 用户密码修改视图
      */
+    @Suppress("SpellCheckingInspection")
     @GetMapping("editpasswordadmin")
     @Operation(summary = "获取管理员修改用户密码视图")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:editPasswordAdmin')")

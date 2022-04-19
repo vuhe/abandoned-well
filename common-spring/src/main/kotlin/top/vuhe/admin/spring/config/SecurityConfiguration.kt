@@ -10,7 +10,8 @@ import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl
 import top.vuhe.admin.spring.security.SpringSecurityAdapter
-import top.vuhe.admin.spring.security.principal.UserSecurityService
+import top.vuhe.admin.spring.security.SpringSecurityService
+import kotlin.time.Duration.Companion.hours
 
 /**
  * ### Security 安全配置
@@ -23,13 +24,13 @@ import top.vuhe.admin.spring.security.principal.UserSecurityService
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfiguration(
-    objectMapper: ObjectMapper, userDetailsService: UserSecurityService
+    objectMapper: ObjectMapper, userDetailsService: SpringSecurityService
 ) : SpringSecurityAdapter(objectMapper, userDetailsService) {
     /**
      * 身份认证接口
      */
     override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.authenticationProvider(loginAuthenticationProvider)
+        auth.authenticationProvider(loginUserCheck)
     }
 
     /**
@@ -56,33 +57,29 @@ class SecurityConfiguration(
             // 登录接口
             loginProcessingUrl = "/login"
             // 登录验证后处理
-            authenticationSuccessHandler = loginAfterHandler
-            authenticationFailureHandler = loginAfterHandler
+            authenticationSuccessHandler = loginSuccessHandle
+            authenticationFailureHandler = loginFailHandle
             // 附加验证码等信息
-            authenticationDetailsSource = loginDetailSource
+            authenticationDetailsSource = loginCaptchaCheck
         }
 
         logout {
-            addLogoutHandler(logoutHandler)
-            // 退出登录删除 cookie缓存
+            addLogoutHandler(logoutHandle)
             deleteCookies("JSESSIONID")
-            // 配置用户登出自定义处理类
-            logoutSuccessHandler = logoutHandler
+            logoutSuccessHandler = logoutSuccessHandle
         }
 
         exceptionHandling {
-            // 配置没有权限自定义处理类
-            accessDeniedHandler = accessDenied
+            accessDeniedHandler = accessDeniedHandle
         }
 
         rememberMe {
             rememberMeParameter = "remember-me"
             rememberMeCookieName = "remember-me-token"
-            authenticationSuccessHandler = rememberLoginAfterHandler
+            authenticationSuccessHandler = rememberMeHandle
             tokenRepository = InMemoryTokenRepositoryImpl()
             key = "VUHE_REMEMBER"
-            // 过期时间 6 小时
-            tokenValiditySeconds = 6 * 60 * 60
+            tokenValiditySeconds = 6.hours.inWholeSeconds.toInt()
         }
 
         sessionManagement {

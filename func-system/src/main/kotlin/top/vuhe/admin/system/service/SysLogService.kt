@@ -77,7 +77,7 @@ class SysLogService(
             requestBody = request.queryString ?: ""
             systemOs = userAgent.system
             operateId = currUserId
-            operateName = user?.username ?: "未登录用户"
+            operateName = user?.username ?: "未知"
         }
         setting(log)
         // 此处必须在多线程中调用 transaction, 否则事务不起作用

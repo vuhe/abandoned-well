@@ -11,7 +11,6 @@ import top.vuhe.admin.api.logging.LoggingAspect
 import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.monitor.MonitorInfo
 import top.vuhe.admin.spring.dsl.javaTimeModule
-import top.vuhe.admin.spring.dsl.registrationFilter
 import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -47,7 +46,7 @@ class SystemConfiguration {
      * xss 过滤
      */
     @Bean
-    fun xssFilterRegistrationBean() = registrationFilter("xssHttpFilter", XssFilterSupport())
+    fun xssFilter() = XssFilterSupport()
 
     /**
      * 日志记录

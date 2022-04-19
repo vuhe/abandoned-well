@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysRole
 import top.vuhe.admin.system.param.SysRoleParam
@@ -18,7 +17,7 @@ import top.vuhe.admin.system.service.SysRoleService
  */
 @RestController
 @Tag(name = "系统角色")
-@RequestMapping(API_SYSTEM_PREFIX + "role")
+@RequestMapping("/system/role")
 class SysRoleController(
     private val sysRoleService: SysRoleService
 ) : BaseController() {
