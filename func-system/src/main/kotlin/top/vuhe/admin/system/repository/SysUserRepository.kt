@@ -15,7 +15,9 @@ import top.vuhe.admin.system.table.SysUserTable
  * @author vuhe
  */
 @Repository
-class SysUserRepository : CurdRepository<SysUserTable, SysUser>(cacheable = true) {
+class SysUserRepository : CurdRepository<SysUserTable, SysUser>() {
+
+    override val cacheName: String? get() = table.tableName
 
     override val table get() = SysUserTable
 

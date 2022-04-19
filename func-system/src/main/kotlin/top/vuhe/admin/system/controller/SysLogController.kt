@@ -11,7 +11,7 @@ import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.param.SysLogParam
-import top.vuhe.admin.system.service.ISysLogService
+import top.vuhe.admin.system.service.SysLogService
 
 /**
  * 日志控制器
@@ -22,7 +22,7 @@ import top.vuhe.admin.system.service.ISysLogService
 @Tag(name = "系统日志")
 @RequestMapping(API_SYSTEM_PREFIX + "log")
 class SysLogController(
-    private val sysLogService: ISysLogService
+    private val sysLogService: SysLogService
 ) : BaseController() {
 
     /**
@@ -46,7 +46,7 @@ class SysLogController(
      */
     @GetMapping("operateLog")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:log:operateLog')")
-    fun operateLog(param: SysLogParam) = pageTable {
+    fun operateLog(param: SysLogParam) = buildPage {
         sysLogService.data(LoggingType.OPERATE, param)
     }
 
@@ -55,7 +55,7 @@ class SysLogController(
      */
     @GetMapping("loginLog")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:log:loginLog')")
-    fun loginLog(param: SysLogParam) = pageTable {
+    fun loginLog(param: SysLogParam) = buildPage {
         sysLogService.data(LoggingType.LOGIN, param)
     }
 

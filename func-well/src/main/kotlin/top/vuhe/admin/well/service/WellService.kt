@@ -1,6 +1,7 @@
-package top.vuhe.admin.well.service.impl
+package top.vuhe.admin.well.service
 
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.exception.businessNotNull
 import top.vuhe.admin.spring.database.service.CurdService
@@ -9,7 +10,6 @@ import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.repository.CodeRepository
 import top.vuhe.admin.well.repository.RegionRepository
 import top.vuhe.admin.well.repository.WellRepository
-import top.vuhe.admin.well.service.IWellService
 
 /**
  * 井信息服务类接口实现
@@ -17,15 +17,18 @@ import top.vuhe.admin.well.service.IWellService
  * @author vuhe
  */
 @Service
-class WellServiceImpl(
-    private val infoRepository: WellRepository,
-    private val regionRepository: RegionRepository,
-    private val regionCodeRepository: CodeRepository
-) : CurdService<WellInfo>(infoRepository), IWellService {
+class WellService(
+    override val repository: WellRepository,
+    private val regions: RegionRepository,
+    private val regionCodes: CodeRepository
+) : CurdService<WellInfo>() {
 
-    override fun exportList(): List<ExportWell> {
+    /**
+     * 导出数据列表
+     */
+    fun exportList(): List<ExportWell> {
         return list().mapNotNull {
-            val region = regionRepository.selectById(it.regionId)
+            val region = regions.selectById(it.regionId)
             if (region != null) ExportWell(it, region)
             else null
         }
@@ -33,27 +36,30 @@ class WellServiceImpl(
 
     /**
      * 添加实体，使用自定义的 id 生成策略
+     *
+     * 此方法使用了其他表的字段进行主键生成，这可能会产生不可重复读，
+     * 为了保证上报的正确性，此方法指定使用「可重复读」
+     * TODO need modify
      */
-    @Transactional(rollbackFor = [Exception::class])
+    @Transactional(rollbackFor = [Exception::class], isolation = Isolation.REPEATABLE_READ)
     override fun add(entity: WellInfo): Boolean {
         val region = businessNotNull(
-            regionRepository.selectById(entity.regionId)
+            regions.selectById(entity.regionId)
         ) { "地区错误，请刷新后重试" }
 
         // 地区顺序码 + 1
         region.next = region.next + 1
 
         val code = businessNotNull(
-            regionCodeRepository.selectById(region.regionCodeId)
+            regionCodes.selectById(region.regionCodeId)
         ) { "水文代码错误，请刷新后重试" }
 
         // 生成井 id
-        val wellId = "%s%04d%sW".format(region.districtCode, region.next, code.code)
-        entity.id = wellId
+        entity.id = "%s%04d%sW".format(region.districtCode, region.next, code.code)
 
         // 插入成功后，将顺序码更改写入数据库
-        return if (infoRepository.insert(entity) > 0) {
-            regionRepository.update(region)
+        return if (repository.insert(entity) > 0) {
+            regions.update(region)
             true
         } else false
     }

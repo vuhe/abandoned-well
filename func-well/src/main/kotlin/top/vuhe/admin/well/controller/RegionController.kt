@@ -7,8 +7,8 @@ import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.well.domina.WellRegion
 import top.vuhe.admin.well.param.RegionParam
-import top.vuhe.admin.well.service.ICodeService
-import top.vuhe.admin.well.service.IRegionService
+import top.vuhe.admin.well.service.CodeService
+import top.vuhe.admin.well.service.RegionService
 import javax.validation.Valid
 
 /**
@@ -20,8 +20,8 @@ import javax.validation.Valid
 @Tag(name = "井区域")
 @RequestMapping("/well/region")
 class RegionController(
-    private val regionService: IRegionService,
-    private val codeService: ICodeService
+    private val regionService: RegionService,
+    private val codeService: CodeService
 ) : BaseController() {
 
     /**
@@ -58,7 +58,7 @@ class RegionController(
      */
     @GetMapping("page")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:page')")
-    fun page(param: RegionParam) = pageTable {
+    fun page(param: RegionParam) = buildPage {
         regionService.page(param)
     }
 
@@ -95,6 +95,6 @@ class RegionController(
     @DeleteMapping("/batchRemove")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:region:remove')")
     fun batchRemove(ids: String) = boolResult {
-        regionService.batchRemove(ids.split(","))
+        regionService.remove(ids.split(","))
     }
 }

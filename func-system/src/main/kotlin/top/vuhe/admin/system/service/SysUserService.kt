@@ -1,4 +1,4 @@
-package top.vuhe.admin.system.service.impl
+package top.vuhe.admin.system.service
 
 import org.ktorm.entity.Entity
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
@@ -11,7 +11,6 @@ import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.repository.LinkUserRole
 import top.vuhe.admin.system.repository.SysRoleRepository
 import top.vuhe.admin.system.repository.SysUserRepository
-import top.vuhe.admin.system.service.ISysUserService
 import java.time.LocalDateTime
 
 /**
@@ -20,17 +19,17 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Service
-class SysUserServiceImpl(
-    private val sysUserRepository: SysUserRepository,
+class SysUserService(
+    override val repository: SysUserRepository,
     private val linkUserRole: LinkUserRole,
     private val sysRoleRepository: SysRoleRepository
-) : CurdService<SysUser>(sysUserRepository), ISysUserService {
+) : CurdService<SysUser>() {
     private val encoder = BCryptPasswordEncoder()
 
     @Transactional(rollbackFor = [Exception::class])
     override fun add(entity: SysUser): Boolean {
         businessRequire(
-            sysUserRepository.selectByUsername(entity.username) == null
+            repository.selectByUsername(entity.username) == null
         ) { "用户名重复，请更改用户名" }
 
         entity.password = encoder.encode(entity.password)
@@ -40,31 +39,35 @@ class SysUserServiceImpl(
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun batchRemove(ids: List<String>): Boolean {
-        // 删除关联表信息
+    override fun remove(ids: List<String>): Boolean {
         linkUserRole.deleteByUser(ids)
-        // 删除用户信息
-        return super.batchRemove(ids)
+        return super.remove(ids)
     }
 
+    /**
+     * 修改用户密码
+     */
     @Transactional(rollbackFor = [Exception::class])
-    override fun modifyPassword(userId: String, password: String): Boolean {
+    fun modifyPassword(userId: String, password: String): Boolean {
         val update = Entity.create<SysUser>().apply {
             this.userId = userId
             this.password = encoder.encode(password)
         }
-        return sysUserRepository.update(update) > 0
+        return repository.update(update) > 0
     }
 
     /**
-     * 更改用户角色映射会删除缓存
+     * 保存用户角色数据
      */
     @Transactional(rollbackFor = [Exception::class])
-    override fun saveUserRole(userId: String, roleIds: List<String>): Boolean {
+    fun saveUserRole(userId: String, roleIds: List<String>): Boolean {
         return linkUserRole.insert(userId, roleIds) > 0
     }
 
-    override fun getUserRole(userId: String): List<SysRole> {
+    /**
+     * 获取用户角色数据
+     */
+    fun getUserRole(userId: String): List<SysRole> {
         // 查询全部角色
         val allRole = sysRoleRepository.selectList()
         // 查此用户的角色表

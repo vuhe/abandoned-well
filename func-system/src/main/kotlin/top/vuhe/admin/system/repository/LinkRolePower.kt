@@ -7,7 +7,9 @@ import top.vuhe.admin.spring.database.repository.BaseRepository
 import top.vuhe.admin.spring.database.table.IdTable
 
 @Repository
-class LinkRolePower : BaseRepository(cacheable = true) {
+class LinkRolePower : BaseRepository() {
+
+    override val cacheName: String? get() = RolePower.tableName
 
     private object RolePower : IdTable<Nothing>("sys_role_power") {
         override val id = varchar("id").primaryKey()

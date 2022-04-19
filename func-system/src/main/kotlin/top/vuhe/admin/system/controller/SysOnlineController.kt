@@ -8,7 +8,7 @@ import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.security.session.SecuritySessionManager
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.system.service.ISysUserService
+import top.vuhe.admin.system.service.SysUserService
 import java.time.Duration
 import java.time.LocalDateTime
 
@@ -22,7 +22,7 @@ import java.time.LocalDateTime
 @RequestMapping(API_SYSTEM_PREFIX + "online")
 class SysOnlineController(
     private val sessionRegistry: SecuritySessionManager,
-    private val sysUserService: ISysUserService
+    private val sysUserService: SysUserService
 ) : BaseController() {
 
     /**
@@ -39,7 +39,7 @@ class SysOnlineController(
      */
     @GetMapping("data")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:online:data')")
-    fun data(username: String?) = dataTable {
+    fun data(username: String?) = buildTable {
         sessionRegistry.allPrincipals.mapNotNull {
             val user = sysUserService.getOneById(it as String)
             if (user == null) null

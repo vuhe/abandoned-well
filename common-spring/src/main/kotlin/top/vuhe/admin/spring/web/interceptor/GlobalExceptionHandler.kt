@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.exception.BusinessException
 import top.vuhe.admin.api.network.isAjax
-import top.vuhe.admin.spring.web.response.ResultObj
+import top.vuhe.admin.spring.web.response.AjaxCode
+import top.vuhe.admin.spring.web.response.AjaxResult
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -23,18 +24,18 @@ class GlobalExceptionHandler {
      * 不支持的请求类型
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
-    fun handleException(e: HttpRequestMethodNotSupportedException): ResultObj {
+    fun handleException(e: HttpRequestMethodNotSupportedException): AjaxResult {
         log.error(e.message, e)
-        return ResultObj.Fail(message = "不支持 '${e.method}'请求")
+        return AjaxResult.fail(message = "不支持 '${e.method}'请求")
     }
 
     /**
      * 拦截参数验证失败异常
      */
     @ExceptionHandler(BindException::class)
-    fun validationFailed(request: HttpServletRequest, e: BindException): ResultObj {
+    fun validationFailed(request: HttpServletRequest, e: BindException): AjaxResult {
         val message = e.bindingResult.allErrors.lastOrNull()?.defaultMessage ?: "参数不符合要求"
-        return ResultObj.Fail(message = message)
+        return AjaxResult.fail(message = message)
     }
 
     /**
@@ -43,11 +44,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(AccessDeniedException::class)
     fun access(request: HttpServletRequest, e: AccessDeniedException): Any {
         return if (request.isAjax) {
-            ResultObj.Fail(message = "暂无权限")
+            AjaxResult.fail(type = AjaxCode.AccessDenied)
         } else {
-            ModelAndView("error/403").apply {
-                addObject("errorMessage", e.message)
-            }
+            ModelAndView("error/403")
         }
     }
 
@@ -57,11 +56,9 @@ class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException::class)
     fun businessException(request: HttpServletRequest, e: BusinessException): Any {
         return if (request.isAjax) {
-            ResultObj.Fail(message = e.message)
+            AjaxResult.fail(message = e.message)
         } else {
-            ModelAndView("error/500").apply {
-                addObject("errorMessage", e.message)
-            }
+            ModelAndView("error/500")
         }
     }
 
@@ -69,18 +66,18 @@ class GlobalExceptionHandler {
      * 运行时异常
      */
     @ExceptionHandler(RuntimeException::class)
-    fun notFount(e: RuntimeException): ResultObj {
+    fun notFount(e: RuntimeException): AjaxResult {
         log.error("运行时异常:", e)
-        return ResultObj.Fail(message = "运行时异常: ${e.message}")
+        return AjaxResult.fail(message = "运行时异常: ${e.message}")
     }
 
     /**
      * 其他异常
      */
     @ExceptionHandler(Exception::class)
-    fun handleException(e: Exception): ResultObj {
+    fun handleException(e: Exception): AjaxResult {
         log.error(e.message, e)
-        return ResultObj.Fail(message = "服务器错误，请联系管理员")
+        return AjaxResult.fail(message = "服务器错误，请联系管理员")
     }
 
     companion object {

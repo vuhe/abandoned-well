@@ -11,6 +11,10 @@
 - function-system: 系统基本管理系统模块
 - function-well: 井信息管理系统基的实现模块
 
+项目使用 spring boot 的分层结构：controller、service、repository
+
+由于项目已经确定数据库，并且大部分和数据库强相关的由 repository 负责实现，service 层不再定义接口
+
 ## 项目依赖
 
 ### 语言及环境

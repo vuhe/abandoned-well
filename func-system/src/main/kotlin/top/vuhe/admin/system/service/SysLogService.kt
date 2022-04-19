@@ -1,10 +1,11 @@
-package top.vuhe.admin.system.service.impl
+package top.vuhe.admin.system.service
 
 import org.ktorm.entity.Entity
 import org.springframework.scheduling.annotation.Async
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.logging.LogRecord
+import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.api.network.requestContext
 import top.vuhe.admin.api.network.userAgent
@@ -14,7 +15,6 @@ import top.vuhe.admin.system.domain.SysLog
 import top.vuhe.admin.system.param.SysLogParam
 import top.vuhe.admin.system.repository.SysLogRepository
 import top.vuhe.admin.system.repository.SysUserRepository
-import top.vuhe.admin.system.service.ISysLogService
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
 
@@ -24,10 +24,10 @@ import javax.servlet.http.HttpServletRequest
  * @author vuhe
  */
 @Service
-class SysLogServiceImpl(
+class SysLogService(
     private val sysUserRepository: SysUserRepository,
     private val sysLogRepository: SysLogRepository
-) : ISysLogService {
+) : LoggingFactory {
     private val request by requestContext()
 
     override fun record(setting: (LogRecord) -> Unit) {
@@ -38,21 +38,26 @@ class SysLogServiceImpl(
         asyncRecord(request, userId, setting)
     }
 
-    override fun data(loggingType: LoggingType, param: SysLogParam): TablePage<SysLog> {
+    /**
+     * 执行查询操作
+     */
+    fun data(loggingType: LoggingType, param: SysLogParam): TablePage<SysLog> {
         param.loggingType = loggingType
         return sysLogRepository.logData(param)
     }
 
-    override fun getById(id: String): SysLog? {
-        return sysLogRepository.selectById(id)
-    }
-
-    override fun getTopLoginLog(userId: String): List<SysLog> {
+    /**
+     * 根据 userId 查询日志
+     */
+    fun getTopLoginLog(userId: String): List<SysLog> {
         return sysLogRepository.selectTopLoginLog(userId)
     }
 
+    /**
+     * 清空日志记录
+     */
     @Transactional(rollbackFor = [Exception::class])
-    override fun removeAll(): Boolean {
+    fun removeAll(): Boolean {
         return sysLogRepository.deleteAll()
     }
 

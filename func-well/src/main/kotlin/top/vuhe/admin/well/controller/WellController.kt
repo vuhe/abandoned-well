@@ -10,8 +10,8 @@ import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
 import top.vuhe.admin.well.param.WellParam
-import top.vuhe.admin.well.service.IRegionService
-import top.vuhe.admin.well.service.IWellService
+import top.vuhe.admin.well.service.RegionService
+import top.vuhe.admin.well.service.WellService
 import javax.validation.Valid
 
 /**
@@ -23,8 +23,8 @@ import javax.validation.Valid
 @Tag(name = "井信息")
 @RequestMapping("/well/info")
 class WellController(
-    private val infoService: IWellService,
-    private val regionService: IRegionService,
+    private val infoService: WellService,
+    private val regionService: RegionService,
 ) : BaseController() {
 
     /**
@@ -91,7 +91,7 @@ class WellController(
     @GetMapping("page")
     @Operation(summary = "分页查询井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:page')")
-    fun page(param: WellParam) = pageTable {
+    fun page(param: WellParam) = buildPage {
         infoService.page(param)
     }
 
@@ -171,6 +171,6 @@ class WellController(
     @Operation(summary = "批量删除井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:remove')")
     fun batchRemove(ids: String) = boolResult {
-        infoService.batchRemove(ids.split(","))
+        infoService.remove(ids.split(","))
     }
 }

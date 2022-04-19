@@ -1,9 +1,9 @@
 package top.vuhe.admin.spring.web.controller
 
 import top.vuhe.admin.spring.database.table.TablePage
-import top.vuhe.admin.spring.web.response.ResultObj
-import top.vuhe.admin.spring.web.response.ResultTable
-import top.vuhe.admin.spring.web.response.ResultTree
+import top.vuhe.admin.spring.web.response.AjaxResult
+import top.vuhe.admin.spring.web.response.LayuiTable
+import top.vuhe.admin.spring.web.response.LayuiTree
 
 /**
  * ### 统一响应 Controller
@@ -12,45 +12,39 @@ import top.vuhe.admin.spring.web.response.ResultTree
  */
 abstract class BaseController {
 
-    protected fun success(message: String = "操作成功", data: Any? = null) = ResultObj.Success(message, data)
+    protected fun success(message: String = "操作成功") = AjaxResult.success(message)
 
-    protected fun fail(code: Int = 500, message: String = "操作失败") = ResultObj.Fail(code, message)
+    protected fun fail() = AjaxResult.fail()
 
     /**
      * bool 处理结果
      */
-    protected inline fun boolResult(block: () -> Boolean): ResultObj {
-        return if (block()) success()
-        else fail()
+    protected inline fun boolResult(block: () -> Boolean): AjaxResult {
+        return if (block()) success() else fail()
     }
 
     /**
      * 处理并返回信息
      */
-    protected inline fun messageResult(block: () -> String): ResultObj {
+    protected inline fun messageResult(block: () -> String): AjaxResult {
         return success(message = block())
     }
 
     /**
      * 返回 Tree 数据
      */
-    protected inline fun dataTree(block: () -> Any) = ResultTree(block())
+    protected inline fun buildTree(block: () -> List<*>) = LayuiTree(block())
 
     /**
      * 返回数据表格数据 分页
      */
-    protected inline fun <T : Any> pageTable(block: () -> TablePage<T>): ResultTable {
-        val page = block()
-        return ResultTable(page.list, page.count.toLong())
+    protected inline fun buildPage(block: () -> TablePage<*>): LayuiTable {
+        return block().let { LayuiTable(it.list, it.count.toLong()) }
     }
 
     /**
      * 返回数据表格数据
      */
-    protected inline fun dataTable(block: () -> List<*>) = ResultTable(block())
+    protected inline fun buildTable(block: () -> List<*>) = LayuiTable(block())
 
-    /**
-     * 返回树状表格数据 分页
-     */
-    protected inline fun treeTable(block: () -> List<*>) = ResultTable(block())
 }

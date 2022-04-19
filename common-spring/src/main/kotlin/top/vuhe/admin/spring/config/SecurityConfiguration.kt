@@ -1,5 +1,6 @@
 package top.vuhe.admin.spring.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -8,7 +9,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl
-import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.spring.security.SpringSecurityAdapter
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 
@@ -23,8 +23,8 @@ import top.vuhe.admin.spring.security.principal.UserSecurityService
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 class SecurityConfiguration(
-    sysLogService: LoggingFactory, userDetailsService: UserSecurityService
-) : SpringSecurityAdapter(sysLogService, userDetailsService) {
+    objectMapper: ObjectMapper, userDetailsService: UserSecurityService
+) : SpringSecurityAdapter(objectMapper, userDetailsService) {
     /**
      * 身份认证接口
      */

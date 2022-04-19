@@ -15,9 +15,9 @@ import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.param.SysUserParam
-import top.vuhe.admin.system.service.ISysLogService
-import top.vuhe.admin.system.service.ISysRoleService
-import top.vuhe.admin.system.service.ISysUserService
+import top.vuhe.admin.system.service.SysLogService
+import top.vuhe.admin.system.service.SysRoleService
+import top.vuhe.admin.system.service.SysUserService
 
 /**
  * 用户控制器
@@ -28,9 +28,9 @@ import top.vuhe.admin.system.service.ISysUserService
 @Tag(name = "用户管理")
 @RequestMapping(API_SYSTEM_PREFIX + "user")
 class SysUserController(
-    private val sysUserService: ISysUserService,
-    private val sysRoleService: ISysRoleService,
-    private val sysLogService: ISysLogService
+    private val sysUserService: SysUserService,
+    private val sysRoleService: SysRoleService,
+    private val sysLogService: SysLogService
 ) : BaseController() {
     /**
      * 获取用户列表视图
@@ -100,7 +100,7 @@ class SysUserController(
     @Operation(summary = "获取用户列表数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:data')")
     @Logging("查询用户", describe = "查询用户", type = BusinessType.QUERY)
-    fun data(param: SysUserParam) = pageTable {
+    fun data(param: SysUserParam) = buildPage {
         sysUserService.page(param)
     }
 
@@ -175,7 +175,7 @@ class SysUserController(
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:remove')")
     @Logging("删除用户", describe = "删除用户", type = BusinessType.REMOVE)
     fun batchRemove(@PathVariable ids: String) = boolResult {
-        sysUserService.batchRemove(ids.split(","))
+        sysUserService.remove(ids.split(","))
     }
 
     /**

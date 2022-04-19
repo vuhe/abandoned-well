@@ -11,7 +11,8 @@ import top.vuhe.admin.system.table.SysRoleTable
  * @author vuhe
  */
 @Repository
-class SysRoleRepository : CurdRepository<SysRoleTable, SysRole>(cacheable = true) {
+class SysRoleRepository : CurdRepository<SysRoleTable, SysRole>() {
+    override val cacheName: String? get() = table.tableName
     override val table get() = SysRoleTable
     override var SysRole.entityId: String by SysRole::roleId
 }

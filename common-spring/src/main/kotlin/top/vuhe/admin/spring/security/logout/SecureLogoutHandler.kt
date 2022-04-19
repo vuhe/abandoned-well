@@ -1,11 +1,12 @@
 package top.vuhe.admin.spring.security.logout
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.authentication.logout.LogoutHandler
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler
-import top.vuhe.admin.spring.web.response.success
+import top.vuhe.admin.spring.web.HttpServletResponseHandler
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -14,7 +15,8 @@ import javax.servlet.http.HttpServletResponse
  *
  * @author vuhe
  */
-object SecureLogoutHandler : LogoutHandler, LogoutSuccessHandler {
+class SecureLogoutHandler(objectMapper: ObjectMapper) :
+    HttpServletResponseHandler(objectMapper), LogoutHandler, LogoutSuccessHandler {
     private val log = LoggerFactory.getLogger(this::class.java)
 
     override fun logout(request: HttpServletRequest?, response: HttpServletResponse?, authentication: Authentication?) {

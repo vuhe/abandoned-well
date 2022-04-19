@@ -16,10 +16,5 @@ interface UserSecurityService {
      */
     fun getLoginUserById(userId: String): LoginUser
 
-    /**
-     * 更新最后登录时间
-     *
-     * @param userId 用户 id
-     */
-    fun updateLoginTime(userId: String)
+    fun loginRecord(userId: String, description: String, success: Boolean, errorMsg: String)
 }

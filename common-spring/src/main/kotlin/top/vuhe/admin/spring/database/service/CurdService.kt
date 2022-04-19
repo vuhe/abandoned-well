@@ -11,21 +11,25 @@ import top.vuhe.admin.spring.web.request.PageParam
  *
  * @author vuhe
  */
-abstract class CurdService<E : Entity<E>>(private val mapper: CurdRepository<*, E>) : ICurdService<E> {
-    override fun list(): List<E> = mapper.selectList()
+abstract class CurdService<E : Entity<E>> {
+    protected abstract val repository: CurdRepository<*, E>
 
-    override fun page(param: PageParam): TablePage<E> = mapper.selectPage(param)
+    fun list(): List<E> = repository.selectList()
 
-    override fun list(param: PageParam): List<E> = mapper.selectList(param)
+    fun page(param: PageParam): TablePage<E> = repository.selectPage(param)
 
-    override fun getOneById(id: String): E? = mapper.selectById(id)
+    open fun list(param: PageParam): List<E> = repository.selectList(param)
 
-    @Transactional(rollbackFor = [Exception::class])
-    override fun add(entity: E): Boolean = mapper.insert(entity) > 0
-
-    @Transactional(rollbackFor = [Exception::class])
-    override fun modify(entity: E): Boolean = mapper.update(entity) > 0
+    fun getOneById(id: String): E? = repository.selectById(id)
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun batchRemove(ids: List<String>): Boolean = mapper.delete(ids) > 0
+    open fun add(entity: E): Boolean = repository.insert(entity) > 0
+
+    @Transactional(rollbackFor = [Exception::class])
+    open fun modify(entity: E): Boolean = repository.update(entity) > 0
+
+    fun remove(id: String) = remove(listOf(id))
+
+    @Transactional(rollbackFor = [Exception::class])
+    open fun remove(ids: List<String>): Boolean = repository.delete(ids) > 0
 }

@@ -10,7 +10,7 @@ import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysPower
 import top.vuhe.admin.system.param.SysPowerParam
-import top.vuhe.admin.system.service.ISysPowerService
+import top.vuhe.admin.system.service.SysPowerService
 
 /**
  * 权限控制器
@@ -20,9 +20,7 @@ import top.vuhe.admin.system.service.ISysPowerService
 @RestController
 @Tag(name = "系统权限")
 @RequestMapping(API_SYSTEM_PREFIX + "power")
-class SysPowerController(
-    private val sysPowerService: ISysPowerService
-) : BaseController() {
+class SysPowerController(private val sysPowerService: SysPowerService) : BaseController() {
 
     /**
      * 获取权限列表视图
@@ -63,7 +61,7 @@ class SysPowerController(
      */
     @GetMapping("data")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:data')")
-    fun data(param: SysPowerParam) = treeTable { sysPowerService.list(param) }
+    fun data(param: SysPowerParam) = buildTable { sysPowerService.list(param) }
 
     /**
      * 保存权限信息
@@ -91,7 +89,7 @@ class SysPowerController(
     @DeleteMapping("remove/{id}")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:power:remove')")
     fun remove(@PathVariable id: String) = boolResult {
-        businessRequire(sysPowerService.hasNoChildNodes(id)) { "请先删除下级权限" }
+        businessRequire(sysPowerService.isLeafNode(id)) { "请先删除下级权限" }
         sysPowerService.remove(id)
     }
 
@@ -99,7 +97,7 @@ class SysPowerController(
      * 获取父级权限选择数据，构建数据附加 [topPower]
      */
     @GetMapping("selectParent")
-    fun selectParent() = dataTree { sysPowerService.list() + topPower }
+    fun selectParent() = buildTree { sysPowerService.list() + topPower }
 
     /**
      * 根据 Id 开启用户

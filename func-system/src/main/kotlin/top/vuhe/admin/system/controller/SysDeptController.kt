@@ -10,7 +10,7 @@ import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysDept
 import top.vuhe.admin.system.param.SysDeptParam
-import top.vuhe.admin.system.service.ISysDeptService
+import top.vuhe.admin.system.service.SysDeptService
 
 /**
  * 部门管理
@@ -20,9 +20,7 @@ import top.vuhe.admin.system.service.ISysDeptService
 @RestController
 @Tag(name = "组织部门")
 @RequestMapping(API_SYSTEM_PREFIX + "dept")
-class SysDeptController(
-    private val sysDeptService: ISysDeptService
-) : BaseController() {
+class SysDeptController(private val sysDeptService: SysDeptService) : BaseController() {
 
     /**
      * 获取部门列表视图
@@ -49,71 +47,54 @@ class SysDeptController(
 
     /* -------------------------------------------------------------------------- */
 
-    /**
-     * 获取部门列表数据
-     */
     @GetMapping("data")
+    @Operation(summary = "获取部门列表数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:data')")
-    fun data(param: SysDeptParam) = dataTable { sysDeptService.list(param) }
+    fun deptData(param: SysDeptParam) = buildTable { sysDeptService.list(param) }
 
-    /**
-     * 获取部门树状数据结构
-     */
     @GetMapping("tree")
-    fun tree() = dataTree { sysDeptService.list() }
+    @Operation(summary = "获取部门树状数据结构")
+    fun deptTree() = buildTree { sysDeptService.list() }
 
-    /**
-     * 保存部门信息
-     */
     @PostMapping("save")
-    @Operation(summary = "保存部门数据")
+    @Operation(summary = "保存部门信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:add')")
     fun save(@RequestBody sysDept: SysDept) = boolResult {
         sysDeptService.add(sysDept)
     }
 
-    /**
-     * 修改部门信息
-     */
     @PutMapping("update")
+    @Operation(summary = "修改部门信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun update(@RequestBody sysDept: SysDept) = boolResult {
         sysDeptService.modify(sysDept)
     }
 
-    /**
-     * 部门删除接口
-     */
     @DeleteMapping("remove/{id}")
+    @Operation(summary = "部门删除接口")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:remove')")
     fun remove(@PathVariable id: String) = boolResult {
-        businessRequire(sysDeptService.hasNoChildNodes(id)) { "请先删除下级部门" }
+        businessRequire(sysDeptService.isLeafNode(id)) { "请先删除下级部门" }
         sysDeptService.remove(id)
     }
 
-    /**
-     * 部门批量删除接口
-     */
     @DeleteMapping("batchRemove/{ids}")
+    @Operation(summary = "部门批量删除接口")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:remove')")
     fun batchRemove(@PathVariable ids: String) = boolResult {
-        sysDeptService.batchRemove(ids.split(","))
+        sysDeptService.remove(ids.split(","))
     }
 
-    /**
-     * 根据 Id 启用部门
-     */
     @PutMapping("enable")
+    @Operation(summary = "根据 Id 启用部门")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun enable(@RequestBody sysDept: SysDept) = boolResult {
         sysDept.enable = true
         sysDeptService.modify(sysDept)
     }
 
-    /**
-     * 根据 Id 禁用部门
-     */
     @PutMapping("disable")
+    @Operation(summary = "根据 Id 禁用部门")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:dept:edit')")
     fun disable(@RequestBody sysDept: SysDept) = boolResult {
         sysDept.enable = false

@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.office.OfficeHandler
 import top.vuhe.admin.spring.web.controller.BaseController
-import top.vuhe.admin.well.service.IWellService
+import top.vuhe.admin.well.service.WellService
 import java.time.LocalDate
 import javax.servlet.http.HttpServletResponse
 
@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse
 @Tag(name = "井信息汇总")
 @RequestMapping("/well/summary")
 class SummaryController(
-    private val infoService: IWellService,
+    private val infoService: WellService,
 ) : BaseController() {
 
     /**

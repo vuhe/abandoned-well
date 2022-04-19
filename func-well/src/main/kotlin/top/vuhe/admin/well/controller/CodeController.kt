@@ -7,7 +7,7 @@ import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.well.domina.RegionCode
 import top.vuhe.admin.well.param.CodeParam
-import top.vuhe.admin.well.service.ICodeService
+import top.vuhe.admin.well.service.CodeService
 
 /**
  * 地质分区代码管理
@@ -18,7 +18,7 @@ import top.vuhe.admin.well.service.ICodeService
 @Tag(name = "地质分区代码")
 @RequestMapping("/well/code")
 class CodeController(
-    private val codeService: ICodeService
+    private val codeService: CodeService
 ) : BaseController() {
 
     /**
@@ -51,7 +51,7 @@ class CodeController(
      */
     @GetMapping("page")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:page')")
-    fun page(param: CodeParam) = pageTable {
+    fun page(param: CodeParam) = buildPage {
         codeService.page(param)
     }
 
@@ -88,6 +88,6 @@ class CodeController(
     @DeleteMapping("/batchRemove")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:code:remove')")
     fun batchRemove(ids: String) = boolResult {
-        codeService.batchRemove(ids.split(","))
+        codeService.remove(ids.split(","))
     }
 }

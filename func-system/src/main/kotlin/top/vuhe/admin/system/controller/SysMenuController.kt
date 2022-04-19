@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController
 import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
 import top.vuhe.admin.system.domain.SysMenu
-import top.vuhe.admin.system.service.ISysMenuService
+import top.vuhe.admin.system.service.SysMenuService
 
 /**
  * 菜单控制器
@@ -18,7 +18,7 @@ import top.vuhe.admin.system.service.ISysMenuService
 @Tag(name = "菜单管理")
 @RestController
 @RequestMapping(API_SYSTEM_PREFIX + "menu/")
-class SysMenuController(private val sysMenuService: ISysMenuService) {
+class SysMenuController(private val sysMenuService: SysMenuService) {
 
     /**
      * 根据 username 获取菜单数据

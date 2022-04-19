@@ -1,15 +1,12 @@
 package top.vuhe.admin.spring.security.login
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.AuthenticationException
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler
-import top.vuhe.admin.api.logging.BusinessType
-import top.vuhe.admin.api.logging.LoggingFactory
-import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.security.principal.UserSecurityService
-import top.vuhe.admin.spring.web.response.fail
-import top.vuhe.admin.spring.web.response.success
+import top.vuhe.admin.spring.web.HttpServletResponseHandler
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -19,26 +16,17 @@ import javax.servlet.http.HttpServletResponse
  * @author vuhe
  */
 class LoginAfterHandler(
-    private val sysLogService: LoggingFactory,
-    private val sysUserService: UserSecurityService,
-) : AuthenticationFailureHandler, AuthenticationSuccessHandler {
+    objectMapper: ObjectMapper,
+    private val securityService: UserSecurityService,
+) : HttpServletResponseHandler(objectMapper), AuthenticationFailureHandler, AuthenticationSuccessHandler {
 
     override fun onAuthenticationSuccess(
         request: HttpServletRequest,
         response: HttpServletResponse,
         authentication: Authentication
     ) {
-        sysLogService.record {
-            it.title = "登录"
-            it.description = "登录成功"
-            it.businessType = BusinessType.OTHER
-            it.success = true
-            it.loggingType = LoggingType.LOGIN
-        }
-
         val userId = authentication.principal as String
-        sysUserService.updateLoginTime(userId)
-
+        securityService.loginRecord(userId, "表单登录成功", true, "")
         response.success(message = "登录成功")
     }
 
@@ -48,14 +36,7 @@ class LoginAfterHandler(
         e: AuthenticationException
     ) {
         val msg = e.message ?: "登录失败"
-        sysLogService.record {
-            it.title = "登录"
-            it.description = "登录失败"
-            it.businessType = BusinessType.OTHER
-            it.success = false
-            it.loggingType = LoggingType.LOGIN
-            it.errorMsg = msg
-        }
-        httpServletResponse.fail(code = 500, message = msg)
+        securityService.loginRecord("", "表单登录失败", false, msg)
+        httpServletResponse.fail(message = msg)
     }
 }

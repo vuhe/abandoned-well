@@ -1,8 +1,11 @@
-package top.vuhe.admin.system.service.impl
+package top.vuhe.admin.system.service
 
 import org.ktorm.entity.Entity
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import top.vuhe.admin.api.logging.BusinessType
+import top.vuhe.admin.api.logging.LoggingFactory
+import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.spring.security.principal.LoginUser
 import top.vuhe.admin.spring.security.principal.UserSecurityService
 import top.vuhe.admin.system.domain.SysUser
@@ -18,37 +21,35 @@ import java.time.LocalDateTime
  * @author vuhe
  */
 @Service
-class LoginUserServiceImpl(
-    private val sysUserRepository: SysUserRepository,
-    private val linkUserRole: LinkUserRole,
-    private val linkRolePower: LinkRolePower,
-    private val sysPowerRepository: SysPowerRepository
+class ProjectSecurityService(
+    private val logging: LoggingFactory,
+    private val users: SysUserRepository,
+    private val userRole: LinkUserRole,
+    private val rolePower: LinkRolePower,
+    private val powers: SysPowerRepository
 ) : UserSecurityService {
 
-    /**
-     * 为减少数据库访问，此方法会缓存数据，在数据库发生数据更改时，
-     * 会删除数据，此时会在此缓存
-     */
-    fun getUserById(id: String): SysUser? = sysUserRepository.selectById(id)
+    fun getUserById(id: String): SysUser? = users.selectById(id)
 
     /**
      * 此方法会缓存用户权限列表，出现权限变化时会清空缓存
      */
     fun getAuthorities(userId: String): List<String> {
         // 转换为 roleId
-        val roleIds = linkUserRole.selectRoleIdByUserId(userId)
+        val roleIds = userRole.selectRoleIdByUserId(userId).asSequence()
 
         // 转换为 powerId
         val powerIds = roleIds.map {
-            linkRolePower.selectPowerIdByRoleId(it)
-        }.flatten()
+            rolePower.selectPowerIdByRoleId(it)
+        }.flatten().distinct()
 
-        // 查询 power 权限，加入列表
-        return sysPowerRepository.selectListByIds(powerIds).map { it.powerCode }
+        val codes = powerIds.mapNotNull { powers.selectById(it)?.powerCode }
+
+        return codes.toList()
     }
 
     override fun getLoginUserId(username: String): String? {
-        return sysUserRepository.selectByUsername(username)?.userId
+        return users.selectByUsername(username)?.userId
     }
 
     override fun getLoginUserById(userId: String): LoginUser {
@@ -56,16 +57,28 @@ class LoginUserServiceImpl(
     }
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun updateLoginTime(userId: String) {
+    protected fun updateLoginTime(userId: String) {
         val user = Entity.create<SysUser>().apply {
             this.userId = userId
             lastTime = LocalDateTime.now()
         }
-        sysUserRepository.update(user)
+        users.update(user)
+    }
+
+    override fun loginRecord(userId: String, description: String, success: Boolean, errorMsg: String) {
+        logging.record {
+            it.title = "登录"
+            it.description = description
+            it.businessType = BusinessType.OTHER
+            it.success = success
+            it.loggingType = LoggingType.LOGIN
+            it.errorMsg = errorMsg
+        }
+        updateLoginTime(userId)
     }
 
     private class SecurityUserProxy(
-        override val userId: String, private val service: LoginUserServiceImpl
+        override val userId: String, private val service: ProjectSecurityService
     ) : LoginUser {
         private val user get() = service.getUserById(userId)
         override val password: String get() = user?.password ?: ""

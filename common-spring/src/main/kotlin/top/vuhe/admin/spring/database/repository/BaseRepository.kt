@@ -5,11 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import top.vuhe.admin.api.cache.ProjectCache
 import top.vuhe.admin.api.extra.nanoId
 
-abstract class BaseRepository(cacheable: Boolean) {
-    protected val cache = ProjectCache(cacheable)
+/**
+ * ## 基本数据库访问层
+ *
+ * 此类会在事务中执行，spring 会创建 cglib 代理的子类，
+ * 由于使用 Objenesis 而非构造方法创建，类中的字段全为空，
+ * 为保证使用正确，本类及子类不能含必要实体字段！
+ */
+abstract class BaseRepository {
+    protected abstract val cacheName: String?
+    protected val cache get() = ProjectCache(cacheName)
 
-    // this is must be open, because kotlin-spring will skip this
-    // if this is not open, spring auto wired can't handle this
     @Autowired
     protected open lateinit var database: Database
 

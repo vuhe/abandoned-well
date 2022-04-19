@@ -9,7 +9,7 @@ import top.vuhe.admin.api.constant.API_SYSTEM_PREFIX
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysRole
 import top.vuhe.admin.system.param.SysRoleParam
-import top.vuhe.admin.system.service.ISysRoleService
+import top.vuhe.admin.system.service.SysRoleService
 
 /**
  * 角色控制器
@@ -20,7 +20,7 @@ import top.vuhe.admin.system.service.ISysRoleService
 @Tag(name = "系统角色")
 @RequestMapping(API_SYSTEM_PREFIX + "role")
 class SysRoleController(
-    private val sysRoleService: ISysRoleService
+    private val sysRoleService: SysRoleService
 ) : BaseController() {
 
     /**
@@ -67,7 +67,7 @@ class SysRoleController(
     @GetMapping("data")
     @Operation(summary = "获取角色列表数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:data')")
-    fun data(param: SysRoleParam) = pageTable {
+    fun data(param: SysRoleParam) = buildPage {
         sysRoleService.page(param)
     }
 
@@ -107,7 +107,7 @@ class SysRoleController(
     @GetMapping("getRolePower")
     @Operation(summary = "获取角色权限数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:power')")
-    fun getRolePower(roleId: String) = dataTree {
+    fun getRolePower(roleId: String) = buildTree {
         sysRoleService.getRolePower(roleId)
     }
 
@@ -128,7 +128,7 @@ class SysRoleController(
     @Operation(summary = "批量删除角色数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:role:remove')")
     fun batchRemove(@PathVariable ids: String) = boolResult {
-        sysRoleService.batchRemove(ids.split(","))
+        sysRoleService.remove(ids.split(","))
     }
 
     /**

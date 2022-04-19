@@ -8,8 +8,8 @@ dependencies {
     implementation("cn.hutool:hutool-core:5.7.22")
 
     // spring 工具
-    implementation("cn.hutool:hutool-extra:5.7.22")
-    compileOnly("org.springframework:spring-context")
+//    implementation("cn.hutool:hutool-extra:5.7.22")
+//    compileOnly("org.springframework:spring-context")
 
     // logging 工具
     compileOnly("org.aspectj:aspectjweaver")

@@ -1,8 +1,8 @@
 package top.vuhe.admin.spring.security
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
-import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.spring.security.login.LoginAfterHandler
 import top.vuhe.admin.spring.security.login.LoginPreCaptchaChecker
 import top.vuhe.admin.spring.security.login.LoginUserCheckProvider
@@ -18,25 +18,25 @@ import top.vuhe.admin.spring.security.session.SecuritySessionManager
  * @author vuhe
  */
 abstract class SpringSecurityAdapter(
-    sysLogService: LoggingFactory, userDetailsService: UserSecurityService,
+    objectMapper: ObjectMapper, userDetailsService: UserSecurityService,
 ) : WebSecurityConfigurerAdapter() {
-    protected val loginAfterHandler = LoginAfterHandler(sysLogService, userDetailsService)
+    protected val loginAfterHandler = LoginAfterHandler(objectMapper, userDetailsService)
     protected val loginAuthenticationProvider = LoginUserCheckProvider(userDetailsService)
     protected val loginDetailSource = LoginPreCaptchaChecker
-    protected val logoutHandler = SecureLogoutHandler
-    protected val accessDenied = SecureAccessDeniedHandler
-    protected val rememberLoginAfterHandler = RememberMeLoginAfterHandler(sysLogService, userDetailsService)
+    protected val logoutHandler = SecureLogoutHandler(objectMapper)
+    protected val accessDenied = SecureAccessDeniedHandler(objectMapper)
+    protected val rememberLoginAfterHandler = RememberMeLoginAfterHandler(userDetailsService)
     protected val sessionRegistryCenter = SecuritySessionManager
 
     /**
      * 使 listener 生效
      */
     @Bean
-    fun securitySessionListener() = sessionRegistryCenter
+    open fun securitySessionListener() = sessionRegistryCenter
 
     /**
      * 禁止其他自动注入
      */
     @Bean
-    fun loginAuthenticationProvider() = loginAuthenticationProvider
+    open fun loginAuthenticationProvider() = loginAuthenticationProvider
 }

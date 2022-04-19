@@ -1,4 +1,4 @@
-package top.vuhe.admin.system.service.impl
+package top.vuhe.admin.system.service
 
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -9,7 +9,6 @@ import top.vuhe.admin.system.repository.LinkRolePower
 import top.vuhe.admin.system.repository.LinkUserRole
 import top.vuhe.admin.system.repository.SysPowerRepository
 import top.vuhe.admin.system.repository.SysRoleRepository
-import top.vuhe.admin.system.service.ISysRoleService
 
 /**
  * 角色服务实现类
@@ -17,22 +16,24 @@ import top.vuhe.admin.system.service.ISysRoleService
  * @author vuhe
  */
 @Service
-class SysRoleServiceImpl(
+class SysRoleService(
     private val linkUserRole: LinkUserRole,
-    sysRoleMapper: SysRoleRepository,
+    override val repository: SysRoleRepository,
     private val linkRolePower: LinkRolePower,
     private val sysPowerRepository: SysPowerRepository
-) : CurdService<SysRole>(sysRoleMapper), ISysRoleService {
+) : CurdService<SysRole>() {
 
     @Transactional(rollbackFor = [Exception::class])
-    override fun batchRemove(ids: List<String>): Boolean {
-        // 删除关联表信息
+    override fun remove(ids: List<String>): Boolean {
         linkUserRole.deleteByRole(ids)
         linkRolePower.deleteByRole(ids)
-        return super.batchRemove(ids)
+        return super.remove(ids)
     }
 
-    override fun getRolePower(roleId: String): List<SysPower> {
+    /**
+     * 获取角色权限
+     */
+    fun getRolePower(roleId: String): List<SysPower> {
         // 查询全部权限
         val allPower = sysPowerRepository.selectList()
         // 查询此角色的权限表
@@ -45,8 +46,11 @@ class SysRoleServiceImpl(
         return allPower
     }
 
+    /**
+     * 保存角色权限
+     */
     @Transactional(rollbackFor = [Exception::class])
-    override fun saveRolePower(roleId: String, powerIds: List<String>): Boolean {
+    fun saveRolePower(roleId: String, powerIds: List<String>): Boolean {
         return linkRolePower.insert(roleId, powerIds) > 0
     }
 }
