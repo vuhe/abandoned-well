@@ -1,6 +1,5 @@
 package top.vuhe.admin.api.monitor
 
-import cn.hutool.system.oshi.CpuInfo
 import cn.hutool.system.oshi.OshiUtil
 
 /**
@@ -26,7 +25,8 @@ object CpuInfo {
     /**
      * 更新 CPU 信息
      */
-    fun updateInfo(cpu: CpuInfo) {
+    fun updateInfo() {
+        val cpu = OshiUtil.getCpuInfo(5000)
         synchronized(info) { info = cpu }
     }
 }

@@ -103,7 +103,8 @@ class WellController(
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:add')")
     fun save(@RequestBody @Valid info: WellInfo) = boolResult {
         info.status = WellStatus.Approved
-        infoService.add(info)
+        val result = infoService.serialAdd(info)
+        result.runCatching { get() }.getOrElse { false }
     }
 
     /**

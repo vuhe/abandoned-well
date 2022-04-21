@@ -6,8 +6,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.scheduling.annotation.AsyncConfigurer
 import org.springframework.scheduling.annotation.EnableAsync
-import top.vuhe.admin.spring.dsl.threadPool
-import java.util.concurrent.Executor
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.SchedulingConfigurer
+import org.springframework.scheduling.config.ScheduledTaskRegistrar
+import top.vuhe.admin.spring.concurrent.ParallelExecutor
+import top.vuhe.admin.spring.concurrent.ScheduledExecutor
+import top.vuhe.admin.spring.concurrent.SerialExecutor
 
 /**
  * ### 异步配置
@@ -15,17 +19,27 @@ import java.util.concurrent.Executor
  * @author vuhe
  */
 @EnableAsync
+@EnableScheduling
 @Configuration
-class AsyncConfiguration : AsyncConfigurer {
+class AsyncConfiguration : AsyncConfigurer, SchedulingConfigurer {
     private val log = LoggerFactory.getLogger("AsyncThreadLog")
 
-    @Bean
-    fun asyncExecutor() = threadPool {}
+    @Bean(destroyMethod = "shutdown")
+    fun scheduledExecutor() = ScheduledExecutor
 
-    override fun getAsyncExecutor(): Executor = asyncExecutor()
+    @Bean("serialExecutor", destroyMethod = "shutdown")
+    fun serialExecutor() = SerialExecutor()
+
+    @Bean("defaultExecutor", destroyMethod = "shutdown")
+    override fun getAsyncExecutor() = ParallelExecutor
+
     override fun getAsyncUncaughtExceptionHandler() =
         AsyncUncaughtExceptionHandler { ex, method, params: Array<*>? ->
             val param = params?.joinToString() ?: ""
             log.warn("执行异步任务 $method ($param)", ex)
         }
+
+    override fun configureTasks(taskRegistrar: ScheduledTaskRegistrar) {
+        taskRegistrar.setTaskScheduler(scheduledExecutor())
+    }
 }

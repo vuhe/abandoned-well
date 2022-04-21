@@ -3,13 +3,13 @@ package top.vuhe.admin.spring.config
 import com.fasterxml.jackson.databind.Module
 import org.ktorm.database.Database
 import org.ktorm.jackson.KtormModule
-import org.springframework.boot.CommandLineRunner
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import top.vuhe.admin.api.logging.LoggingAspect
 import top.vuhe.admin.api.logging.LoggingFactory
-import top.vuhe.admin.api.monitor.MonitorInfo
+import top.vuhe.admin.api.monitor.CpuInfo
 import top.vuhe.admin.spring.dsl.javaTimeModule
 import top.vuhe.admin.spring.web.interceptor.XssFilterSupport
 import java.time.LocalDate
@@ -52,7 +52,7 @@ class SystemConfiguration {
      * 日志记录
      */
     @Bean
-    fun loggingAspect(loggingFactory: LoggingFactory) = LoggingAspect(loggingFactory)
+    fun loggingAspect(factory: LoggingFactory) = LoggingAspect(factory)
 
     /**
      * 注册 database 作为 bean
@@ -65,6 +65,6 @@ class SystemConfiguration {
     /**
      * 硬件信息刷新任务
      */
-    @Bean
-    fun hardwareRefresher() = CommandLineRunner { MonitorInfo.refresh() }
+    @Scheduled(fixedDelay = 60 * 1000)
+    fun hardwareRefresher() = CpuInfo.updateInfo()
 }

@@ -1,7 +1,8 @@
 package top.vuhe.admin.well.service
 
+import org.springframework.scheduling.annotation.Async
+import org.springframework.scheduling.annotation.AsyncResult
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Isolation
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.exception.businessNotNull
 import top.vuhe.admin.spring.database.service.CurdService
@@ -10,6 +11,7 @@ import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.repository.CodeRepository
 import top.vuhe.admin.well.repository.RegionRepository
 import top.vuhe.admin.well.repository.WellRepository
+import java.util.concurrent.Future
 
 /**
  * 井信息服务类接口实现
@@ -34,15 +36,25 @@ class WellService(
         }
     }
 
+    @Deprecated("Can't be serial, use serialAdd!", ReplaceWith("serialAdd(entity)"))
+    override fun add(entity: WellInfo): Boolean {
+        throw UnsupportedOperationException("Can't be serial, deprecated!")
+    }
+
     /**
      * 添加实体，使用自定义的 id 生成策略
      *
      * 此方法使用了其他表的字段进行主键生成，这可能会产生不可重复读，
-     * 为了保证上报的正确性，此方法指定使用「可重复读」
-     * TODO need modify
+     * 为了保证上报的正确性，此方法使用串行化执行
      */
-    @Transactional(rollbackFor = [Exception::class], isolation = Isolation.REPEATABLE_READ)
-    override fun add(entity: WellInfo): Boolean {
+    @Async("serialExecutor")
+    fun serialAdd(entity: WellInfo): Future<Boolean> {
+        transactionalAdd(entity)
+        return AsyncResult(true)
+    }
+
+    @Transactional(rollbackFor = [Exception::class])
+    protected fun transactionalAdd(entity: WellInfo) {
         val region = businessNotNull(
             regions.selectById(entity.regionId)
         ) { "地区错误，请刷新后重试" }
@@ -58,9 +70,7 @@ class WellService(
         entity.id = "%s%04d%sW".format(region.districtCode, region.next, code.code)
 
         // 插入成功后，将顺序码更改写入数据库
-        return if (repository.insert(entity) > 0) {
-            regions.update(region)
-            true
-        } else false
+        repository.insert(entity)
+        regions.update(region)
     }
 }

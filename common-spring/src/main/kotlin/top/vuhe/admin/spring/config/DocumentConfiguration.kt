@@ -1,7 +1,5 @@
 package top.vuhe.admin.spring.config
 
-import org.springdoc.core.GroupedOpenApi
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import top.vuhe.admin.spring.dsl.openApiInfo
@@ -12,8 +10,7 @@ import javax.annotation.PostConstruct
  *
  * @author vuhe
  */
-@Configuration
-@ConditionalOnClass(GroupedOpenApi::class)
+@Configuration(proxyBeanMethods = false)
 class DocumentConfiguration {
     @PostConstruct
     @Suppress("SpellCheckingInspection")
