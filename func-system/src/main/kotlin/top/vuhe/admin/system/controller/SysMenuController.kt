@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
-import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
+import top.vuhe.admin.spring.security.securityContext
 import top.vuhe.admin.system.domain.SysMenu
 import top.vuhe.admin.system.service.SysMenuService
 
@@ -18,6 +18,7 @@ import top.vuhe.admin.system.service.SysMenuService
 @RestController
 @RequestMapping("/system/menu/")
 class SysMenuController(private val sysMenuService: SysMenuService) {
+    private val currUserId by securityContext()
 
     /**
      * 根据 username 获取菜单数据

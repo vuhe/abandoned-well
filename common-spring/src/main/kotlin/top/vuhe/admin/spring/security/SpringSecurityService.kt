@@ -15,7 +15,12 @@ interface SpringSecurityService {
     fun buildLoginUser(username: String): LoginUser?
 
     /**
-     * 记录登录信息
+     * 记录登录成功信息
      */
-    fun loginRecord(userId: String, description: String, success: Boolean, errorMsg: String)
+    fun loginSuccess(userId: String, description: String)
+
+    /**
+     * 记录登录失败信息
+     */
+    fun loginFail(userId: String, description: String, errorMsg: String)
 }

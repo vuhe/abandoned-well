@@ -18,13 +18,13 @@ internal class SecurityHandler(
 
     val loginSuccess = AuthenticationSuccessHandler { _, response, authentication ->
         val userId = authentication.principal as String
-        service.loginRecord(userId, "表单登录成功", true, "")
+        service.loginSuccess(userId, "表单登录成功")
         response.success(message = "登录成功")
     }
 
     val loginFail = AuthenticationFailureHandler { _, response, e ->
         val msg = e.message ?: "登录失败"
-        service.loginRecord("", "表单登录失败", false, msg)
+        service.loginFail("", "表单登录失败", msg)
         response.fail(message = msg)
     }
 
@@ -49,7 +49,7 @@ internal class SecurityHandler(
 
     val rememberMe = AuthenticationSuccessHandler { request, _, authentication ->
         val userId = authentication.principal as String
-        service.loginRecord(userId, "Remember Me 登录", true, "")
+        service.loginSuccess(userId, "Remember Me 登录")
 
         // Remember Me 老用户登录续期
         SecuritySessionManager.refreshLastRequest(request.session.id)

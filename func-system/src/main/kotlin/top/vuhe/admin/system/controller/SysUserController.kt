@@ -10,7 +10,7 @@ import top.vuhe.admin.api.annotation.RepeatSubmit
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.api.logging.Logging
-import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
+import top.vuhe.admin.spring.security.securityContext
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.param.SysUserParam
@@ -31,6 +31,8 @@ class SysUserController(
     private val sysRoleService: SysRoleService,
     private val sysLogService: SysLogService
 ) : BaseController() {
+    private val currUserId by securityContext()
+
     /**
      * 获取用户列表视图
      */

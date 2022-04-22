@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.logging.LogRecord
 import top.vuhe.admin.api.network.userAgent
-import top.vuhe.admin.spring.security.principal.LoginUserInfo
 import top.vuhe.admin.system.domain.SysLog
 import top.vuhe.admin.system.repository.SysLogRepository
 import top.vuhe.admin.system.repository.SysUserRepository
@@ -23,7 +22,7 @@ class LoggingService(
         request: HttpServletRequest, userId: String,
         setting: (LogRecord) -> Unit
     ) {
-        val user = sysUserRepository.selectById(LoginUserInfo.currUserId)
+        val user = sysUserRepository.selectById(userId)
         val userAgent = request.userAgent
         val log = Entity.create<SysLog>().apply {
             operateAddress = request.remoteHost ?: "未知"
@@ -33,7 +32,7 @@ class LoggingService(
             browser = userAgent.browser
             requestBody = request.queryString ?: ""
             systemOs = userAgent.system
-            operateId = LoginUserInfo.currUserId
+            operateId = userId
             operateName = user?.username ?: "未知"
         }
         setting(log)

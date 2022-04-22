@@ -5,7 +5,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import top.vuhe.admin.spring.security.SpringSecurityService
-import top.vuhe.admin.spring.security.principal.UserAuthenticatedToken
+import top.vuhe.admin.spring.security.principal.UserLoggedToken
 import kotlin.reflect.full.isSubclassOf
 
 /**
@@ -38,7 +38,7 @@ class LoginUserCheckProvider(
         val password = authentication.credentials?.toString() ?: throw BadCredentialsException("密码为空(null)")
         if (!passwordEncoder.matches(password, user.password)) throw BadCredentialsException("密码错误")
 
-        return UserAuthenticatedToken(user, authentication.credentials, authentication.details)
+        return UserLoggedToken(user, authentication.credentials, authentication.details)
     }
 
     override fun supports(authentication: Class<*>): Boolean {

@@ -7,7 +7,7 @@ import top.vuhe.admin.api.logging.LoggingFactory
 import top.vuhe.admin.api.logging.LoggingType
 import top.vuhe.admin.api.network.requestContext
 import top.vuhe.admin.spring.database.table.TablePage
-import top.vuhe.admin.spring.security.principal.LoginUserInfo.currUserId
+import top.vuhe.admin.spring.security.securityContext
 import top.vuhe.admin.system.domain.SysLog
 import top.vuhe.admin.system.param.SysLogParam
 import top.vuhe.admin.system.repository.SysLogRepository
@@ -23,13 +23,11 @@ class SysLogService(
     private val sysLogRepository: SysLogRepository
 ) : LoggingFactory {
     private val request by requestContext()
+    private val currUserId by securityContext()
 
     override fun record(setting: (LogRecord) -> Unit) {
-        // 在进入其他线程前获取 request, currUserId
-        // 否则为 null
-        val request = request
-        val userId = currUserId
-        loggingService.asyncRecord(request, userId, setting)
+        // 在进入其他线程前获取 request, currUserId 否则为 null
+        loggingService.asyncRecord(request, currUserId, setting)
     }
 
     /**

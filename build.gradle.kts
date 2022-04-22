@@ -54,14 +54,9 @@ subprojects {
             }
             "org.ktorm:ktorm".let {
                 val version = "3.4.1"
-                implementation("$it-core:$version")
+                api("$it-core:$version")
                 implementation("$it-jackson:$version")
                 implementation("$it-support-mysql:$version")
-            }
-            "org.springdoc:springdoc-openapi".let {
-                val version = "1.6.7"
-                implementation("$it-ui:$version")
-                implementation("$it-kotlin:$version")
             }
             implementation("com.github.ben-manes.caffeine:caffeine:3.0.6")
             implementation("org.jsoup:jsoup:1.14.3")

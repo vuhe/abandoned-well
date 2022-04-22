@@ -31,9 +31,6 @@ class SecurityService(
 
     fun getUserById(id: String): SysUser? = users.selectById(id)
 
-    /**
-     * 此方法会缓存用户权限列表，出现权限变化时会清空缓存
-     */
     fun getAuthorities(userId: String): List<String> {
         // 转换为 roleId
         val roleIds = userRole.selectRoleIdByUserId(userId).asSequence()
@@ -62,17 +59,25 @@ class SecurityService(
         users.update(user)
     }
 
-    override fun loginRecord(userId: String, description: String, success: Boolean, errorMsg: String) {
+    override fun loginSuccess(userId: String, description: String) {
         logging.record {
             it.title = "登录"
             it.description = description
             it.businessType = BusinessType.OTHER
-            it.success = success
+            it.success = true
+            it.loggingType = LoggingType.LOGIN
+        }
+        updateLoginTime(userId)
+    }
+
+    override fun loginFail(userId: String, description: String, errorMsg: String) {
+        logging.record {
+            it.title = "登录"
+            it.description = description
+            it.businessType = BusinessType.OTHER
+            it.success = false
             it.loggingType = LoggingType.LOGIN
             it.errorMsg = errorMsg
-        }
-        if (success) {
-            updateLoginTime(userId)
         }
     }
 

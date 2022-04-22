@@ -40,7 +40,7 @@ class LoggingAspect(private val loggingFactory: LoggingFactory) {
             it.businessType = logging.type
             it.loggingType = LoggingType.OPERATE
             it.success = false
-            it.errorMsg = e.message ?: ""
+            it.errorMsg = e.message ?: e::class.simpleName ?: "Unknown Exception!"
         }
     }
 
