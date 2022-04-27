@@ -1,7 +1,7 @@
 package top.vuhe.admin.api.monitor
 
-import cn.hutool.core.util.NumberUtil
 import oshi.software.os.OSFileStore
+import top.vuhe.admin.api.extra.exact
 
 /**
  * ## 磁盘信息
@@ -29,8 +29,8 @@ class DiskInfo(fs: OSFileStore) {
 
     private fun usage(): String {
         if (totalNum == 0L) return "0.0 %"
-        val num = NumberUtil.div(totalNum - freeNum, totalNum, 4)
-        return "${NumberUtil.mul(num, 100f)} %"
+        val num = (totalNum.exact() - freeNum) / totalNum * 100
+        return "${num.toString(2)} %"
     }
 
     private fun convertFileSize(size: Long): String {

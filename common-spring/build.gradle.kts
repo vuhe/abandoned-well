@@ -10,7 +10,7 @@ dependencies {
 
     // 系统安全组件
     api("org.springframework.boot:spring-boot-starter-security")
-    implementation("com.github.whvcse:easy-captcha")
+    implementation("com.github.whvcse:easy-captcha:1.6.2")
 
     // 系统校验组件
     implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -21,9 +21,9 @@ dependencies {
     api("org.thymeleaf.extras:thymeleaf-extras-java8time")
 
     // 系统数据库组件
-    api("org.ktorm:ktorm-core")
-    implementation("org.ktorm:ktorm-jackson")
-    implementation("org.ktorm:ktorm-support-mysql")
+    api("org.ktorm:ktorm-core:3.4.1")
+    implementation("org.ktorm:ktorm-jackson:3.4.1")
+    implementation("org.ktorm:ktorm-support-mysql:3.4.1")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
     implementation("mysql:mysql-connector-java")
 

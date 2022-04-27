@@ -1,7 +1,7 @@
 package top.vuhe.admin.api.monitor
 
-import cn.hutool.core.util.NumberUtil
 import cn.hutool.system.SystemUtil
+import top.vuhe.admin.api.extra.exact
 
 /**
  * ## JVM内存信息
@@ -23,14 +23,14 @@ object MemoryInfo {
     val usage get() = usage()
 
     private fun Long.toMB(): String {
-        val num = NumberUtil.div(toDouble(), (1024 * 1024).toFloat(), 2)
-        return "$num M"
+        val num = exact() / (1024 * 1024)
+        return "${num.toString(2)} M"
     }
 
     private fun usage(): String {
-        val used = SystemUtil.getTotalMemory().toDouble()
+        val used = SystemUtil.getTotalMemory().toDouble().exact()
         val total = SystemUtil.getMaxMemory().toDouble()
-        val num = NumberUtil.mul(NumberUtil.div(used, total, 4), 100f)
-        return "$num %"
+        val num = used / total * 100
+        return "${num.toString(2)} %"
     }
 }

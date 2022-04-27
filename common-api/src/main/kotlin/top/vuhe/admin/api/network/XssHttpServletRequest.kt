@@ -1,8 +1,6 @@
 package top.vuhe.admin.api.network
 
-import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.safety.Safelist
+import cn.hutool.http.HtmlUtil
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletRequestWrapper
 
@@ -36,14 +34,6 @@ class XssHttpServletRequest(
 
     private fun String?.cleanText(): String? {
         return if (isNullOrBlank()) this
-        else Jsoup.clean(this, "", safeList, outputSettings)
-    }
-
-    companion object {
-        private val safeList = Safelist.basicWithImages().apply {
-            addAttributes(":all", "style")
-        }
-
-        private val outputSettings = Document.OutputSettings().prettyPrint(false)
+        else HtmlUtil.filter(this)
     }
 }
