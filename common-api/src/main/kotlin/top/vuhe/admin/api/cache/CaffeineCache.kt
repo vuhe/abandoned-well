@@ -8,6 +8,8 @@ import kotlin.time.toJavaDuration
  * ## 缓存的 Caffeine 实现
  *
  * 此缓存对象使用 Caffeine 实现
+ *
+ * @author vuhe
  */
 internal class CaffeineCache : SimpleCache {
     private val cache = Caffeine.newBuilder()

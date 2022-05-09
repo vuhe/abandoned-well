@@ -1,4 +1,4 @@
-package top.vuhe.admin.spring.web.interceptor
+package top.vuhe.admin.spring.web.handler
 
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
@@ -22,7 +22,7 @@ import kotlin.time.Duration.Companion.seconds
  * @author vuhe
  */
 @Component
-class RepeatSubmitInterceptor : HttpServletResponseHandler(), HandlerInterceptor {
+class RepeatSubmitHandler : HttpServletResponseHandler(), HandlerInterceptor {
     /** 前置拦截,进入处理活力前判断当前提交的内容是否重复 */
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         return if (handler is HandlerMethod) {

@@ -4,6 +4,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 /**
  * ## 系统数据缓存
+ *
+ * @author vuhe
  */
 object ProjectCache {
     private val map = ConcurrentHashMap<String, SimpleCache>()

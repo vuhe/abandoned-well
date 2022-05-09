@@ -3,7 +3,8 @@ package top.vuhe.admin.api.logging
 import com.fasterxml.jackson.annotation.JsonValue
 
 /**
- * ### 日志业务类型
+ * ## 日志业务类型
+ *
  * 前端实现时使用 definition 字段
  *
  * @author vuhe

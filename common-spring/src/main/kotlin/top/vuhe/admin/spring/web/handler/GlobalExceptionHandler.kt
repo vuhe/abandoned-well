@@ -1,4 +1,4 @@
-package top.vuhe.admin.spring.web.interceptor
+package top.vuhe.admin.spring.web.handler
 
 import org.slf4j.LoggerFactory
 import org.springframework.security.access.AccessDeniedException

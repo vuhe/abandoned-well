@@ -1,11 +1,12 @@
-package top.vuhe.admin.spring.web.interceptor
+package top.vuhe.admin.spring.web.handler
 
+import top.vuhe.admin.api.network.RepeatableReadRequest
 import top.vuhe.admin.api.network.XssHttpServletRequest
 import java.util.regex.Pattern
 import javax.servlet.*
 import javax.servlet.http.HttpServletRequest
 
-class XssFilterSupport : Filter {
+class HttpRequestFilterHandler : Filter {
     private var isIncludeRichText = false
     private var excludes: List<Pattern> = emptyList()
 
@@ -22,11 +23,19 @@ class XssFilterSupport : Filter {
 
     override fun doFilter(request: ServletRequest, response: ServletResponse?, filterChain: FilterChain) {
         val handledReq = if (request is HttpServletRequest) {
-            if (handleExcludeURL(request)) request
-            else XssHttpServletRequest(request, isIncludeRichText)
+            handleHttpRequest(request)
         } else request
 
         filterChain.doFilter(handledReq, response)
+    }
+
+    private fun handleHttpRequest(request: HttpServletRequest): HttpServletRequest {
+        // 过滤 xss 攻击
+        val clean = if (handleExcludeURL(request)) request
+        else XssHttpServletRequest(request, isIncludeRichText)
+
+        // 缓存 body
+        return RepeatableReadRequest(clean)
     }
 
     private fun handleExcludeURL(request: HttpServletRequest): Boolean {

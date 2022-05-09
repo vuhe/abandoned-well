@@ -5,6 +5,7 @@ import top.vuhe.admin.api.extra.exact
 
 /**
  * ## JVM内存信息
+ *
  * 脱离虚拟机的内存信息，对项目调参参考意义不大
  *
  * @author vuhe

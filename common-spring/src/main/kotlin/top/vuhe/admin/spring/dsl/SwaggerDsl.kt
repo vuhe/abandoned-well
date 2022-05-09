@@ -11,7 +11,6 @@ internal inline fun openApiInfo(block: InfoDsl.() -> Unit): OpenAPI {
 }
 
 @ProjectDsl
-@Suppress("UsePropertyAccessSyntax")
 class InfoDsl {
     var title: String = ""
     var description: String = ""

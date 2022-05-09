@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.logging.BusinessType
-import top.vuhe.admin.api.logging.Logging
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
@@ -33,7 +31,6 @@ class EntranceController : BaseController() {
      * @return  登录视图
      */
     @GetMapping("index")
-    @Logging("主页", describe = "返回 Index 主页视图", type = BusinessType.QUERY)
     fun index() = ModelAndView("index")
 
     /**

@@ -6,9 +6,10 @@ import org.aspectj.lang.annotation.AfterThrowing
 import org.aspectj.lang.annotation.Aspect
 import org.aspectj.lang.annotation.Pointcut
 import org.aspectj.lang.reflect.MethodSignature
+import top.vuhe.admin.api.annotation.Logging
 
 /**
- * ### 日志切面实现
+ * ## 日志切面实现
  *
  * @author vuhe
  */
@@ -16,7 +17,7 @@ import org.aspectj.lang.reflect.MethodSignature
 class LoggingAspect(private val loggingFactory: LoggingFactory) {
 
     @Suppress("unused")
-    @Pointcut("@annotation(top.vuhe.admin.api.logging.Logging)")
+    @Pointcut("@annotation(top.vuhe.admin.api.annotation.Logging)")
     fun dsPointCut() = Unit
 
     @AfterReturning(pointcut = "dsPointCut()")

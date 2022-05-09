@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.annotation.RepeatSubmit
 import top.vuhe.admin.api.exception.businessRequire
-import top.vuhe.admin.api.logging.BusinessType
-import top.vuhe.admin.api.logging.Logging
 import top.vuhe.admin.spring.security.securityContext
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.system.domain.SysUser
@@ -101,7 +99,6 @@ class SysUserController(
     @GetMapping("data")
     @Operation(summary = "获取用户列表数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:data')")
-    @Logging("查询用户", describe = "查询用户", type = BusinessType.QUERY)
     fun data(param: SysUserParam) = buildPage {
         sysUserService.page(param)
     }
@@ -113,7 +110,6 @@ class SysUserController(
     @PostMapping("save")
     @Operation(summary = "保存用户数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:add')")
-    @Logging("新增用户", describe = "新增用户", type = BusinessType.ADD)
     fun save(@RequestBody sysUser: SysUser) = boolResult {
         sysUserService.saveUserRole(sysUser.userId, sysUser.roles)
         sysUserService.add(sysUser)
@@ -160,7 +156,6 @@ class SysUserController(
     @PutMapping("update")
     @Operation(summary = "修改用户数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:edit')")
-    @Logging("修改用户", describe = "修改用户", type = BusinessType.EDIT)
     fun update(@RequestBody sysUser: SysUser) = boolResult {
         businessRequire(sysUser.password.isEmpty()) { "修改用户信息禁止修改密码" }
         if (sysUser.roles.isNotEmpty()) {
@@ -175,7 +170,6 @@ class SysUserController(
     @DeleteMapping("batchRemove/{ids}")
     @Operation(summary = "批量删除用户")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:remove')")
-    @Logging("删除用户", describe = "删除用户", type = BusinessType.REMOVE)
     fun batchRemove(@PathVariable ids: String) = boolResult {
         sysUserService.remove(ids.split(","))
     }
@@ -186,7 +180,6 @@ class SysUserController(
     @DeleteMapping("remove/{id}")
     @Operation(summary = "删除用户数据")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:user:remove')")
-    @Logging("删除用户", describe = "删除用户", type = BusinessType.REMOVE)
     fun remove(@PathVariable id: String) = boolResult {
         sysUserService.remove(id)
     }

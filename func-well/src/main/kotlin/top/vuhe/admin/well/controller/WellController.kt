@@ -6,6 +6,8 @@ import org.ktorm.entity.Entity
 import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
+import top.vuhe.admin.api.annotation.Logging
+import top.vuhe.admin.api.logging.BusinessType
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
@@ -84,7 +86,6 @@ class WellController(
 
     /* -------------------------------------------------------------------------- */
 
-
     /**
      * 分页查询 井信息
      */
@@ -101,6 +102,7 @@ class WellController(
     @PostMapping("save")
     @Operation(summary = "添加井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:add')")
+    @Logging("井上报", describe = "添加井信息", type = BusinessType.ADD)
     fun save(@RequestBody @Valid info: WellInfo) = boolResult {
         info.status = WellStatus.Approved
         infoService.add(info)
@@ -112,6 +114,7 @@ class WellController(
     @PutMapping("update")
     @Operation(summary = "修改井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
+    @Logging("井修改", describe = "修改井信息", type = BusinessType.EDIT)
     fun update(@RequestBody @Valid info: WellInfo) = boolResult {
         infoService.modify(info)
     }
@@ -122,6 +125,7 @@ class WellController(
     @PutMapping("report")
     @Operation(summary = "动态更新井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
+    @Logging("井更新", describe = "动态更新井信息", type = BusinessType.EDIT)
     fun report(@RequestBody info: WellInfo) = boolResult {
         infoService.modify(info)
     }
@@ -132,6 +136,7 @@ class WellController(
     @PutMapping("approved/{id}")
     @Operation(summary = "通过审核井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
+    @Logging("井审核", describe = "通过审核井信息", type = BusinessType.EDIT)
     fun pass(@PathVariable("id") id: String) = boolResult {
         val info = Entity.create<WellInfo>().apply {
             this.id = id
@@ -146,6 +151,7 @@ class WellController(
     @PutMapping("not_approved/{id}")
     @Operation(summary = "打回修改井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:edit')")
+    @Logging("井审核", describe = "审核打回井信息", type = BusinessType.EDIT)
     fun notPass(@PathVariable("id") id: String) = boolResult {
         val info = Entity.create<WellInfo>().apply {
             this.id = id
@@ -160,6 +166,7 @@ class WellController(
     @DeleteMapping("remove/{id}")
     @Operation(summary = "删除井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:remove')")
+    @Logging("井删除", describe = "删除井信息", type = BusinessType.REMOVE)
     fun remove(@PathVariable("id") id: String) = boolResult {
         infoService.remove(id)
     }
@@ -170,6 +177,7 @@ class WellController(
     @DeleteMapping("/batchRemove")
     @Operation(summary = "批量删除井信息")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:remove')")
+    @Logging("井删除", describe = "删除井信息", type = BusinessType.REMOVE)
     fun batchRemove(ids: String) = boolResult {
         infoService.remove(ids.split(","))
     }

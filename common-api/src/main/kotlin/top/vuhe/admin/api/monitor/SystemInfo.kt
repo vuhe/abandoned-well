@@ -6,6 +6,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * ## 系统信息
+ *
  * 此信息大部分仅在启动时获取即可，因此定义为单例
  *
  * @author vuhe

@@ -2,6 +2,8 @@ package top.vuhe.admin.api.cache
 
 /**
  * ## 系统简单缓存接口
+ *
+ * @author vuhe
  */
 interface SimpleCache {
     operator fun <T> get(key: String): T?

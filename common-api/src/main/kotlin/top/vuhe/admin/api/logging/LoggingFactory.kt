@@ -1,7 +1,7 @@
 package top.vuhe.admin.api.logging
 
 /**
- * ### 日志异步工厂
+ * ## 日志异步工厂
  *
  * @author vuhe
  */

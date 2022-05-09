@@ -1,7 +1,9 @@
-package top.vuhe.admin.api.logging
+package top.vuhe.admin.api.annotation
+
+import top.vuhe.admin.api.logging.BusinessType
 
 /**
- * ### 系统日志注解
+ * ## 系统日志注解
  *
  * @param value    标题 默认无参输入
  * @param describe Describe 默认输入

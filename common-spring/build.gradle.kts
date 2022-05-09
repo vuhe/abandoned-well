@@ -28,6 +28,6 @@ dependencies {
     implementation("mysql:mysql-connector-java")
 
     // 系统文档组件
-    api("org.springdoc:springdoc-openapi-ui:1.6.7")
-    api("org.springdoc:springdoc-openapi-kotlin:1.6.7")
+    api("org.springdoc:springdoc-openapi-ui:1.6.8")
+    api("org.springdoc:springdoc-openapi-kotlin:1.6.8")
 }

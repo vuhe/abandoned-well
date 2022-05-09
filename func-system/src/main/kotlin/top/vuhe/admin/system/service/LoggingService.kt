@@ -30,7 +30,8 @@ class LoggingService(
             createTime = LocalDateTime.now()
             operateUrl = request.requestURI ?: "未知"
             browser = userAgent.browser
-            requestBody = request.queryString ?: ""
+            requestParam = request.queryString ?: ""
+            requestBody = request.reader.readText()
             systemOs = userAgent.system
             operateId = userId
             operateName = user?.username ?: "未知"
