@@ -1,6 +1,5 @@
 package top.vuhe.admin.spring.security.hepler
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.web.access.AccessDeniedHandler
 import org.springframework.security.web.authentication.AuthenticationFailureHandler
@@ -13,8 +12,8 @@ import top.vuhe.admin.spring.web.HttpServletResponseHandler
 import top.vuhe.admin.spring.web.response.AjaxCode
 
 internal class SecurityHandler(
-    objectMapper: ObjectMapper, private val service: SpringSecurityService,
-) : HttpServletResponseHandler(objectMapper) {
+    private val service: SpringSecurityService,
+) : HttpServletResponseHandler() {
 
     val loginSuccess = AuthenticationSuccessHandler { _, response, authentication ->
         val userId = authentication.principal as String

@@ -3,11 +3,16 @@ package top.vuhe.admin.spring.web
 import com.fasterxml.jackson.databind.ObjectMapper
 import top.vuhe.admin.api.network.ContentType
 import top.vuhe.admin.api.network.setContent
+import top.vuhe.admin.spring.config.SystemConfiguration
 import top.vuhe.admin.spring.web.response.AjaxCode
 import top.vuhe.admin.spring.web.response.AjaxResult
 import javax.servlet.http.HttpServletResponse
 
-abstract class HttpServletResponseHandler(private val objectMapper: ObjectMapper) {
+abstract class HttpServletResponseHandler {
+    protected val objectMapper: ObjectMapper by lazy {
+        SystemConfiguration.builder.createXmlMapper(false).build()
+    }
+
     private fun HttpServletResponse.writeJson(json: Any) {
         setContent(ContentType.TEXT_JSON)
         writer.write(objectMapper.writeValueAsString(json))

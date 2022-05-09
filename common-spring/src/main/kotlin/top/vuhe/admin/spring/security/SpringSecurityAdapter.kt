@@ -1,6 +1,5 @@
 package top.vuhe.admin.spring.security
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import top.vuhe.admin.spring.security.hepler.SecurityHandler
@@ -13,10 +12,9 @@ import top.vuhe.admin.spring.security.login.LoginUserCheckProvider
  *
  * @author vuhe
  */
-abstract class SpringSecurityAdapter(
-    objectMapper: ObjectMapper, userDetailsService: SpringSecurityService,
-) : WebSecurityConfigurerAdapter() {
-    private val handler = SecurityHandler(objectMapper, userDetailsService)
+abstract class SpringSecurityAdapter(userDetailsService: SpringSecurityService) :
+    WebSecurityConfigurerAdapter() {
+    private val handler = SecurityHandler(userDetailsService)
 
     protected val loginSuccessHandle = handler.loginSuccess
     protected val loginFailHandle = handler.loginFail
@@ -33,15 +31,11 @@ abstract class SpringSecurityAdapter(
 
     protected val sessionRegistryCenter = SecuritySessionManager
 
-    /**
-     * 使 listener 生效
-     */
+    /** 使 listener 生效 */
     @Bean
     open fun securitySessionListener() = sessionRegistryCenter
 
-    /**
-     * 禁止其他自动注入
-     */
+    /** 禁止其他自动注入 */
     @Bean
     open fun loginAuthenticationProvider() = loginUserCheck
 }

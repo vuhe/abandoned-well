@@ -1,6 +1,5 @@
 package top.vuhe.admin.spring.web.interceptor
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.stereotype.Component
 import org.springframework.web.method.HandlerMethod
 import org.springframework.web.servlet.HandlerInterceptor
@@ -16,22 +15,15 @@ import kotlin.time.Duration.Companion.seconds
 
 /**
  * ## 防止重复提交拦截器
- *
  * > 本拦截器是基于内存设计，未考虑(反)序列化带来的问题
  *
- * 判断请求url和数据是否和上一次相同，
- * 如果和上次相同，则是重复提交表单。
- * 有效时间为10秒内。
+ * 判断请求url和数据是否和上一次相同， 如果和上次相同，则是重复提交表单。 有效时间为10秒内。
  *
  * @author vuhe
  */
 @Component
-class RepeatSubmitInterceptor(
-    private val objectMapper: ObjectMapper
-) : HttpServletResponseHandler(objectMapper), HandlerInterceptor {
-    /**
-     * 前置拦截,进入处理活力前判断当前提交的内容是否重复
-     */
+class RepeatSubmitInterceptor : HttpServletResponseHandler(), HandlerInterceptor {
+    /** 前置拦截,进入处理活力前判断当前提交的内容是否重复 */
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
         return if (handler is HandlerMethod) {
             val annotation = handler.method.getAnnotation(RepeatSubmit::class.java)
@@ -44,9 +36,7 @@ class RepeatSubmitInterceptor(
         }
     }
 
-    /**
-     * 验证是否重复提交由子类实现具体的防重复提交的规则
-     */
+    /** 验证是否重复提交由子类实现具体的防重复提交的规则 */
     private fun HttpServletRequest.isRepeatSubmit(): Boolean {
         // 本次参数及系统时间
         val nowParams: String = objectMapper.writeValueAsString(parameterMap)

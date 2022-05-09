@@ -1,6 +1,5 @@
 package top.vuhe.admin.spring.config
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
@@ -15,27 +14,20 @@ import kotlin.time.Duration.Companion.hours
 
 /**
  * ### Security 安全配置
- * 整个系统中不直接使用实体，使用提供的 LoginUser，
- * 此接口中的 username 为用户 id
+ * 整个系统中不直接使用实体，使用提供的 LoginUser， 此接口中的 username 为用户 id
  *
  * @author vuhe
  */
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecurityConfiguration(
-    objectMapper: ObjectMapper, userDetailsService: SpringSecurityService
-) : SpringSecurityAdapter(objectMapper, userDetailsService) {
-    /**
-     * 身份认证接口
-     */
+class SecurityConfiguration(service: SpringSecurityService) : SpringSecurityAdapter(service) {
+    /** 身份认证接口 */
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.authenticationProvider(loginUserCheck)
     }
 
-    /**
-     * 配置 Security 控制逻辑
-     */
+    /** 配置 Security 控制逻辑 */
     override fun configure(http: HttpSecurity) = http {
         authorizeRequests {
             // 开放登录接口
