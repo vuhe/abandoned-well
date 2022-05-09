@@ -104,7 +104,7 @@ class WellController(
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:add')")
     @Logging("井上报", describe = "添加井信息", type = BusinessType.ADD)
     fun save(@RequestBody @Valid info: WellInfo) = boolResult {
-        info.status = WellStatus.Approved
+        info.status = WellStatus.Reported
         infoService.add(info)
     }
 

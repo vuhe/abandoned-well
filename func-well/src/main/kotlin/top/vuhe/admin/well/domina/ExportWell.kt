@@ -1,54 +1,43 @@
 package top.vuhe.admin.well.domina
 
+import top.vuhe.admin.api.office.OfficeData
 import java.time.LocalDate
 
 /**
- * 用于导出井信息的对象
+ * ## 用于导出井信息的对象
  *
  * @author vuhe
  */
-data class ExportWell(
-    val id: String,
-    val name: String,
-    val originCode: String,
-    val category: String,
-    val type: String,
-    val city: String,
-    val county: String,
-    val street: String,
-    val address: String,
-    val company: String,
-    val digTime: String,
-    val contacts: String,
-    val phone: String,
-    val abandonRemark: String,
-    val abandonTime: String,
-    val lng: String,
-    val lat: String,
-    val informer: String,
-    val investigator: String,
-    val informTime: String,
-    val fillStartTime: String,
-    val fillEndTime: String,
-    val status: String,
-    val remark: String = "",
-    val info: String = ""
-) {
-    constructor(well: WellInfo, region: WellRegion) : this(
-        id = well.id, name = well.name, originCode = well.originCode,
-        category = well.wellType.category, type = well.wellType.type,
-        city = region.city, county = region.county, street = well.street, address = well.address,
-        company = well.company, digTime = dateFormatter(well.digTime), contacts = well.contacts,
-        phone = well.phone, abandonRemark = well.abandonRemark, abandonTime = dateFormatter(well.abandonTime),
-        lng = well.lng, lat = well.lat, informer = well.informer, investigator = well.investigator,
-        informTime = dateFormatter(well.informTime), fillStartTime = dateFormatter(well.fillStartTime),
-        fillEndTime = dateFormatter(well.fillEndTime), status = well.statusStr
-    )
+class ExportWell(private val well: WellInfo, private val region: WellRegion) : OfficeData {
+    override val data: Map<String, Any> = buildMap {
+        put("id", well.id)
+        put("name", well.name)
+        put("originCode", well.originCode)
+        put("category", well.wellType.category)
+        put("type", well.wellType.type)
+        put("city", region.city)
+        put("county", region.county)
+        put("street", well.street)
+        put("address", well.address)
+        put("company", well.company)
+        put("digTime", dateFormatter(well.digTime))
+        put("contacts", well.contacts)
+        put("phone", well.phone)
+        put("abandonRemark", well.abandonRemark)
+        put("abandonTime", dateFormatter(well.abandonTime))
+        put("lng", well.lng)
+        put("lat", well.lat)
+        put("informer", well.informer)
+        put("investigator", well.investigator)
+        put("informTime", dateFormatter(well.informTime))
+        put("fillStartTime", dateFormatter(well.fillStartTime))
+        put("fillEndTime", dateFormatter(well.fillEndTime))
+        put("status", well.status.tag)
+        put("remark", well.remark.ifBlank { "无" })
+    }
 
-    companion object {
-        private fun dateFormatter(date: LocalDate?): String {
-            return if (date == null) "未填报"
-            else "%04d%02d".format(date.year, date.monthValue)
-        }
+    private fun dateFormatter(date: LocalDate?): String {
+        return if (date == null) "未填报"
+        else "%04d%02d".format(date.year, date.monthValue)
     }
 }

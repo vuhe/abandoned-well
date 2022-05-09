@@ -27,4 +27,7 @@ enum class WellType(val category: String, val type: String) {
     QU("取水井", "疏降水井"),
     QN("取水井", "农田灌溉井"),
     QO("取水井", "其他");
+
+    /** 井类型字符串 */
+    val tag: String = "$category-$type"
 }

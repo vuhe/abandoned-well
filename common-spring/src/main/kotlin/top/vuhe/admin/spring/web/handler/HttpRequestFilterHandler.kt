@@ -1,6 +1,5 @@
 package top.vuhe.admin.spring.web.handler
 
-import top.vuhe.admin.api.network.RepeatableReadRequest
 import top.vuhe.admin.api.network.XssHttpServletRequest
 import java.util.regex.Pattern
 import javax.servlet.*
@@ -31,11 +30,8 @@ class HttpRequestFilterHandler : Filter {
 
     private fun handleHttpRequest(request: HttpServletRequest): HttpServletRequest {
         // 过滤 xss 攻击
-        val clean = if (handleExcludeURL(request)) request
+        return if (handleExcludeURL(request)) request
         else XssHttpServletRequest(request, isIncludeRichText)
-
-        // 缓存 body
-        return RepeatableReadRequest(clean)
     }
 
     private fun handleExcludeURL(request: HttpServletRequest): Boolean {

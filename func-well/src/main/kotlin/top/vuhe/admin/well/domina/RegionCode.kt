@@ -14,6 +14,9 @@ interface RegionCode : Entity<RegionCode> {
     /** 分区代码 */
     val code: String
 
+    /** 分区名称 */
+    val name: String
+
     /** 分区信息 */
     val remark: String
 }

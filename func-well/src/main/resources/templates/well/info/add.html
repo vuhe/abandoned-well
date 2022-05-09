@@ -29,26 +29,8 @@
         <div class="layui-input-block">
           <select id="wellType" name="wellType" lay-verify="required">
             <option value=""></option>
-            <option value="KU">矿井-竖井</option>
-            <option value="KX">矿井-斜井</option>
-            <option value="KP">矿井-平硐</option>
-            <option value="KO">矿井-其他</option>
-
-            <option value="ZU">钻井-石油井</option>
-            <option value="ZT">钻井-天然气井</option>
-            <option value="ZW">钻井-瓦斯抽采与排放井</option>
-            <option value="ZD">钻井-地热井</option>
-            <option value="ZL">钻井-卤水井</option>
-            <option value="ZP">钻井-普通地质钻孔</option>
-            <option value="ZK">钻井-水文孔</option>
-            <option value="ZO">钻井-其他</option>
-
-            <option value="QG">取水井-供水井</option>
-            <option value="QD">取水井-地下水监测井</option>
-            <option value="QK">取水井-水文地质勘探井</option>
-            <option value="QU">取水井-疏降水井</option>
-            <option value="QN">取水井-农田灌溉井</option>
-            <option value="QO">取水井-其他</option>
+            <option th:each="type: ${T(top.vuhe.admin.well.domina.WellType).values()}"
+                    th:value="${type.name()}" th:text="${type.tag}"></option>
           </select>
         </div>
       </div>
@@ -176,6 +158,13 @@
         <div class="layui-input-block">
           <input id="informTime" class="layui-input" lay-verify="required" name="informTime"
                  placeholder="请输入时间" type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label for="remark" class="layui-form-label">注释</label>
+        <div class="layui-input-block">
+          <textarea id="remark" class="layui-textarea" name="remark" placeholder="请输入注释"
+                    type="text"></textarea>
         </div>
       </div>
 

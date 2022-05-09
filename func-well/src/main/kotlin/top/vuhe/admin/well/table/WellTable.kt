@@ -6,6 +6,7 @@ import top.vuhe.admin.well.domina.WellInfo
 import top.vuhe.admin.well.domina.WellStatus
 import top.vuhe.admin.well.domina.WellType
 
+@Suppress("unused")
 object WellTable : IdTable<WellInfo>("well_info") {
     override val id = varchar("id").primaryKey().bindTo { it.id }
     val name = varchar("name").bindTo { it.name }
@@ -32,6 +33,5 @@ object WellTable : IdTable<WellInfo>("well_info") {
     val status = enum<WellStatus>("status").bindTo { it.status }
     val fillStartTime = date("fill_start_time").bindTo { it.fillStartTime }
     val fillEndTime = date("fill_end_time").bindTo { it.fillEndTime }
-    // TODO it will be save to database!
-//        val remark = text("remark").bindTo { it.remark }
+    val remark = text("remark").bindTo { it.remark }
 }

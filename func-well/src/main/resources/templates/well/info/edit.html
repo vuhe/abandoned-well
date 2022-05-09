@@ -31,27 +31,9 @@
         <label for="wellType" class="layui-form-label">井类型</label>
         <div class="layui-input-block">
           <select id="wellType" name="wellType" lay-verify="required">
-            <option value=""></option>
-            <option value="KU" th:selected="${well.wellType.name() eq 'KU'}">矿井-竖井</option>
-            <option value="KX" th:selected="${well.wellType.name() eq 'KX'}">矿井-斜井</option>
-            <option value="KP" th:selected="${well.wellType.name() eq 'KP'}">矿井-平硐</option>
-            <option value="KO" th:selected="${well.wellType.name() eq 'KO'}">矿井-其他</option>
-
-            <option value="ZU" th:selected="${well.wellType.name() eq 'ZU'}">钻井-石油井</option>
-            <option value="ZT" th:selected="${well.wellType.name() eq 'ZT'}">钻井-天然气井</option>
-            <option value="ZW" th:selected="${well.wellType.name() eq 'ZW'}">钻井-瓦斯抽采与排放井</option>
-            <option value="ZD" th:selected="${well.wellType.name() eq 'ZD'}">钻井-地热井</option>
-            <option value="ZL" th:selected="${well.wellType.name() eq 'ZL'}">钻井-卤水井</option>
-            <option value="ZP" th:selected="${well.wellType.name() eq 'ZP'}">钻井-普通地质钻孔</option>
-            <option value="ZK" th:selected="${well.wellType.name() eq 'ZK'}">钻井-水文孔</option>
-            <option value="ZO" th:selected="${well.wellType.name() eq 'ZO'}">钻井-其他</option>
-
-            <option value="QG" th:selected="${well.wellType.name() eq 'QG'}">取水井-供水井</option>
-            <option value="QD" th:selected="${well.wellType.name() eq 'QD'}">取水井-地下水监测井</option>
-            <option value="QK" th:selected="${well.wellType.name() eq 'QK'}">取水井-水文地质勘探井</option>
-            <option value="QU" th:selected="${well.wellType.name() eq 'QU'}">取水井-疏降水井</option>
-            <option value="QN" th:selected="${well.wellType.name() eq 'QN'}">取水井-农田灌溉井</option>
-            <option value="QO" th:selected="${well.wellType.name() eq 'QO'}">取水井-其他</option>
+            <option th:each="type: ${T(top.vuhe.admin.well.domina.WellType).values()}"
+                    th:value="${type.name()}" th:selected="${well.wellType eq type}"
+                    th:text="${type.tag}"></option>
           </select>
         </div>
       </div>
@@ -203,6 +185,13 @@
           <input id="informTime" class="layui-input" lay-verify="required" name="informTime"
                  th:value="${#temporals.format(well.informTime, 'yyyy-MM-dd')}"
                  placeholder="请输入时间" type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label for="remark" class="layui-form-label">注释</label>
+        <div class="layui-input-block">
+          <textarea id="remark" class="layui-textarea" name="remark" placeholder="请输入注释"
+                    th:value="${well.remark}" type="text"></textarea>
         </div>
       </div>
 

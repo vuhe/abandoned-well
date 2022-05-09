@@ -31,7 +31,7 @@
   </tr>
   <tr>
     <td>废弃井类型</td>
-    <td th:text="${well.type}"></td>
+    <td th:text="${well.wellType.tag}"></td>
   </tr>
   <tr>
     <td>省辖市(含济源)</td>
@@ -95,7 +95,7 @@
   </tr>
   <tr>
     <td>状态</td>
-    <td th:text="${well.statusStr}"></td>
+    <td th:text="${well.status.tag}"></td>
   </tr>
   <tr>
     <td>回填开始时间</td>
@@ -108,6 +108,10 @@
     <td th:if="${well.fillEndTime} eq null">未填报</td>
     <td th:unless="${well.fillEndTime} eq null"
         th:text="${#temporals.format(well.fillEndTime, 'yyyy年MM月dd日')}"></td>
+  </tr>
+  <tr>
+    <td>其他信息</td>
+    <td th:text="${well.remark}"></td>
   </tr>
   </tbody>
 </table>

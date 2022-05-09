@@ -8,5 +8,6 @@ import top.vuhe.admin.well.domina.RegionCode
 object CodeTable : IdTable<RegionCode>("region_code") {
     override val id = varchar("id").primaryKey().bindTo { it.id }
     val code = varchar("code").bindTo { it.code }
+    val name = varchar("name").bindTo { it.name }
     val remark = text("remark").bindTo { it.remark }
 }

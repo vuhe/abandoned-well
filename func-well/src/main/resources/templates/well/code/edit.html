@@ -18,6 +18,13 @@
         </div>
       </div>
       <div class="layui-form-item">
+        <label for="name" class="layui-form-label">名称：</label>
+        <div class="layui-input-block">
+          <input id="name" class="layui-input" lay-verify="required" name="name"
+                 placeholder="请输入名称" th:field="*{name}" type="text"/>
+        </div>
+      </div>
+      <div class="layui-form-item">
         <label for="remark" class="layui-form-label">注释：</label>
         <div class="layui-input-block">
           <textarea id="remark" class="layui-textarea" lay-verify="required" name="remark"

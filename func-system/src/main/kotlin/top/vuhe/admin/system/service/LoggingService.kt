@@ -31,7 +31,6 @@ class LoggingService(
             operateUrl = request.requestURI ?: "未知"
             browser = userAgent.browser
             requestParam = request.queryString ?: ""
-            requestBody = request.reader.readText()
             systemOs = userAgent.system
             operateId = userId
             operateName = user?.username ?: "未知"

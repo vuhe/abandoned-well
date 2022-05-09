@@ -15,11 +15,13 @@
           <i class="layui-icon layui-icon-search"></i>
           信息详情
         </button>
-        <button class="pear-btn pear-btn-md pear-btn-primary" lay-filter="well-pass" lay-submit>
+        <button th:if="${well.status ne T(top.vuhe.admin.well.domina.WellStatus).Approved}"
+          class="pear-btn pear-btn-md pear-btn-primary" lay-filter="well-pass" lay-submit>
           <i class="layui-icon layui-icon-search"></i>
           审核通过
         </button>
-        <button class="pear-btn pear-btn-md" lay-filter="well-not-pass" lay-submit>
+        <button th:if="${well.status ne T(top.vuhe.admin.well.domina.WellStatus).NotAccepted}"
+          class="pear-btn pear-btn-md" lay-filter="well-not-pass" lay-submit>
           <i class="layui-icon layui-icon-refresh"></i>
           打回修改
         </button>
@@ -64,7 +66,7 @@
   </tr>
   <tr>
     <td>状态</td>
-    <td th:text="${well.statusStr}"></td>
+    <td th:text="${well.status.tag}"></td>
   </tr>
   </tbody>
 </table>

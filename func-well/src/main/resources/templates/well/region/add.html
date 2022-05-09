@@ -32,11 +32,11 @@
         </div>
       </div>
       <div class="layui-form-item">
-        <label class="layui-form-label">水文代码：</label>
+        <label class="layui-form-label">水文地区：</label>
         <div class="layui-input-block">
           <!--suppress HtmlFormInputWithoutLabel -->
           <input lay-skin="primary" name="regionCodeId"
-                 th:checked="${code.get('checked')}" th:each="code:${codes}" th:title="${code.code}"
+                 th:checked="${code.get('checked')}" th:each="code:${codes}" th:title="${code.name}"
                  th:value="${code.id}" type="radio">
         </div>
       </div>

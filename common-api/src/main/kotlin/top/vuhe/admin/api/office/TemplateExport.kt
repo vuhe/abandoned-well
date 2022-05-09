@@ -12,16 +12,21 @@ internal object TemplateExport {
 
     fun excel(list: List<Any>, templateUrl: String): OfficeFileData {
         val params = TemplateExportParams(templateUrl)
-        val objects = list.map { BeanUtil.beanToMap(it) }
+        val objects = list.toMap()
         val map = mutableMapOf("list" to objects) as MutableMap<String, *>
         val excel = ExcelExportUtil.exportExcel(params, map)
         return write { excel.write(it) }
     }
 
     fun word(list: List<Any>, templateUrl: String): OfficeFileData {
-        val mapList = list.map { BeanUtil.beanToMap(it) }
+        val mapList = list.toMap()
         val word = WordExportUtil.exportWord07(templateUrl, mapList)
         return write { word.write(it) }
+    }
+
+    private fun List<Any>.toMap(): List<Map<String, Any>> = map {
+        if (it is OfficeData) it.data
+        else BeanUtil.beanToMap(it)
     }
 
     private inline fun write(crossinline block: (OutputStream) -> Unit) =

@@ -116,14 +116,4 @@ interface WellInfo : Entity<WellInfo> {
     /** 纬度 */
     val lat: String get() = "${lat1}°${lat2}′${lat3}″"
 
-    /** 井类型字符串 */
-    val type: String get() = "${wellType.category}-${wellType.type}"
-
-    /** 井状态字符串 */
-    val statusStr: String
-        get() = when (status) {
-            WellStatus.NotAccepted -> "审核不通过（打回修改）"
-            WellStatus.Approved -> "审核通过"
-            WellStatus.Reported -> "已上报（审核中）"
-        }
 }
