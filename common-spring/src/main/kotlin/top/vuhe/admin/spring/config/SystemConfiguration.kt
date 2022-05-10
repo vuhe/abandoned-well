@@ -9,8 +9,7 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import top.vuhe.admin.api.logging.LoggingAspect
 import top.vuhe.admin.api.logging.LoggingFactory
-import top.vuhe.admin.api.monitor.CpuInfo
-import top.vuhe.admin.spring.web.handler.HttpRequestFilterHandler
+import top.vuhe.admin.api.monitor.Monitor
 import javax.sql.DataSource
 
 /**
@@ -21,10 +20,6 @@ import javax.sql.DataSource
 @EnableTransactionManagement
 @Configuration(proxyBeanMethods = false)
 class SystemConfiguration {
-
-    /** http request 增强 */
-    @Bean
-    fun httpRequestExtra() = HttpRequestFilterHandler()
 
     /** 日志记录 */
     @Bean
@@ -38,7 +33,7 @@ class SystemConfiguration {
 
     /** 硬件信息刷新任务 */
     @Scheduled(fixedDelay = 60 * 1000)
-    fun hardwareRefresher() = CpuInfo.updateInfo()
+    fun hardwareRefresher() = Monitor.refresh()
 
     /** 加载 objectMapperBuilder */
     @Autowired

@@ -30,7 +30,7 @@ class DiskInfo(fs: OSFileStore) {
     private fun usage(): String {
         if (totalNum == 0L) return "0.0 %"
         val num = (totalNum.exact() - freeNum) / totalNum * 100
-        return "${num.toString(2)} %"
+        return "${num.round(2)} %"
     }
 
     private fun convertFileSize(size: Long): String {

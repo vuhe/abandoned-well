@@ -70,7 +70,7 @@ class SecurityService(
         updateLoginTime(userId)
     }
 
-    override fun loginFail(userId: String, description: String, errorMsg: String) {
+    override fun loginFail(description: String, errorMsg: String) {
         logging.record {
             it.title = "登录"
             it.description = description

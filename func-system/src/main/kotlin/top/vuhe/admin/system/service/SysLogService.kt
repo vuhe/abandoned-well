@@ -27,7 +27,8 @@ class SysLogService(
 
     override fun record(setting: (LogRecord) -> Unit) {
         // 在进入其他线程前获取 request, currUserId 否则为 null
-        loggingService.asyncRecord(request, currUserId, setting)
+        val userId = kotlin.runCatching { currUserId }.getOrElse { "" }
+        loggingService.asyncRecord(request, userId, setting)
     }
 
     /**

@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.admin.api.annotation.Logging
 import top.vuhe.admin.api.logging.BusinessType
-import top.vuhe.admin.api.office.OfficeHandler
+import top.vuhe.admin.api.network.ContentType
+import top.vuhe.admin.api.network.setContent
+import top.vuhe.admin.api.network.setFilename
+import top.vuhe.admin.api.office.OfficeExport
 import top.vuhe.admin.spring.web.controller.BaseController
 import top.vuhe.admin.well.service.WellService
 import java.time.LocalDate
@@ -39,7 +42,10 @@ class SummaryController(
     @Logging("井导出", describe = "导出井 excel 信息", type = BusinessType.EXPORT)
     fun excel(response: HttpServletResponse) {
         val list = infoService.exportList()
-        OfficeHandler.exportExcel(list, "doc/excel.xls", "${data}信息汇总", response)
+
+        response.setContent(ContentType.FILE_XLS)
+        response.setFilename("${date}信息汇总.xls")
+        OfficeExport.excel(list, "doc/excel.xls").writeTo(response.outputStream)
     }
 
     /** 用于汇总导出 word */
@@ -48,10 +54,13 @@ class SummaryController(
     @Logging("井导出", describe = "导出井 word 信息", type = BusinessType.EXPORT)
     fun word(response: HttpServletResponse) {
         val list = infoService.exportList()
-        OfficeHandler.exportWord(list, "doc/doc.docx", "${data}详情汇总", response)
+
+        response.setContent(ContentType.FILE_DOCX)
+        response.setFilename("${date}详情汇总.docx")
+        OfficeExport.word(list, "doc/doc.docx").writeTo(response.outputStream)
     }
 
-    private val data: String
+    private val date: String
         get() {
             val time = LocalDate.now()
             return "${time.year}年${time.monthValue}月${time.dayOfMonth}日"

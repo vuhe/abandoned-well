@@ -9,17 +9,19 @@ dependencies {
 
     // jackson 工具
     compileOnly("com.fasterxml.jackson.core:jackson-annotations")
+    compileOnly("com.fasterxml.jackson.core:jackson-core")
+    compileOnly("com.fasterxml.jackson.core:jackson-databind")
 
     // 缓存工具
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.0")
 
     // 网络工具
-    implementation("cn.hutool:hutool-http")
+    implementation("org.jsoup:jsoup:1.14.3")
+    implementation("eu.bitwalker:UserAgentUtils:1.21")
     compileOnly("org.springframework:spring-web")
     compileOnly("jakarta.servlet:jakarta.servlet-api")
 
     // 系统信息获取
-    implementation("cn.hutool:hutool-system")
     implementation("com.github.oshi:oshi-core-java11:6.1.6")
 
     // excel 工具

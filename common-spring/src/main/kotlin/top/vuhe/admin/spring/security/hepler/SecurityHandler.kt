@@ -23,7 +23,7 @@ internal class SecurityHandler(
 
     val loginFail = AuthenticationFailureHandler { _, response, e ->
         val msg = e.message ?: "登录失败"
-        service.loginFail("", "表单登录失败", msg)
+        service.loginFail("表单登录失败", msg)
         response.fail(message = msg)
     }
 

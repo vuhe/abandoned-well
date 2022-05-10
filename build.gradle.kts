@@ -31,7 +31,6 @@ allprojects {
 
     dependencies {
         implementation(platform(SpringBootPlugin.BOM_COORDINATES))
-        implementation(platform("cn.hutool:hutool-bom:5.7.22"))
     }
 
     tasks.withType<KotlinCompile> {

@@ -22,5 +22,5 @@ interface SpringSecurityService {
     /**
      * 记录登录失败信息
      */
-    fun loginFail(userId: String, description: String, errorMsg: String)
+    fun loginFail(description: String, errorMsg: String)
 }

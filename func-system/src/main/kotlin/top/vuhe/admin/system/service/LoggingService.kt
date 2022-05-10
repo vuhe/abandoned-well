@@ -25,15 +25,15 @@ class LoggingService(
         val user = sysUserRepository.selectById(userId)
         val userAgent = request.userAgent
         val log = Entity.create<SysLog>().apply {
-            operateAddress = request.remoteHost ?: "未知"
-            method = request.method ?: "未知"
+            operateAddress = request.remoteHost ?: "Unknown"
+            method = request.method ?: "Unknown"
             createTime = LocalDateTime.now()
-            operateUrl = request.requestURI ?: "未知"
+            operateUrl = request.requestURI ?: "Unknown"
             browser = userAgent.browser
             requestParam = request.queryString ?: ""
             systemOs = userAgent.system
             operateId = userId
-            operateName = user?.username ?: "未知"
+            operateName = user?.username ?: "Unknown"
         }
         setting(log)
         // 此处必须在多线程中调用 transaction, 否则事务不起作用

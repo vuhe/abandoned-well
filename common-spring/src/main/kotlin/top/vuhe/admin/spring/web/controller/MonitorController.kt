@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import org.springframework.web.servlet.ModelAndView
-import top.vuhe.admin.api.monitor.MonitorInfo
+import top.vuhe.admin.api.monitor.Monitor
 
 /**
  * 服务器控制器
@@ -20,6 +20,6 @@ class MonitorController : BaseController() {
     @GetMapping("main")
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','sys:monitor:main')")
     fun main() = ModelAndView("system/monitor/main").apply {
-        addObject("info", MonitorInfo)
+        addObject("info", Monitor)
     }
 }
