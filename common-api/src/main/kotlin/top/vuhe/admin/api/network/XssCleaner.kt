@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonParser
 import com.fasterxml.jackson.databind.DeserializationContext
 import com.fasterxml.jackson.databind.JsonDeserializer
 import org.slf4j.LoggerFactory
-import top.vuhe.admin.api.extra.Text
+import top.vuhe.admin.api.extra.xssClean
 import java.beans.PropertyEditorSupport
 
 object XssCleaner {
@@ -24,7 +24,7 @@ object XssCleaner {
         override fun getAsText(): String = value?.toString() ?: ""
         override fun setAsText(text: String) {
             value = if (enable) {
-                Text(text).xssClean().also {
+                xssClean(text).also {
                     log.debug("Request value:{} cleaned, current value is:{}.", text, it)
                 }
             } else text.trim()
@@ -36,7 +36,7 @@ object XssCleaner {
             // XSS filter
             val text = p.valueAsString ?: return null
             return if (enable) {
-                Text(text).xssClean().also {
+                xssClean(text).also {
                     log.debug("Json value:{} cleaned, current value is:{}.", text, it)
                 }
             } else {

@@ -3,6 +3,9 @@ package top.vuhe.admin.spring.dsl
 import com.fasterxml.jackson.databind.Module
 import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer
@@ -19,18 +22,22 @@ class DatetimeModule : SimpleModule() {
     infix fun KClass<LocalDateTime>.byPattern(pattern: String) {
         val formatter = DateTimeFormatter.ofPattern(pattern)
         addSerializer(java, LocalDateTimeSerializer(formatter))
+        addDeserializer(java, LocalDateTimeDeserializer(formatter))
     }
 
     @JvmName("byPatternLocalDate")
     infix fun KClass<LocalDate>.byPattern(pattern: String) {
         val formatter = DateTimeFormatter.ofPattern(pattern)
         addSerializer(java, LocalDateSerializer(formatter))
+        addDeserializer(java, LocalDateDeserializer(formatter))
+
     }
 
     @JvmName("byPatternLocalTime")
     infix fun KClass<LocalTime>.byPattern(pattern: String) {
         val formatter = DateTimeFormatter.ofPattern(pattern)
         addSerializer(java, LocalTimeSerializer(formatter))
+        addDeserializer(java, LocalTimeDeserializer(formatter))
     }
 
     companion object {

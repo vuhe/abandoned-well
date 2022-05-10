@@ -1,6 +1,9 @@
 package top.vuhe.admin.api.monitor
 
+import top.vuhe.admin.api.extra.div
 import top.vuhe.admin.api.extra.exact
+import top.vuhe.admin.api.extra.round
+import top.vuhe.admin.api.extra.times
 
 /**
  * ## JVM内存信息

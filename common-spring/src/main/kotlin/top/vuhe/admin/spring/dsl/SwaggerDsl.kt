@@ -6,18 +6,29 @@ import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.info.License
 import top.vuhe.admin.api.annotation.ProjectDsl
 
-internal inline fun openApiInfo(block: InfoDsl.() -> Unit): OpenAPI {
-    return OpenAPI().apply { info = InfoDsl().apply(block).build() }
+internal inline fun openApi(block: ApiDsl.() -> Unit): OpenAPI {
+    return ApiDsl().apply(block).build()
 }
 
 @ProjectDsl
-class InfoDsl {
+internal class ApiDsl {
+    internal val info = InfoDsl()
+
+    inline fun info(block: InfoDsl.() -> Unit) = info.block()
+
+    fun build() = OpenAPI().also {
+        it.info = info.build()
+    }
+}
+
+@ProjectDsl
+internal class InfoDsl {
     var title: String = ""
     var description: String = ""
     var version: String = ""
     var termsOfService: String = ""
-    val contact = Contact()
-    val license = License()
+    internal val contact = Contact()
+    internal val license = License()
 
     inline fun contact(block: Contact.() -> Unit) = contact.block()
     inline fun license(block: License.() -> Unit) = license.block()

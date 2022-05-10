@@ -1,7 +1,7 @@
 package top.vuhe.admin.api.monitor
 
-import top.vuhe.admin.api.extra.formatInstant
 import java.lang.management.ManagementFactory
+import java.text.SimpleDateFormat
 import kotlin.time.Duration.Companion.milliseconds
 
 /**
@@ -36,7 +36,10 @@ object EnvInfo {
     val javaHome: String = this["java.home"]
 
     /** Jvm 启动时间 */
-    val jvmStartTime: String by lazy { formatInstant(startInstant) }
+    val jvmStartTime: String by lazy {
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        formatter.format(java.util.Date(startInstant))
+    }
 
     /** Jvm 运行时间 */
     val jvmRunTime: String

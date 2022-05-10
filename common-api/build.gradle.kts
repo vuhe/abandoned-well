@@ -2,7 +2,7 @@
 
 dependencies {
     // kotlin 扩展
-    api(kotlin("reflect"))
+    implementation(kotlin("reflect"))
 
     // logging 工具
     compileOnly("org.aspectj:aspectjweaver")

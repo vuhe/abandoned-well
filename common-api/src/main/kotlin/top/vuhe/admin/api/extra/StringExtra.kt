@@ -7,81 +7,41 @@ import org.jsoup.nodes.Element
 import org.jsoup.nodes.Entities
 import org.jsoup.safety.Safelist
 
-@JvmInline
-value class Text(val text: String) {
-    fun xssClean(): String {
-        val str = text.trim()
+internal fun xssClean(text: String): String {
+    val str = text.trim()
 
-        // 1. 为空直接返回
-        str.ifEmpty { return str }
+    // 1. 为空直接返回
+    str.ifEmpty { return str }
 
-        // jsoup html 清理
-        val outputSettings = Document.OutputSettings()
-            // 2. 转义，没找到关闭的方法，目前这个规则最少
-            .escapeMode(Entities.EscapeMode.xhtml)
-            // 3. 保留换行
-            .prettyPrint(false)
+    // jsoup html 清理
+    val outputSettings = Document.OutputSettings()
+        // 2. 转义，没找到关闭的方法，目前这个规则最少
+        .escapeMode(Entities.EscapeMode.xhtml)
+        // 3. 保留换行
+        .prettyPrint(false)
 
-        // 4. 清理后的 html
-        val escapedHtml = Jsoup.clean(str, "", WhiteList, outputSettings)
+    // 4. 清理后的 html
+    val escapedHtml = Jsoup.clean(str, "", WhiteList, outputSettings)
 
-        // 5. 反转义
-        return Entities.unescape(escapedHtml)
-    }
+    // 5. 反转义
+    return Entities.unescape(escapedHtml)
 }
 
 /**
  * 做自己的白名单，允许base64的图片通过等
  *
  * @author michael
+ * @author vuhe
  */
+@Suppress("SpellCheckingInspection")
 private object WhiteList : Safelist() {
     init {
         addTags(
-            "a",
-            "b",
-            "blockquote",
-            "br",
-            "caption",
-            "cite",
-            "code",
-            "col",
-            "colgroup",
-            "dd",
-            "div",
-            "span",
-            "embed",
-            "object",
-            "dl",
-            "dt",
-            "em",
-            "h1",
-            "h2",
-            "h3",
-            "h4",
-            "h5",
-            "h6",
-            "i",
-            "img",
-            "li",
-            "ol",
-            "p",
-            "pre",
-            "q",
-            "small",
-            "strike",
-            "strong",
-            "sub",
-            "sup",
-            "table",
-            "tbody",
-            "td",
-            "tfoot",
-            "th",
-            "thead",
-            "tr",
-            "u",
-            "ul"
+            "a", "b", "blockquote", "br", "caption", "cite", "code", "col", "colgroup",
+            "dd", "div", "span", "embed", "object", "dl", "dt", "em", "h1", "h2", "h3",
+            "h4", "h5", "h6", "i", "img", "li", "ol", "p", "pre", "q", "small", "strike",
+            "strong", "sub", "sup", "table", "tbody", "td", "tfoot", "th", "thead",
+            "tr", "u", "ul"
         )
         addAttributes("a", "href", "title", "target")
         addAttributes("blockquote", "cite")
@@ -98,16 +58,8 @@ private object WhiteList : Safelist() {
         addAttributes("param", "name", "value")
         addAttributes(
             "embed",
-            "src",
-            "quality",
-            "width",
-            "height",
-            "allowFullScreen",
-            "allowScriptAccess",
-            "flashvars",
-            "name",
-            "type",
-            "pluginspage"
+            "src", "quality", "width", "height", "allowFullScreen", "allowScriptAccess",
+            "flashvars", "name", "type", "pluginspage"
         )
         addAttributes(":all", "class", "style", "height", "width", "type", "id", "name")
         addProtocols("blockquote", "cite", "http", "https")
@@ -126,7 +78,7 @@ private object WhiteList : Safelist() {
         // 不允许 javascript 开头的 src 和 href
         if ("src".equals(attr.key, ignoreCase = true) || "href".equals(attr.key, ignoreCase = true)) {
             val value = attr.value
-            if (value.isNotBlank() && value.lowercase().startsWith("javascript")) {
+            if (value.isNotBlank() && value.startsWith("javascript", ignoreCase = true)) {
                 return false
             }
         }

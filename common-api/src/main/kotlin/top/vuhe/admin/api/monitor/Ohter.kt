@@ -4,8 +4,11 @@ import oshi.SystemInfo
 import oshi.hardware.CentralProcessor
 import oshi.software.os.OperatingSystem
 import oshi.util.Util
-import top.vuhe.admin.api.extra.ExactNum
+import top.vuhe.admin.api.extra.div
 import top.vuhe.admin.api.extra.exact
+import top.vuhe.admin.api.extra.round
+import top.vuhe.admin.api.extra.times
+import java.math.BigDecimal
 import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.NetworkInterface
@@ -24,8 +27,8 @@ internal fun cpuInfo(waitingTime: Duration): CpuInfo {
 }
 
 /** 获取每个CPU核心的tick，计算方式为 100 * tick / totalCpu */
-private infix fun Long.per(totalCpu: Long): ExactNum {
-    if (totalCpu == 0L || this <= 0) return 0.exact()
+private infix fun Long.per(totalCpu: Long): BigDecimal {
+    if (totalCpu == 0L || this <= 0) return BigDecimal.ZERO
     return (exact() * 100 / totalCpu).round(2)
 }
 
@@ -45,7 +48,7 @@ private fun tick(processor: CentralProcessor, waitingTime: Long): CpuTicks {
  * 2. 如果无满足要求的地址，调用 [InetAddress.getLocalHost] 获取地址
  */
 private fun localhost(): InetAddress? {
-    val localAddressList = kotlin.runCatching {
+    val localAddressList = runCatching {
         NetworkInterface.getNetworkInterfaces().asSequence()
     }.getOrDefault(emptySequence())
         .filterNotNull()
@@ -65,7 +68,7 @@ private fun localhost(): InetAddress? {
     localAddressList.firstOrNull()?.let { return it }
 
     // 以上全不存在的话，最后尝试
-    return kotlin.runCatching { InetAddress.getLocalHost() }.getOrNull()
+    return runCatching { InetAddress.getLocalHost() }.getOrNull()
 }
 
 /** CPU负载时间信息 */
@@ -89,7 +92,7 @@ object HardwareInfo {
     private val systemInfo = SystemInfo()
 
     /** 操作系统相关信息，包括系统版本、文件系统、进程等 */
-    val os: OperatingSystem = systemInfo.operatingSystem
+    private val os: OperatingSystem = systemInfo.operatingSystem
 
     /** 文件系统相关信息 */
     val fileStores = os.fileSystem.fileStores.map { DiskInfo(it) }

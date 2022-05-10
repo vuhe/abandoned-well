@@ -41,7 +41,7 @@ class GlobalAdviceHandler {
 
     /** 拦截参数验证失败异常 */
     @ExceptionHandler(BindException::class)
-    fun validationFailed(request: HttpServletRequest, e: BindException): AjaxResult {
+    fun validationFailed(e: BindException): AjaxResult {
         val message = e.bindingResult.allErrors.lastOrNull()?.defaultMessage ?: "参数不符合要求"
         return AjaxResult.fail(message = message)
     }

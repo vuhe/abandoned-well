@@ -3,7 +3,7 @@ package top.vuhe.admin.spring.database.repository
 import org.ktorm.database.Database
 import org.springframework.beans.factory.annotation.Autowired
 import top.vuhe.admin.api.cache.ProjectCache
-import top.vuhe.admin.api.extra.nanoId
+import top.vuhe.admin.api.extra.NanoId
 
 /**
  * ## 基本数据库访问层
@@ -19,7 +19,7 @@ abstract class BaseRepository {
     @Autowired
     protected open lateinit var database: Database
 
-    protected fun defaultId(): String = nanoId(15)
+    protected fun defaultId(): String = NanoId(15)
 
     protected inline fun <E> cacheable(key: String, block: () -> E): E {
         cache.get<E>(key)?.let { return it }

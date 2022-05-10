@@ -1,7 +1,7 @@
 package top.vuhe.admin.api.monitor
 
 import oshi.software.os.OSFileStore
-import top.vuhe.admin.api.extra.exact
+import top.vuhe.admin.api.extra.*
 
 /**
  * ## 磁盘信息
