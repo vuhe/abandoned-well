@@ -10,7 +10,4 @@ spring:
 #logging:
 #  level:
 #    org:
-#      springframework:
-#        security:
-#          core:
-#            session: trace
+#      ktorm: debug

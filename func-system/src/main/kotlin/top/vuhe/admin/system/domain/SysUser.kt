@@ -4,7 +4,7 @@ import org.ktorm.entity.Entity
 import java.time.LocalDateTime
 
 /**
- * ### 用户领域模型
+ * ## 用户领域模型
  *
  * @author vuhe
  */
@@ -52,6 +52,8 @@ interface SysUser : Entity<SysUser> {
     val remark: String
 
     /** 角色 ids，用于修改 */
-    val roles: List<String>
-        get() = get("roleIds")?.toString()?.split(",") ?: emptyList()
+    val roleIds: String
+
+    /** 角色 ids，用于修改 */
+    val roles: List<String> get() = roleIds.split(",")
 }

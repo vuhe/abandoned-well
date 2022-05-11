@@ -61,6 +61,7 @@
         <div class="layui-form-item">
           <label class="layui-form-label">角色</label>
           <div class="layui-input-block">
+            <input lay-skin="primary" th:checked="${sysUser.admin}" title="管理员" type="checkbox" disabled>
             <!--suppress HtmlFormInputWithoutLabel -->
             <input lay-skin="primary" name="roleIds"
                    th:checked="${sysRole.get('checked')}" th:each="sysRole:${sysRoles}" th:title="${sysRole.roleName}"

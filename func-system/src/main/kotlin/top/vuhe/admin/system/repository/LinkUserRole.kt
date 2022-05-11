@@ -44,7 +44,7 @@ class LinkUserRole : BaseRepository() {
                 }
             }
         }
-        return result.reduce { acc, i -> acc + i }
+        return result.fold(0) { acc, i -> acc + i }
     }
 
     /**

@@ -4,7 +4,3 @@ spring:
   session:
     # 系统 session 过期时间 30 分钟
     timeout: 30m
-  config:
-    activate:
-      # 运行环境配置
-      on-profile: dev

@@ -1,6 +1,7 @@
 package top.vuhe.admin.spring.web.handler
 
 import org.slf4j.LoggerFactory
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.security.access.AccessDeniedException
 import org.springframework.validation.BindException
 import org.springframework.web.HttpRequestMethodNotSupportedException
@@ -53,6 +54,16 @@ class GlobalAdviceHandler {
             AjaxResult.fail(type = AjaxCode.AccessDenied)
         } else {
             ModelAndView("error/403")
+        }
+    }
+
+    /** 数据完整性异常 */
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    fun dataIntegrityViolationException(request: HttpServletRequest): Any {
+        return if (request.isAjax) {
+            AjaxResult.fail(message = "违反数据约束，不能执行此操作！")
+        } else {
+            ModelAndView("error/500")
         }
     }
 

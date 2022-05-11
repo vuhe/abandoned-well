@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import top.vuhe.admin.api.exception.businessRequire
 import top.vuhe.admin.spring.database.service.CurdService
+import top.vuhe.admin.spring.security.securityContext
 import top.vuhe.admin.system.domain.SysRole
 import top.vuhe.admin.system.domain.SysUser
 import top.vuhe.admin.system.repository.LinkUserRole
@@ -25,6 +26,7 @@ class SysUserService(
     private val sysRoleRepository: SysRoleRepository
 ) : CurdService<SysUser>() {
     private val encoder = BCryptPasswordEncoder()
+    private val currUserId by securityContext()
 
     @Transactional(rollbackFor = [Exception::class])
     override fun add(entity: SysUser): Boolean {
@@ -40,13 +42,14 @@ class SysUserService(
 
     @Transactional(rollbackFor = [Exception::class])
     override fun remove(ids: List<String>): Boolean {
+        businessRequire(
+            ids.find { it == currUserId } == null
+        ) { "不能删除自己" }
         linkUserRole.deleteByUser(ids)
         return super.remove(ids)
     }
 
-    /**
-     * 修改用户密码
-     */
+    /** 修改用户密码 */
     @Transactional(rollbackFor = [Exception::class])
     fun modifyPassword(userId: String, password: String): Boolean {
         val update = Entity.create<SysUser>().apply {
@@ -56,17 +59,13 @@ class SysUserService(
         return repository.update(update) > 0
     }
 
-    /**
-     * 保存用户角色数据
-     */
+    /** 保存用户角色数据 */
     @Transactional(rollbackFor = [Exception::class])
     fun saveUserRole(userId: String, roleIds: List<String>): Boolean {
         return linkUserRole.insert(userId, roleIds) > 0
     }
 
-    /**
-     * 获取用户角色数据
-     */
+    /** 获取用户角色数据 */
     fun getUserRole(userId: String): List<SysRole> {
         // 查询全部角色
         val allRole = sysRoleRepository.selectList()

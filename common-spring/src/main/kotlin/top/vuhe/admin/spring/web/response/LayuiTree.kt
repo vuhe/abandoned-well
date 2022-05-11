@@ -14,7 +14,7 @@ data class LayuiTree(
     val status = DTreeStatus
 
     object DTreeStatus {
-        const val code = 200
-        const val message = "默认"
+        val code get() = 200
+        val message get() = "默认"
     }
 }
