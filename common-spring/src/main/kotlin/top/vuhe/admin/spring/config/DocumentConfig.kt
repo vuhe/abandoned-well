@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct
  * @author vuhe
  */
 @Configuration(proxyBeanMethods = false)
-class DocumentConfiguration {
+class DocumentConfig {
     @PostConstruct
     @Suppress("SpellCheckingInspection")
     fun setProperties() {

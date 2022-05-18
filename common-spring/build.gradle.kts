@@ -3,17 +3,13 @@
 dependencies {
     // 系统基础组件
     api(project(":common-api"))
-    api("org.springframework.boot:spring-boot-starter-web")
-
-    // 系统切面组件
-    implementation("org.springframework.boot:spring-boot-starter-aop")
 
     // 系统安全组件
     api("org.springframework.boot:spring-boot-starter-security")
     implementation("com.github.whvcse:easy-captcha:1.6.2")
 
     // 系统校验组件
-    implementation("org.springframework.boot:spring-boot-starter-validation")
+    api("org.springframework.boot:spring-boot-starter-validation")
 
     // 系统模版组件
     api("org.springframework.boot:spring-boot-starter-thymeleaf")
@@ -24,8 +20,8 @@ dependencies {
     api("org.ktorm:ktorm-core:3.4.1")
     implementation("org.ktorm:ktorm-jackson:3.4.1")
     implementation("org.ktorm:ktorm-support-mysql:3.4.1")
-    implementation("org.springframework.boot:spring-boot-starter-jdbc")
-    implementation("mysql:mysql-connector-java")
+    api("org.springframework.boot:spring-boot-starter-jdbc")
+    runtimeOnly("mysql:mysql-connector-java")
 
     // 系统文档组件
     api("org.springdoc:springdoc-openapi-ui:1.6.8")

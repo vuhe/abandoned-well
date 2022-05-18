@@ -1,4 +1,4 @@
-package top.vuhe.admin.spring.concurrent
+package top.vuhe.admin.spring.thread
 
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler
 

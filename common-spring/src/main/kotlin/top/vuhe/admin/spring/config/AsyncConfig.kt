@@ -9,9 +9,9 @@ import org.springframework.scheduling.annotation.EnableAsync
 import org.springframework.scheduling.annotation.EnableScheduling
 import org.springframework.scheduling.annotation.SchedulingConfigurer
 import org.springframework.scheduling.config.ScheduledTaskRegistrar
-import top.vuhe.admin.spring.concurrent.ParallelExecutor
-import top.vuhe.admin.spring.concurrent.ScheduledExecutor
-import top.vuhe.admin.spring.concurrent.SerialExecutor
+import top.vuhe.admin.spring.thread.ParallelExecutor
+import top.vuhe.admin.spring.thread.ScheduledExecutor
+import top.vuhe.admin.spring.thread.SerialExecutor
 
 /**
  * ### 异步配置
@@ -21,7 +21,7 @@ import top.vuhe.admin.spring.concurrent.SerialExecutor
 @EnableAsync
 @EnableScheduling
 @Configuration
-class AsyncConfiguration : AsyncConfigurer, SchedulingConfigurer {
+class AsyncConfig : AsyncConfigurer, SchedulingConfigurer {
     private val log = LoggerFactory.getLogger("AsyncThreadLog")
 
     @Bean(destroyMethod = "shutdown")

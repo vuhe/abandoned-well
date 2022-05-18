@@ -16,7 +16,7 @@ import top.vuhe.admin.spring.web.handler.XssCleanHandler
  * @author vuhe
  */
 @Configuration(proxyBeanMethods = false)
-class ServletWebConfiguration : WebMvcConfigurer {
+class ServletWebConfig : WebMvcConfigurer {
 
     @Bean
     fun xssJacksonCustomizer() = Jackson2ObjectMapperBuilderCustomizer {

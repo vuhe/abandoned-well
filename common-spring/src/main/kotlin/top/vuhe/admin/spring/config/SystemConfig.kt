@@ -19,7 +19,7 @@ import javax.sql.DataSource
  */
 @EnableTransactionManagement
 @Configuration(proxyBeanMethods = false)
-class SystemConfiguration {
+class SystemConfig {
 
     /** 日志记录 */
     @Bean

@@ -21,7 +21,7 @@ import kotlin.time.Duration.Companion.hours
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecurityConfiguration(service: SpringSecurityService) : SpringSecurityAdapter(service) {
+class SecurityConfig(service: SpringSecurityService) : SpringSecurityAdapter(service) {
     /** 身份认证接口 */
     override fun configure(auth: AuthenticationManagerBuilder) {
         auth.authenticationProvider(loginUserCheck)

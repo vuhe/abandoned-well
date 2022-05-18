@@ -4,13 +4,14 @@ dependencies {
     // kotlin 扩展
     implementation(kotlin("reflect"))
 
-    // logging 工具
-    compileOnly("org.aspectj:aspectjweaver")
+    // 系统基础组件
+    api("org.springframework.boot:spring-boot-starter-web")
+
+    // 系统切面组件
+    api("org.springframework.boot:spring-boot-starter-aop")
 
     // jackson 工具
-    compileOnly("com.fasterxml.jackson.core:jackson-annotations")
-    compileOnly("com.fasterxml.jackson.core:jackson-core")
-    compileOnly("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     // 缓存工具
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.0")
@@ -18,8 +19,6 @@ dependencies {
     // 网络工具
     implementation("org.jsoup:jsoup:1.14.3")
     implementation("eu.bitwalker:UserAgentUtils:1.21")
-    compileOnly("org.springframework:spring-web")
-    compileOnly("jakarta.servlet:jakarta.servlet-api")
 
     // 系统信息获取
     implementation("com.github.oshi:oshi-core-java11:6.1.6")

@@ -10,8 +10,8 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":func-system"))
-    implementation(project(":func-well"))
+    implementation(project(":entity-system"))
+    implementation(project(":entity-well"))
 }
 
 springBoot { mainClass.set("top.vuhe.admin.WellManagementAppKt") }
@@ -21,7 +21,7 @@ allprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
 
     group = "top.vuhe"
-    version = "0.3.0"
+    version = "1.0.0"
     java.sourceCompatibility = JavaVersion.VERSION_11
 
     repositories {
