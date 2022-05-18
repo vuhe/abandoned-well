@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":entity-well"))
 }
 
-springBoot { mainClass.set("top.vuhe.admin.WellManagementAppKt") }
+springBoot { mainClass.set("top.vuhe.WellManagementAppKt") }
 
 allprojects {
     apply(plugin = "org.jetbrains.kotlin.plugin.spring")

@@ -29,7 +29,7 @@
         <div class="layui-input-block">
           <select id="wellType" name="wellType" lay-verify="required">
             <option value=""></option>
-            <option th:each="type: ${T(top.vuhe.admin.well.domina.WellType).values()}"
+            <option th:each="type: ${T(top.vuhe.domain.well.WellType).values()}"
                     th:value="${type.name()}" th:text="${type.tag}"></option>
           </select>
         </div>
