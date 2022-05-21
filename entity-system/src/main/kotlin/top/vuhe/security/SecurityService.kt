@@ -40,6 +40,7 @@ class SecurityService(
         }.flatten().distinct()
 
         val codes = powerIds.mapNotNull { powers.selectById(it)?.powerCode }
+            .filter { it.isNotBlank() }
 
         return codes.toList()
     }
@@ -87,7 +88,7 @@ class SecurityService(
         override val password: String get() = user?.password ?: ""
         override val isAdmin: Boolean get() = user?.admin ?: false
         override val authorities: Collection<String> get() = service.getAuthorities(userId)
-        override val isNonLocked: Boolean = user?.unlocked ?: false
+        override val isNonLocked: Boolean = true
         override val isEnable: Boolean get() = user?.enable ?: false
     }
 }

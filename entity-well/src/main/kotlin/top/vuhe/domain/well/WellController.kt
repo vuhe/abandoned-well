@@ -36,7 +36,7 @@ class WellController(
      * 用于查看单个数据
      */
     @GetMapping("detail")
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:detail')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','well:info:main')")
     fun detail(id: String) = ModelAndView("well/info/detail").apply {
         val well = infoService.getOneById(id)
         addObject("well", well)

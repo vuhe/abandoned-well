@@ -28,9 +28,7 @@ class SysRoleService(
         return super.remove(ids)
     }
 
-    /**
-     * 获取角色权限
-     */
+    /** 获取角色权限 */
     fun getRolePower(roleId: String): List<SysPower> {
         // 查询全部权限
         val allPower = sysPowerRepository.selectList()
@@ -38,15 +36,13 @@ class SysRoleService(
         val myPower = linkRolePower.selectPowerIdByRoleId(roleId)
         // 设置权限选中
         // 0-未选中，1-选中，2-半选
-        allPower.forEach { sysPower ->
-            sysPower["checkArr"] = if (sysPower.powerId in myPower) "1" else "0"
+        allPower.forEach {
+            it.checkArr = if (it.powerId in myPower) "1" else "0"
         }
         return allPower
     }
 
-    /**
-     * 保存角色权限
-     */
+    /** 保存角色权限 */
     @Transactional(rollbackFor = [Exception::class])
     fun saveRolePower(roleId: String, powerIds: List<String>): Boolean {
         return linkRolePower.insert(roleId, powerIds) > 0

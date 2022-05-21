@@ -4,10 +4,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class WellManagementApplication
+class WellManagementApp
 
 fun main(args: Array<String>) {
-    runApplication<WellManagementApplication>(profilesActive(args))
+    runApplication<WellManagementApp>(profilesActive(args))
 }
 
 /** 参数仅用于选择内部配置使用，其他命令行参数将不起作用 */

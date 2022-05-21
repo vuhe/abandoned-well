@@ -37,4 +37,7 @@ interface SysPower : Entity<SysPower> {
 
     /** 开启 */
     var enable: Boolean
+
+    /** 前端显示标识 */
+    var checkArr: String
 }
