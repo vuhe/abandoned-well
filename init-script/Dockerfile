@@ -3,4 +3,4 @@ EXPOSE 8080
 
 ADD output.jar /app.jar
 RUN bash -c 'touch /app.jar'
-ENTRYPOINT ["java", "-Xmx256m","-jar","/app.jar","--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-Xmx256m","-jar","/app.jar","prod"]
