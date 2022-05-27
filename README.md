@@ -10,10 +10,12 @@
 
 ## 项目结构
 
-- common-api: 项目的基本工具模块
-- common-spring: 项目的 spring 配置模块
-- function-system: 系统基本管理系统模块
-- function-well: 井信息管理系统基的实现模块
+|       模块名       |       说明        |
+|:---------------:|:---------------:|
+|   common-api    |    项目的基本工具模块    |
+|  common-spring  | 项目的 spring 配置模块 |
+| function-system |   系统基本管理系统模块    |
+|  function-well  |  井信息管理系统基的实现模块  |
 
 项目使用 spring boot 的分层结构：controller、service、repository
 
@@ -23,22 +25,27 @@
 
 ### 语言及环境
 
-- Java: target:11.x, dependency: 17.x
-- Kotlin: 1.6.21
-- spring boot: 2.6.7
-- ktorm(database dependency): 3.4.x
-- springdoc-openapi(system doc): 1.6.x
+|        环境        |   版本   |       说明        |
+|:----------------:|:------:|:---------------:|
+|       Java       |  11+   | dependency: 17+ |
+|      Kotlin      | 1.6.21 |                 |
+|   spring boot    | 2.7.0  |                 |
+|      ktorm       | 3.4.x  | orm dependency  |
+|    springdoc     | 1.6.x  | system api doc  |
 
 ### 工具依赖
 
-- hutool tool(api module only): 5.7.x
-- caffeine cache(api module only): 3.0.x
-- jsoup(api module only): 1.14.x
-- oshi-java11(api module only): 6.1.x
-- easy-poi(api module only): 4.4.x
-- easy-captcha(spring module only): 1.6.x
+|        名称        |   版本   |         范围         |
+|:----------------:|:------:|:------------------:|
+|  caffeine cache  | 3.1.0  |  common-api only   |
+|      jsoup       | 1.14.3 |  common-api only   |
+|   oshi-java11    | 6.1.6  |  common-api only   |
+| user-agent-utils |  1.21  |  common-api only   |
+|     easy-poi     | 4.4.0  |  common-api only   |
+|   easy-captcha   | 1.6.2  | common-spring only |
 
 ## Road Map
 
 - [x] Update spring boot to 2.6.x
+- [x] Update spring boot to 2.7.0
 - [x] Update kotlin to 1.6.x
