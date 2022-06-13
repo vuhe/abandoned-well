@@ -1,16 +1,16 @@
 package top.vuhe.config
 
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.config.web.servlet.invoke
 import org.springframework.security.web.authentication.rememberme.InMemoryTokenRepositoryImpl
-import top.vuhe.security.SpringSecurityAdapter
+import top.vuhe.security.SpringSecurityHandler
 import top.vuhe.security.SpringSecurityService
-import kotlin.time.Duration.Companion.hours
+import top.vuhe.security.config
+import kotlin.time.Duration
 
 /**
  * ### Security 安全配置
@@ -21,14 +21,18 @@ import kotlin.time.Duration.Companion.hours
 @EnableWebSecurity
 @Configuration(proxyBeanMethods = false)
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-class SecurityConfig(service: SpringSecurityService) : SpringSecurityAdapter(service) {
-    /** 身份认证接口 */
-    override fun configure(auth: AuthenticationManagerBuilder) {
-        auth.authenticationProvider(loginUserCheck)
-    }
+class SecurityConfig(service: SpringSecurityService) : SpringSecurityHandler(service) {
+    /** 身份认证 */
+    @Bean
+    fun loginAuthenticationProvider() = loginUserCheck
+
+    /** 使 listener 生效 */
+    @Bean
+    fun securitySessionListener() = sessionRegistryCenter
 
     /** 配置 Security 控制逻辑 */
-    override fun configure(http: HttpSecurity) = http {
+    @Bean
+    fun filterChain(http: HttpSecurity) = http.config {
         authorizeRequests {
             // 开放登录接口
             authorize("/login/**", permitAll)
@@ -71,7 +75,7 @@ class SecurityConfig(service: SpringSecurityService) : SpringSecurityAdapter(ser
             authenticationSuccessHandler = rememberMeHandle
             tokenRepository = InMemoryTokenRepositoryImpl()
             key = "VUHE_REMEMBER"
-            tokenValiditySeconds = 6.hours.inWholeSeconds.toInt()
+            tokenValiditySeconds = with(Duration) { 6.hours.inWholeSeconds.toInt() }
         }
 
         sessionManagement {

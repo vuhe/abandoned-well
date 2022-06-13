@@ -5,7 +5,7 @@ import org.springframework.security.access.prepost.PreAuthorize
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.servlet.ModelAndView
 import top.vuhe.exception.businessRequire
-import top.vuhe.security.hepler.SecuritySessionManager
+import top.vuhe.security.SecuritySessionManager
 import top.vuhe.web.controller.BaseController
 import java.time.Duration
 import java.time.LocalDateTime
